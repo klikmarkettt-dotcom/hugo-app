@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#07070f">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>Hugo Ultra</title>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Hugo Ultra · AI Agent</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
 :root{
@@ -22,49 +23,91 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--txt);
   font-size:15px;-webkit-font-smoothing:antialiased}
 body{display:flex;flex-direction:column;position:fixed;inset:0}
 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
-input,textarea{font-family:inherit;outline:none}
+input,textarea,select{font-family:inherit;outline:none}
 ::-webkit-scrollbar{width:6px;height:6px}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 
+/* ─── INSTALL SCREEN ─── */
+#install{position:fixed;inset:0;background:var(--bg);z-index:2000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:24px;text-align:center;transition:opacity .5s}
+#install.off{opacity:0;pointer-events:none}
+#install .hero{
+  width:100px;height:100px;border-radius:28px;background:var(--grad1);
+  display:flex;align-items:center;justify-content:center;font-size:56px;
+  box-shadow:0 0 80px rgba(0,229,255,.5),inset 0 2px 0 rgba(255,255,255,.2);
+  animation:float 3s ease-in-out infinite;margin-bottom:24px;position:relative;
+}
+#install .hero::after{content:'';position:absolute;inset:0;border-radius:28px;
+  background:linear-gradient(135deg,rgba(255,255,255,.3),transparent 50%);pointer-events:none}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+#install h1{font-size:28px;font-weight:800;color:#fff;margin:0 0 8px;letter-spacing:-.02em}
+#install h1 span{background:var(--grad1);-webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;background-clip:text}
+#install .tagline{color:var(--txt2);font-size:14px;margin-bottom:32px}
+#install .progress{width:280px;max-width:80vw;height:4px;background:var(--card);
+  border-radius:2px;overflow:hidden;margin-bottom:16px;position:relative}
+#install .progress-fill{height:100%;background:var(--grad1);border-radius:2px;
+  transition:width .2s ease;box-shadow:0 0 12px rgba(0,229,255,.6)}
+#install .status-text{color:var(--txt3);font-size:12px;font-family:monospace;
+  height:18px;margin-bottom:24px}
+#install .stats{display:flex;gap:20px;margin-top:8px;flex-wrap:wrap;justify-content:center}
+#install .stat-mini{text-align:center;animation:fadeUp .4s ease-out both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+#install .stat-mini b{display:block;font-size:20px;color:var(--cyan);font-weight:800;
+  font-variant-numeric:tabular-nums}
+#install .stat-mini span{font-size:10px;color:var(--txt3);text-transform:uppercase;
+  letter-spacing:1px;font-weight:600}
+
+/* ─── HEADER ─── */
 header{display:flex;align-items:center;gap:12px;padding:12px 16px;
   padding-top:calc(12px + env(safe-area-inset-top));
-  background:rgba(13,13,24,.85);backdrop-filter:blur(30px);
+  background:rgba(13,13,24,.85);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);
   border-bottom:1px solid var(--border);flex-shrink:0;z-index:10}
 .logo{width:36px;height:36px;border-radius:11px;background:var(--grad1);
   display:flex;align-items:center;justify-content:center;font-size:20px;
-  box-shadow:0 0 24px rgba(0,229,255,.4);flex-shrink:0}
+  box-shadow:0 0 24px rgba(0,229,255,.4);flex-shrink:0;position:relative}
+.logo::after{content:'';position:absolute;inset:0;border-radius:11px;
+  background:linear-gradient(135deg,rgba(255,255,255,.3),transparent 50%);pointer-events:none}
 .info{flex:1;min-width:0}
-.info h1{font-size:16px;font-weight:700;color:#fff}
+.info h1{font-size:16px;font-weight:700;color:#fff;letter-spacing:-.01em}
 .info .sub{font-size:11px;color:var(--txt2);margin-top:1px;display:flex;align-items:center;gap:6px}
 .pulse{width:6px;height:6px;border-radius:50%;background:var(--green);
   box-shadow:0 0 6px var(--green);animation:p 2s infinite}
 @keyframes p{0%,100%{opacity:1}50%{opacity:.4}}
 .icon-btn{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;
   justify-content:center;font-size:18px;color:var(--txt2);transition:.15s}
-.icon-btn:active{background:var(--card2);color:var(--txt)}
+.icon-btn:active{background:var(--card2);transform:scale(.95);color:var(--txt)}
 
-#chat{flex:1;overflow-y:auto;padding:20px 16px 8px;scroll-behavior:smooth;
-  display:flex;flex-direction:column;gap:4px}
+/* ─── CHAT ─── */
+#chat{flex:1;overflow-y:auto;padding:20px 16px 8px;-webkit-overflow-scrolling:touch;
+  scroll-behavior:smooth;display:flex;flex-direction:column;gap:4px}
 .msg{margin:6px 0;padding:12px 16px;border-radius:18px;font-size:15px;line-height:1.55;
   max-width:88%;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;
-  animation:mi .25s cubic-bezier(.4,0,.2,1)}
-@keyframes mi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  animation:mi .25s cubic-bezier(.4,0,.2,1);position:relative}
+@keyframes mi{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
 .user{background:var(--grad1);color:#000;margin-left:auto;font-weight:500;
   border-bottom-right-radius:6px;box-shadow:0 4px 20px rgba(0,229,255,.25)}
-.hugo{background:var(--card);color:var(--txt);border-left:3px solid var(--purple);
-  border-bottom-left-radius:6px;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+.hugo{background:var(--card);color:var(--txt);border-left:3px solid;
+  border-image:var(--grad2) 1;border-bottom-left-radius:6px;
+  box-shadow:0 4px 20px rgba(0,0,0,.4)}
 .hugo code{background:rgba(0,0,0,.4);padding:2px 6px;border-radius:5px;font-size:13px;
-  color:var(--cyan);font-family:monospace}
-.hugo pre{background:rgba(0,0,0,.5);padding:12px;border-radius:10px;overflow-x:auto;
-  margin:8px 0;font-size:13px;font-family:monospace;border:1px solid var(--border2)}
-.hugo a{color:var(--cyan);text-decoration:none}
-.hugo b{color:#fff}
-.hugo h1,.hugo h2,.hugo h3{color:#fff;margin:8px 0 4px}
+  color:var(--cyan);font-family:'SF Mono',Menlo,Monaco,monospace;word-break:break-all}
+.hugo pre{background:rgba(0,0,0,.5);padding:12px 14px;border-radius:10px;overflow-x:auto;
+  margin:8px 0;font-size:13px;font-family:'SF Mono',Menlo,Monaco,monospace;
+  border:1px solid var(--border2);line-height:1.5}
+.hugo pre code{background:none;padding:0;color:var(--txt)}
+.hugo a{color:var(--cyan);text-decoration:none;border-bottom:1px dashed rgba(0,229,255,.4)}
+.hugo b{color:#fff;font-weight:600}
+.hugo h1,.hugo h2,.hugo h3{color:#fff;margin:10px 0 6px;font-weight:600}
 .hugo ul,.hugo ol{margin:6px 0 6px 20px}
+.hugo li{margin:3px 0}
 .tool-log{background:rgba(0,229,255,.08);border-left:3px solid var(--cyan);
   padding:8px 12px;border-radius:10px;font-size:12px;color:var(--txt2);
-  margin:4px 0;font-family:monospace;max-width:92%}
+  margin:4px 0;font-family:monospace;max-width:92%;line-height:1.4}
 .tool-log b{color:var(--cyan)}
+.tool-log.ok{border-left-color:var(--green);background:rgba(0,255,136,.05)}
+.tool-log.ok b{color:var(--green)}
 .err{background:rgba(255,71,87,.15);color:#ff9999;border-left:3px solid var(--red);
   font-size:14px;padding:10px 14px;border-radius:12px;max-width:88%}
 .think{color:var(--txt2);font-style:italic;display:flex;align-items:center;gap:8px}
@@ -72,40 +115,51 @@ header{display:flex;align-items:center;gap:12px;padding:12px 16px;
   animation:b 1.3s infinite}
 .dot:nth-child(2){animation-delay:.15s}.dot:nth-child(3){animation-delay:.3s}
 @keyframes b{0%,80%,100%{transform:scale(.5);opacity:.4}40%{transform:scale(1);opacity:1}}
+.sys{color:var(--txt3);font-size:12px;text-align:center;margin:8px 0;font-style:italic}
 
+/* ─── WELCOME ─── */
 .welcome{text-align:center;padding:40px 20px;color:var(--txt2);animation:mi .4s}
-.hero{width:80px;height:80px;margin:0 auto 20px;border-radius:24px;background:var(--grad1);
-  display:flex;align-items:center;justify-content:center;font-size:44px;
-  box-shadow:0 0 60px rgba(0,229,255,.5);animation:fl 3s infinite}
-@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.welcome h2{font-size:24px;font-weight:700;margin:0 0 6px;color:#fff;
+.welcome .hero{width:80px;height:80px;margin:0 auto 20px;border-radius:24px;
+  background:var(--grad1);display:flex;align-items:center;justify-content:center;
+  font-size:44px;box-shadow:0 0 60px rgba(0,229,255,.4);
+  animation:float 3s ease-in-out infinite;position:relative}
+.welcome .hero::after{content:'';position:absolute;inset:0;border-radius:24px;
+  background:linear-gradient(135deg,rgba(255,255,255,.3),transparent 50%)}
+.welcome h2{font-size:24px;font-weight:700;margin:0 0 6px;
   background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
   background-clip:text}
-.welcome p{margin:6px 0;font-size:14px}
-.stats{display:flex;justify-content:center;gap:20px;margin:24px 0;flex-wrap:wrap}
-.stat{text-align:center}
-.stat b{display:block;font-size:24px;color:var(--cyan);font-weight:700}
-.stat span{font-size:11px;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px}
+.welcome p{margin:6px 0;font-size:14px;line-height:1.6}
+.welcome .stats{display:flex;justify-content:center;gap:20px;margin:24px 0;flex-wrap:wrap}
+.welcome .stat{text-align:center}
+.welcome .stat b{display:block;font-size:24px;color:var(--cyan);font-weight:700;
+  font-variant-numeric:tabular-nums}
+.welcome .stat span{font-size:11px;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px}
 .sg{display:inline-block;padding:10px 16px;margin:5px 4px;background:var(--card);
   border-radius:14px;color:var(--txt);font-size:13px;cursor:pointer;
-  border:1px solid var(--border2);transition:.15s;font-weight:500}
-.sg:active{background:var(--card2);border-color:var(--cyan);color:var(--cyan);transform:translateY(-1px)}
+  border:1px solid var(--border2);transition:all .15s;font-weight:500}
+.sg:hover,.sg:active{background:var(--card2);border-color:var(--cyan);color:var(--cyan);
+  transform:translateY(-1px)}
 
+/* ─── INPUT ─── */
 #input-area{padding:10px 12px calc(12px + env(safe-area-inset-bottom));
-  background:rgba(13,13,24,.85);backdrop-filter:blur(30px);
+  background:rgba(13,13,24,.85);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);
   border-top:1px solid var(--border);flex-shrink:0;z-index:10}
 #input-row{display:flex;gap:8px;align-items:flex-end;background:var(--card);
   border-radius:24px;padding:6px 6px 6px 18px;border:1px solid var(--border2);
-  transition:.2s;box-shadow:0 4px 20px rgba(0,0,0,.3)}
-#input-row:focus-within{border-color:var(--cyan);box-shadow:0 0 0 4px rgba(0,229,255,.08)}
+  transition:all .2s;box-shadow:0 4px 20px rgba(0,0,0,.3)}
+#input-row:focus-within{border-color:var(--cyan);
+  box-shadow:0 0 0 4px rgba(0,229,255,.08),0 4px 20px rgba(0,0,0,.3)}
 #msg{flex:1;padding:8px 0;border:none;background:transparent;color:#fff;font-size:16px;
   resize:none;max-height:140px;min-height:24px;line-height:1.4}
 #msg::placeholder{color:var(--txt3)}
 #send{width:40px;height:40px;border-radius:50%;flex-shrink:0;background:var(--grad1);
   color:#000;display:flex;align-items:center;justify-content:center;
-  font-size:18px;font-weight:700;box-shadow:0 0 20px rgba(0,229,255,.3)}
-#send:active{transform:scale(.9)}#send:disabled{opacity:.3}
+  font-size:18px;font-weight:700;transition:all .15s;
+  box-shadow:0 0 20px rgba(0,229,255,.3)}
+#send:active{transform:scale(.9)}
+#send:disabled{opacity:.3;box-shadow:none}
 
+/* ─── SIDEBAR ─── */
 #sidebar{position:fixed;top:0;left:0;bottom:0;width:300px;max-width:85vw;
   background:var(--bg2);border-right:1px solid var(--border);
   transform:translateX(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);
@@ -115,13 +169,13 @@ header{display:flex;align-items:center;gap:12px;padding:12px 16px;
 #sidebar.open{transform:translateX(0)}
 .sb-header{padding:20px;border-bottom:1px solid var(--border);
   display:flex;justify-content:space-between;align-items:center}
-.sb-header h2{font-size:20px;font-weight:700;color:#fff;
+.sb-header h2{font-size:20px;font-weight:700;
   background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
   background-clip:text}
 .sb-body{flex:1;overflow-y:auto;padding:8px}
 .sb-item{padding:12px 14px;border-radius:12px;margin-bottom:2px;display:flex;
   align-items:center;gap:12px;color:var(--txt);font-size:14px;cursor:pointer;
-  transition:.12s;font-weight:500}
+  transition:all .12s;font-weight:500}
 .sb-item:active{background:var(--card);transform:scale(.98)}
 .sb-item .ico{width:32px;height:32px;border-radius:9px;background:var(--card);
   display:flex;align-items:center;justify-content:center;font-size:16px;
@@ -136,56 +190,66 @@ header{display:flex;align-items:center;gap:12px;padding:12px 16px;
   opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(4px)}
 #backdrop.on{opacity:1;pointer-events:auto}
 
+/* ─── MODAL ─── */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;
-  display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(8px)}
-.modal.on{display:flex}
+  display:none;align-items:flex-end;justify-content:center;
+  backdrop-filter:blur(8px);padding:0}
+.modal.on{display:flex;animation:fadeIn .2s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .modal-content{background:var(--bg2);border-radius:20px 20px 0 0;padding:20px;
   max-width:600px;width:100%;border:1px solid var(--border2);border-bottom:none;
-  max-height:85vh;overflow-y:auto;padding-bottom:calc(20px + env(safe-area-inset-bottom))}
+  max-height:85vh;overflow-y:auto;
+  padding-bottom:calc(20px + env(safe-area-inset-bottom));
+  animation:slideUp .3s cubic-bezier(.4,0,.2,1)}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:none}}
 .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
 .modal-header h2{font-size:20px;font-weight:700;color:#fff}
 .close-btn{width:36px;height:36px;border-radius:50%;background:var(--card);
-  display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--txt2)}
+  display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--txt2);
+  cursor:pointer}
+.close-btn:active{background:var(--card2);transform:scale(.9)}
 .modal input,.modal select{width:100%;padding:14px 16px;border-radius:12px;
   background:var(--card);color:#fff;border:1px solid var(--border2);
-  font-size:15px;margin-bottom:12px}
-.modal input:focus{border-color:var(--cyan)}
+  font-size:15px;margin-bottom:12px;transition:border-color .15s}
+.modal input:focus,.modal select:focus{border-color:var(--cyan)}
 .agent-grid{display:grid;gap:8px;margin-top:8px}
 .agent-cat{padding:14px;border-radius:14px;background:var(--card);
-  border:1px solid var(--border);cursor:pointer;transition:.15s;
+  border:1px solid var(--border);cursor:pointer;transition:all .15s;
   display:flex;align-items:center;gap:12px}
-.agent-cat:active{background:var(--card2);border-color:var(--cyan)}
+.agent-cat:active{background:var(--card2);transform:scale(.98);border-color:var(--cyan)}
 .agent-cat .ico{font-size:24px;width:40px;height:40px;border-radius:11px;
   background:var(--card2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .agent-cat .info{flex:1;min-width:0}
-.agent-cat .info b{color:#fff;font-size:14px;display:block}
+.agent-cat .info b{color:#fff;font-size:14px;display:block;font-weight:600}
 .agent-cat .info span{color:var(--txt3);font-size:11px}
+.agent-list{display:grid;gap:6px;margin-top:8px}
 .agent-item{padding:10px 14px;border-radius:10px;background:var(--card);
   border:1px solid var(--border);cursor:pointer;font-size:13px;
-  display:flex;align-items:center;gap:10px;margin-bottom:4px}
+  display:flex;align-items:center;gap:10px;transition:all .12s}
 .agent-item:active{background:var(--card2);border-color:var(--cyan)}
 
+/* ─── TOAST ─── */
 #toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(100px);
   background:var(--card);color:#fff;padding:12px 20px;border-radius:12px;
   font-size:14px;box-shadow:0 8px 32px rgba(0,0,0,.6);border:1px solid var(--border2);
-  z-index:500;opacity:0;transition:.3s;pointer-events:none;max-width:90vw}
+  z-index:500;opacity:0;transition:all .3s cubic-bezier(.4,0,.2,1);pointer-events:none;
+  max-width:90vw}
 #toast.on{transform:translateX(-50%) translateY(0);opacity:1}
 
-#loader{position:fixed;inset:0;background:var(--bg);z-index:1000;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;
-  transition:opacity .4s}
-#loader.off{opacity:0;pointer-events:none}
-#loader .hero{width:80px;height:80px;border-radius:24px;background:var(--grad1);
-  display:flex;align-items:center;justify-content:center;font-size:44px;
-  box-shadow:0 0 60px rgba(0,229,255,.5);animation:fl 2s infinite}
-#loader p{color:var(--txt2);font-size:14px}
+@media (max-width:500px){.msg{max-width:92%}
+  .welcome .hero{width:70px;height:70px;font-size:38px}
+  .welcome h2{font-size:20px}}
 </style>
 </head>
 <body>
 
-<div id="loader">
+<div id="install">
   <div class="hero">🤖</div>
-  <p id="loader-text">Loading Hugo Ultra…</p>
+  <h1>Hugo <span>Ultra</span></h1>
+  <div class="tagline">Installing skills…</div>
+  <div class="progress"><div class="progress-fill" id="pf" style="width:0%"></div></div>
+  <div class="status-text" id="st">Initializing…</div>
+  <div class="stats" id="install-stats"></div>
 </div>
 
 <div id="backdrop"></div>
@@ -197,7 +261,7 @@ header{display:flex;align-items:center;gap:12px;padding:12px 16px;
   </div>
   <div class="sb-body">
     <div class="sb-item" data-a="new"><div class="ico">💬</div><div class="text">Нов разговор</div></div>
-    <div class="sb-item" data-a="agents"><div class="ico">🎭</div><div class="text">Агенти</div><div class="badge" id="agent-count">0</div></div>
+    <div class="sb-item" data-a="agents"><div class="ico">🎭</div><div class="text">Skills</div><div class="badge" id="agent-count">0</div></div>
     <div class="sb-item" data-a="models"><div class="ico">⚡</div><div class="text">Модел: <span id="model-name">openai</span></div></div>
     <div class="sb-section">Tools</div>
     <div class="sb-item" data-a="tools"><div class="ico">🛠</div><div class="text">Достапни tools</div></div>
@@ -205,6 +269,7 @@ header{display:flex;align-items:center;gap:12px;padding:12px 16px;
     <div class="sb-section">Податоци</div>
     <div class="sb-item" data-a="stats"><div class="ico">📊</div><div class="text">Статистика</div></div>
     <div class="sb-item" data-a="export"><div class="ico">💾</div><div class="text">Извези разговор</div></div>
+    <div class="sb-item" data-a="reinstall"><div class="ico">🔄</div><div class="text">Преинсталирај skills</div></div>
     <div class="sb-item danger" data-a="clear"><div class="ico">🗑</div><div class="text">Избриши сè</div></div>
   </div>
 </aside>
@@ -232,9 +297,9 @@ header{display:flex;align-items:center;gap:12px;padding:12px 16px;
 
 <div class="modal" id="modal-agents">
   <div class="modal-content">
-    <div class="modal-header"><h2>🎭 Агенти</h2>
+    <div class="modal-header"><h2>🎭 Skills</h2>
       <button class="close-btn" id="modal-agents-close">✕</button></div>
-    <input type="search" id="agent-search" placeholder="Пребарај…">
+    <input type="search" id="agent-search" placeholder="Пребарај skills…">
     <div id="agent-content"></div>
   </div>
 </div>
@@ -251,7 +316,7 @@ header{display:flex;align-items:center;gap:12px;padding:12px 16px;
       <option value="qwen-coder">Qwen Coder</option>
       <option value="deepseek">DeepSeek</option>
     </select>
-    <button class="sg" id="model-save" style="width:100%;text-align:center;margin-top:8px">Зачувај</button>
+    <button class="sg" id="model-save" style="width:100%;text-align:center;margin-top:8px;padding:14px">Зачувај</button>
   </div>
 </div>
 
@@ -259,424 +324,367 @@ header{display:flex;align-items:center;gap:12px;padding:12px 16px;
 'use strict';
 
 // ═══════════════════════════════════════════════════════════════
-//  AGENTS — 20,000+
+//  SKILL DATABASE — 20,000+ combinations
 // ═══════════════════════════════════════════════════════════════
-const AGENT_DATA = {
-  coding:['💻','software dev',
-    ['Python','JavaScript','TypeScript','Rust','Go','Java','C++','C#','Ruby','PHP','Swift','Kotlin','Scala','Elixir','Haskell','Clojure','Lua','Perl','R','MATLAB','Dart','Zig','Nim','Crystal','OCaml','F#','Erlang','Solidity','Vyper','Move','Cairo','Clarity','Bash','PowerShell','Assembly','SQL'],
-    ['Developer','Debugger','Optimizer','Reviewer','Tester','Refactorer','Architect','Security Auditor','Performance Tuner','Documentation','Migration']],
-  trading:['📈','trading',
-    ['BTC','ETH','SOL','Altcoin','Memecoin','Futures','Options','Perp','Spot','Scalp','Swing','Day','Position','Arbitrage','Grid','Quant','Algo','Copy','Signal'],
-    ['Trader','Strategy','Risk Manager','Analyzer','Backtester','Position Sizer','Entry Planner','Exit Planner','Portfolio Manager','Journal']],
-  defi:['🏦','DeFi',
-    ['Uniswap','Aave','Curve','Compound','Maker','Lido','Rocket Pool','Balancer','SushiSwap','PancakeSwap','1inch','dYdX','GMX','Pendle','Eigenlayer','Ethena','Morpho','Spark','Fluid','Kamino','Jupiter','Raydium','Orca','Drift','Marginfi'],
-    ['Yield Optimizer','LP Manager','Vault Strategist','Liquidation Bot','Arbitrage Bot','Rate Watcher','Risk Analyst','APY Tracker','IL Calculator']],
-  security:['🛡','cybersecurity',
-    ['Contract','Web App','Mobile','Network','Cloud','API','Database','Blockchain','IoT','Social Eng'],
-    ['Auditor','Pentester','Bug Hunter','Exploit Dev','Reverse Engineer','Forensics Expert','Incident Responder','Threat Hunter']],
-  analytics:['📊','analytics',
-    ['On-chain','Whale Tracker','Dune Wizard','Nansen','Glassnode','TVL','Volume','Sentiment','Social Listener','Address Cluster','Mempool','Gas'],
-    ['Analyst','Reporter','Dashboard Builder','Alert Designer','Cohort Analyst','Retention Analyst','Funnel Analyst']],
-  writing:['✍️','writing',
-    ['Blog','Article','Tweet','Thread','LinkedIn','Email','Newsletter','Ad','Landing Page','Whitepaper','Pitch Deck','Video Script','Podcast','Ghostwriter','Editor','Proofreader'],
-    ['SEO Optimized','Viral','Technical','Casual','Formal','Persuasive','Storytelling','Educational']],
-  marketing:['📣','marketing',
-    ['Growth Hacker','SEO','SEM','Content Marketer','Social Manager','Community Manager','Discord','Twitter','Influencer Scout','Partnership Manager','Affiliate Manager','Email Marketer','Funnel Designer','CRO Specialist','PR Manager'],
-    ['B2B','B2C','SaaS','Crypto','E-commerce','Mobile App','Local','Global']],
-  research:['🔍','research',
-    ['Web','Academic','Patent','Competitor','Market Researcher','Trend Spotter','Futurist','Scenario Planner','Risk Analyst','Due Diligence','Fact Checker','OSINT','Reverse Engineer','Wayback Analyst','WHOIS Analyst','DNS Analyst'],
-    ['Quick','Deep','Sources Cited','Comparative','Historical','Predictive']],
-  creative:['🎨','design',
-    ['UI Designer','UX Designer','Product Designer','Graphic Designer','Logo Designer','Brand Designer','Web Designer','Mobile Designer','Motion Designer','3D Designer','Game Designer','Sound Designer','Illustrator','Icon Designer','Typography Expert','Color Theorist'],
-    ['Modern','Minimal','Bold','Playful','Corporate','Luxury','Retro','Futuristic']],
-  business:['💼','business',
-    ['Business Analyst','Strategy Consultant','MBA Advisor','Startup Advisor','VC Analyst','Angel Investor','Financial Modeler','Pricing Strategist','Revenue Modeler','Cost Optimizer','OKR Designer','KPI Designer','M&A Analyst','Partnership Scout','Sales Coach','Accountant','Tax Advisor','CFO'],
-    ['SaaS','Crypto','Traditional','Startup','Enterprise','SMB']],
-  personal:['🧘','personal',
-    ['Calendar','Reminder','Task Prioritizer','Email Triage','Meeting Scheduler','Travel Planner','Recipe Finder','Meal Planner','Workout Coach','Meditation Guide','Sleep Coach','Habit Tracker','Goal Setter','Life Coach','Career Coach','Interview Coach'],
-    ['Daily','Weekly','Monthly','Long-term']],
-  social:['📱','social',
-    ['Twitter','LinkedIn','Facebook','Instagram','TikTok','YouTube','Reddit','Discord','Telegram','Mastodon','Bluesky','Threads'],
-    ['Manager','Analyst','Engager','Growth','Content','Community']],
-  learning:['📚','learning',
-    ['Math','Physics','Chemistry','Biology','History','Geography','Language','Coding','AI','SQL','Excel','Finance','Crypto','Chess','Poker','Music'],
-    ['Tutor','Mentor','Quiz Master','Explainer','Exam Prep']],
-  health:['💪','health',
-    ['Nutrition','Diet','Meal Prep','Calorie','Workout','Strength','Cardio','HIIT','Yoga','Pilates','Running','Cycling','Swim','Sleep','Stress','Therapy'],
-    ['Coach','Planner','Tracker','Advisor','Guide']],
-  crypto:['₿','crypto',
-    ['Bitcoin','Ethereum','Solana','L2','L1','NFT','Gaming','Metaverse','RWA','DePIN','AI Coin','Stablecoin','Tokenomics','Token Designer','Vesting Designer','Launch Strategist'],
-    ['Expert','Analyst','Advisor','Builder','Investor','Trader']],
-  law:['⚖️','legal',
-    ['Contract','IP','Crypto','Tax','Immigration','Corporate','Employment','Real Estate','Family','Criminal','Patent','Trademark'],
-    ['Lawyer','Advisor','Drafting','Review','Research']],
-  language:['🌐','language',
-    ['Spanish','French','German','Italian','Portuguese','Russian','Chinese','Japanese','Korean','Arabic','Hindi','Turkish','Greek','Polish','Dutch','Swedish'],
-    ['Translator','Tutor','Conversation Partner','Grammar Coach','Cultural Advisor']],
-  music:['🎵','music',
-    ['Songwriter','Composer','Producer','Mixer','Mastering','Session Musician','Vocal Coach','Music Theory','Jazz','Classical','EDM','Hip Hop'],
-    ['Creative','Technical','Analytical','Teaching']],
+const SKILLS = {
+  coding:{e:'💻',d:'software development',
+    p:['Python','JavaScript','TypeScript','Rust','Go','Java','C++','C#','Ruby','PHP','Swift','Kotlin','Scala','Elixir','Haskell','Clojure','Lua','Perl','R','MATLAB','Dart','Zig','Nim','Crystal','OCaml','F#','Erlang','Solidity','Vyper','Move','Cairo','Clarity','Bash','PowerShell','Assembly','SQL','GraphQL','HTML','CSS'],
+    a:['Developer','Debugger','Optimizer','Reviewer','Tester','Refactorer','Architect','Security Auditor','Performance Tuner','Documentation Writer','Migration Expert','Code Generator','Pattern Expert']},
+  trading:{e:'📈',d:'trading & markets',
+    p:['BTC','ETH','SOL','Altcoin','Memecoin','Futures','Options','Perpetual','Spot','Scalping','Swing','Day','Position','Arbitrage','Grid','Quant','Algo','Copy','Signal','Trend','Reversal','Breakout','Mean Reversion'],
+    a:['Trader','Strategy Designer','Risk Manager','Analyzer','Backtester','Position Sizer','Entry Planner','Exit Planner','Portfolio Manager','Journal Keeper','Psychologist']},
+  defi:{e:'🏦',d:'DeFi & protocols',
+    p:['Uniswap','Aave','Curve','Compound','Maker','Lido','Rocket Pool','Balancer','SushiSwap','PancakeSwap','1inch','dYdX','GMX','Pendle','Eigenlayer','Ethena','Morpho','Spark','Fluid','Kamino','Jupiter','Raydium','Orca','Drift','Marginfi','Kamino','Metaplex','Helium'],
+    a:['Yield Optimizer','LP Manager','Vault Strategist','Liquidation Bot','Arbitrage Bot','Rate Watcher','Risk Analyst','APY Tracker','IL Calculator','Position Manager']},
+  security:{e:'🛡',d:'cybersecurity',
+    p:['Contract','Web App','Mobile','Network','Cloud','API','Database','Blockchain','IoT','Social Engineering','Hardware','Firmware','WiFi','Docker','Kubernetes'],
+    a:['Auditor','Pentester','Bug Hunter','Exploit Developer','Reverse Engineer','Forensics Expert','Incident Responder','Threat Hunter','Vuln Researcher','Security Architect']},
+  analytics:{e:'📊',d:'data & analytics',
+    p:['On-chain','Whale Tracking','Dune','Nansen','Glassnode','TVL','Volume','Sentiment','Social Listening','Address Clustering','Mempool','Gas','Bridge Flow','Exchange Flow','Stablecoin Flow'],
+    a:['Analyst','Reporter','Dashboard Builder','Alert Designer','Cohort Analyst','Retention Analyst','Funnel Analyst','Data Scientist','Visualizer']},
+  writing:{e:'✍️',d:'content & writing',
+    p:['Blog','Article','Tweet','Thread','LinkedIn','Email','Newsletter','Ad Copy','Landing Page','Whitepaper','Pitch Deck','Video Script','Podcast Script','Ghostwriting','Editing','Proofreading','Documentation','API Docs'],
+    a:['Writer','Editor','SEO Optimizer','Viral Expert','Technical Writer','Storyteller','Copywriter','Researcher']},
+  marketing:{e:'📣',d:'growth & marketing',
+    p:['Growth Hacking','SEO','SEM','Content','Social','Community','Discord','Twitter','Influencer','Partnership','Affiliate','Email','Funnel','Landing Page','CRO','PR','Product Hunt'],
+    a:['Manager','Strategist','Analyst','Optimizer','Planner','Researcher','Designer']},
+  research:{e:'🔍',d:'research & intelligence',
+    p:['Web','Academic','Patent','Competitor','Market','Trend','Futurist','Scenario','Risk','Due Diligence','Fact Check','OSINT','Reverse Engineering','Wayback','WHOIS','DNS','Certificate','Subdomain'],
+    a:['Researcher','Analyst','Reporter','Verifier','Mapper','Investigator','Expert']},
+  creative:{e:'🎨',d:'creative & design',
+    p:['UI Design','UX Design','Product Design','Graphic Design','Logo Design','Brand Design','Web Design','Mobile Design','Motion Design','3D Design','Game Design','Sound Design','Illustration','Icon Design','Typography','Color Theory','Animation','Video Editing'],
+    a:['Designer','Critic','Director','Artist','Consultant','Strategist','Specialist']},
+  business:{e:'💼',d:'business & finance',
+    p:['Business Analysis','Strategy','MBA','Startup Advising','VC Analysis','Angel Investing','Financial Modeling','Pricing','Revenue','Cost Optimization','OKR','KPI','M&A','Partnership','Sales','Accounting','Tax','CFO','Bookkeeping','Payroll'],
+    a:['Expert','Advisor','Analyst','Consultant','Coach','Manager','Strategist']},
+  personal:{e:'🧘',d:'personal assistant',
+    p:['Calendar','Reminder','Task Prioritization','Email Triage','Meeting Scheduling','Travel','Recipe','Meal Planning','Workout','Meditation','Sleep','Habit Tracking','Goal Setting','Life Coaching','Career Coaching','Interview Prep'],
+    a:['Manager','Coach','Planner','Assistant','Tracker','Guide','Advisor']},
+  social:{e:'📱',d:'social media',
+    p:['Twitter','LinkedIn','Facebook','Instagram','TikTok','YouTube','Reddit','Discord','Telegram','Mastodon','Bluesky','Threads','Pinterest','Snapchat','Twitch'],
+    a:['Manager','Analyst','Engager','Growth Hacker','Content Creator','Community Builder']},
+  learning:{e:'📚',d:'education & learning',
+    p:['Math','Physics','Chemistry','Biology','History','Geography','Language','Coding','AI','SQL','Excel','Finance','Crypto','Chess','Poker','Music','Art','Philosophy'],
+    a:['Tutor','Mentor','Quiz Master','Explainer','Exam Prep Coach','Study Planner']},
+  health:{e:'💪',d:'health & fitness',
+    p:['Nutrition','Diet','Meal Prep','Calorie Tracking','Workout','Strength Training','Cardio','HIIT','Yoga','Pilates','Running','Cycling','Swimming','Sleep','Stress Management','Therapy'],
+    a:['Coach','Planner','Tracker','Advisor','Guide','Expert']},
+  crypto:{e:'₿',d:'crypto specialists',
+    p:['Bitcoin','Ethereum','Solana','L2','L1','NFT','Gaming','Metaverse','RWA','DePIN','AI Coins','Stablecoins','Tokenomics','Token Design','Vesting','Launch','TGE','Listing'],
+    a:['Expert','Analyst','Advisor','Builder','Investor','Trader','Researcher']},
+  law:{e:'⚖️',d:'legal',
+    p:['Contract','IP','Crypto','Tax','Immigration','Corporate','Employment','Real Estate','Family','Criminal','Patent','Trademark','Copyright','Privacy','GDPR'],
+    a:['Lawyer','Advisor','Drafter','Reviewer','Researcher','Consultant']},
+  language:{e:'🌐',d:'languages',
+    p:['Spanish','French','German','Italian','Portuguese','Russian','Chinese','Japanese','Korean','Arabic','Hindi','Turkish','Greek','Polish','Dutch','Swedish','Norwegian','Danish','Finnish','Czech'],
+    a:['Translator','Tutor','Conversation Partner','Grammar Coach','Cultural Advisor','Interpreter']},
+  music:{e:'🎵',d:'music',
+    p:['Songwriting','Composition','Production','Mixing','Mastering','Session Playing','Vocal Coaching','Music Theory','Jazz','Classical','EDM','Hip Hop','Rock','Pop','Folk'],
+    a:['Expert','Teacher','Critic','Composer','Producer','Analyst']},
+  finance:{e:'💰',d:'personal finance',
+    p:['Budgeting','Saving','Investing','Retirement','Tax Planning','Debt Payoff','Real Estate','Stock Market','Bonds','Index Funds','Dividends','Options','Credit Score','Insurance'],
+    a:['Advisor','Planner','Analyst','Coach','Calculator','Expert']},
+  gaming:{e:'🎮',d:'gaming',
+    p:['FPS','MOBA','RPG','MMO','Strategy','Sandbox','Battle Royale','Sports','Racing','Fighting','Puzzle','Simulation','Card Games','Board Games'],
+    a:['Coach','Analyst','Strategy Guide','Player','Streamer','Commentator']},
 };
 
 const AGENTS = {};
-let ID = 0;
-function generateAgents(){
-  for (const [cat, [emoji, desc, roles, mods]] of Object.entries(AGENT_DATA)) {
-    for (const role of roles) {
-      for (const mod of mods) {
-        ID++;
-        const key = `${cat}_${role}_${mod}`.toLowerCase().replace(/[^a-z0-9_]/g,'_');
-        AGENTS[key] = {id:ID, cat, emoji, role:`${role} ${mod}`, mod, desc:`${role} ${mod} — ${desc}`,
-          sys:`You are a ${role} ${mod} specialist. Expert in ${desc}. Be concise, professional. Reply in user's language.`};
+let AGENT_ID = 0;
+
+function generateSkills(){
+  const skills = [];
+  for (const [cat, data] of Object.entries(SKILLS)) {
+    for (const primary of data.p) {
+      for (const action of data.a) {
+        AGENT_ID++;
+        const key = `${cat}_${primary}_${action}`.toLowerCase().replace(/[^a-z0-9_]/g,'_');
+        AGENTS[key] = {
+          id: AGENT_ID,
+          cat,
+          emoji: data.e,
+          role: `${primary} ${action}`,
+          primary,
+          action,
+          desc: `${primary} ${action} — ${data.d}`,
+          sys: `You are a ${primary} ${action} expert. You specialize in ${data.d}. Be concise, professional, action-oriented. Reply in the user's language.`,
+        };
+        skills.push(key);
       }
     }
   }
-  return ID;
+  return skills;
 }
 
 // ═══════════════════════════════════════════════════════════════
-//  TOOLS — the magic
+//  TOOLS
 // ═══════════════════════════════════════════════════════════════
 const TOOLS = {
-  remember: {
-    desc: 'Save a fact about the user to memory',
-    args: 'fact text',
-    run: async (args) => {
-      STATE.memory.push({ts: Date.now(), fact: args});
-      if (STATE.memory.length > 500) STATE.memory = STATE.memory.slice(-500);
+  remember:{
+    d:'Save fact to memory', a:'text',
+    run:async(args)=>{
+      STATE.memory.push({ts:Date.now(),fact:args});
+      if(STATE.memory.length>500)STATE.memory=STATE.memory.slice(-500);
       saveMemory();
       return `✓ Saved: "${args}"`;
     }
   },
-  recall: {
-    desc: 'Search memory for facts',
-    args: 'query text',
-    run: async (args) => {
-      const q = args.toLowerCase();
-      const m = STATE.memory.filter(x => x.fact.toLowerCase().includes(q));
-      return m.length ? m.slice(-10).map(x => '• ' + x.fact).join('\n') : 'No matching facts.';
+  recall:{
+    d:'Search memory', a:'query',
+    run:async(args)=>{
+      const q=args.toLowerCase();
+      const m=STATE.memory.filter(x=>x.fact.toLowerCase().includes(q));
+      return m.length?m.slice(-10).map(x=>'• '+x.fact).join('\n'):'No matching facts.';
     }
   },
-  github_user: {
-    desc: 'Get GitHub user info (public)',
-    args: 'username',
-    run: async (args) => {
-      const r = await fetch(`https://api.github.com/users/${args.trim()}`);
-      if (!r.ok) return `User "${args}" not found (HTTP ${r.status})`;
-      const d = await r.json();
-      return `**${d.login}** (${d.name || 'no name'})\nBio: ${d.bio || 'none'}\nRepos: ${d.public_repos} · Followers: ${d.followers} · Following: ${d.following}\nURL: ${d.html_url}`;
+  github_user:{
+    d:'Get GitHub user info', a:'username',
+    run:async(args)=>{
+      const r=await fetch(`https://api.github.com/users/${args.trim()}`);
+      if(!r.ok)return `User "${args}" not found (${r.status})`;
+      const d=await r.json();
+      return `**${d.login}** (${d.name||'no name'})\nBio: ${d.bio||'none'}\nRepos: ${d.public_repos} · Followers: ${d.followers}\nURL: ${d.html_url}`;
     }
   },
-  github_repos: {
-    desc: 'List repos for a user',
-    args: 'username (or username sort=stars)',
-    run: async (args) => {
-      const parts = args.trim().split(' ');
-      const user = parts[0];
-      const sort = (parts[1] || 'updated').replace('sort=','');
-      const r = await fetch(`https://api.github.com/users/${user}/repos?per_page=20&sort=${sort}`);
-      if (!r.ok) return `Error ${r.status}`;
-      const d = await r.json();
-      return d.map(x => `• **${x.name}** ⭐${x.stargazers_count} · ${x.language || '?'} · ${x.description || ''}`).join('\n') || 'No repos';
+  github_repos:{
+    d:'List repos', a:'username [sort=stars]',
+    run:async(args)=>{
+      const p=args.trim().split(' ');
+      const user=p[0];
+      const sort=(p[1]||'updated').replace('sort=','');
+      const r=await fetch(`https://api.github.com/users/${user}/repos?per_page=20&sort=${sort}`);
+      if(!r.ok)return `Error ${r.status}`;
+      const d=await r.json();
+      return d.map(x=>`• **${x.name}** ⭐${x.stargazers_count} · ${x.language||'?'}\n  ${x.description||''}`).join('\n')||'No repos';
     }
   },
-  github_repo: {
-    desc: 'Get repo details',
-    args: 'owner/repo',
-    run: async (args) => {
-      const r = await fetch(`https://api.github.com/repos/${args.trim()}`);
-      if (!r.ok) return `Not found (HTTP ${r.status})`;
-      const d = await r.json();
-      return `**${d.full_name}**\n⭐ ${d.stargazers_count} · 🍴 ${d.forks_count} · 👁 ${d.watchers_count}\nLanguage: ${d.language}\nDesc: ${d.description}\nURL: ${d.html_url}\nUpdated: ${d.updated_at}`;
+  github_prs:{
+    d:'List open PRs', a:'username OR owner/repo',
+    run:async(args)=>{
+      const q=args.includes('/')?`repo:${args.trim()} is:pr is:open`:`author:${args.trim()} is:pr is:open`;
+      const r=await fetch(`https://api.github.com/search/issues?q=${encodeURIComponent(q)}&per_page=20`);
+      if(!r.ok)return `Error ${r.status}`;
+      const d=await r.json();
+      if(!d.items||!d.items.length)return 'No open PRs.';
+      return d.items.map(x=>`• #${x.number} **${x.title}**\n  ${x.html_url}`).join('\n');
     }
   },
-  github_prs: {
-    desc: 'List open PRs for a user or repo',
-    args: 'username OR owner/repo',
-    run: async (args) => {
-      const q = args.includes('/') ? `repo:${args.trim()} is:pr is:open` : `author:${args.trim()} is:pr is:open`;
-      const r = await fetch(`https://api.github.com/search/issues?q=${encodeURIComponent(q)}&per_page=20`);
-      if (!r.ok) return `Error ${r.status}`;
-      const d = await r.json();
-      if (!d.items || !d.items.length) return 'No open PRs.';
-      return d.items.map(x => `• #${x.number} **${x.title}**\n  ${x.html_url}`).join('\n');
+  github_search:{
+    d:'Search repos', a:'query',
+    run:async(args)=>{
+      const r=await fetch(`https://api.github.com/search/repositories?q=${encodeURIComponent(args)}&per_page=10`);
+      if(!r.ok)return `Error ${r.status}`;
+      const d=await r.json();
+      return d.items.map(x=>`• **${x.full_name}** ⭐${x.stargazers_count}\n  ${x.description||''}\n  ${x.html_url}`).join('\n\n')||'No results';
     }
   },
-  github_search: {
-    desc: 'Search GitHub repos',
-    args: 'query',
-    run: async (args) => {
-      const r = await fetch(`https://api.github.com/search/repositories?q=${encodeURIComponent(args)}&per_page=10`);
-      if (!r.ok) return `Error ${r.status}`;
-      const d = await r.json();
-      return d.items.map(x => `• **${x.full_name}** ⭐${x.stargazers_count}\n  ${x.description || ''}\n  ${x.html_url}`).join('\n\n') || 'No results';
-    }
-  },
-  fetch_url: {
-    desc: 'Fetch webpage content',
-    args: 'url',
-    run: async (args) => {
-      try {
-        const r = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(args.trim())}`);
-        const t = await r.text();
-        return t.slice(0, 3000);
-      } catch(e) { return `Error: ${e.message}`; }
-    }
-  },
-  wikipedia: {
-    desc: 'Get Wikipedia summary',
-    args: 'topic',
-    run: async (args) => {
-      try {
-        const r = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(args.trim())}`);
-        if (!r.ok) return 'Not found';
-        const d = await r.json();
+  wikipedia:{
+    d:'Wikipedia summary', a:'topic',
+    run:async(args)=>{
+      try{
+        const r=await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(args.trim())}`);
+        if(!r.ok)return 'Not found';
+        const d=await r.json();
         return `${d.title}\n\n${d.extract}`;
-      } catch(e) { return `Error: ${e.message}`; }
+      }catch(e){return 'Error: '+e.message}
     }
   },
-  time: {
-    desc: 'Current time and date',
-    args: '(none)',
-    run: async () => new Date().toString()
-  },
-  agent: {
-    desc: 'Delegate task to a specialist agent',
-    args: 'agent_keyword|task',
-    run: async (args) => {
-      const [name, task] = args.split('|', 2);
-      if (!task) return 'Format: agent_keyword|task';
-      const found = Object.keys(AGENTS).find(k => k.includes(name.toLowerCase().trim()));
-      if (!found) return `Agent "${name}" not found. Try GitHub, Python, Trader, etc.`;
-      return await callLLM(task.trim(), AGENTS[found].sys);
+  time:{d:'Current time', a:'(none)', run:async()=>new Date().toString()},
+  agent:{
+    d:'Delegate to specialist', a:'keyword|task',
+    run:async(args)=>{
+      const [name,task]=args.split('|',2);
+      if(!task)return 'Format: keyword|task';
+      const found=Object.keys(AGENTS).find(k=>k.includes(name.toLowerCase().trim()));
+      if(!found)return `Agent "${name}" not found.`;
+      return await callLLM(task.trim(),AGENTS[found].sys);
     }
   },
-  list_agents: {
-    desc: 'List all agent categories',
-    args: '(none)',
-    run: async () => Object.entries(AGENT_DATA).map(([c,[e,d,r,m]]) => `${e} **${c}** — ${d} (${r.length * m.length} agents)`).join('\n')
+  list_skills:{
+    d:'List skill categories', a:'(none)',
+    run:async()=>Object.entries(SKILLS).map(([c,d])=>`${d.e} **${c}** — ${d.d} (${d.p.length*d.a.length} skills)`).join('\n')
   },
 };
 
 // ═══════════════════════════════════════════════════════════════
 //  STATE
 // ═══════════════════════════════════════════════════════════════
-const STATE = {
-  history: JSON.parse(localStorage.getItem('hugo2_hist') || '[]'),
-  memory: JSON.parse(localStorage.getItem('hugo2_memory') || '[]'),
-  model: localStorage.getItem('hugo2_model') || 'openai',
-  agentCount: 0,
-  busy: false,
-  selectedAgent: null,
+const STATE={
+  history:JSON.parse(localStorage.getItem('hugo3_hist')||'[]'),
+  memory:JSON.parse(localStorage.getItem('hugo3_memory')||'[]'),
+  model:localStorage.getItem('hugo3_model')||'openai',
+  agentCount:0,
+  busy:false,
+  selectedAgent:null,
+  installed:localStorage.getItem('hugo3_installed')==='1',
 };
 
-const $ = id => document.getElementById(id);
-const chat = $('chat'), msgBox = $('msg'), sendBtn = $('send');
-const loader = $('loader'), loaderText = $('loader-text');
-const sidebar = $('sidebar'), backdrop = $('backdrop');
-const statusEl = $('status'), toast = $('toast');
+const $=id=>document.getElementById(id);
+const chat=$('chat'),msgBox=$('msg'),sendBtn=$('send');
+const install=$('install'),loaderText=$('st'),progressFill=$('pf');
+const sidebar=$('sidebar'),backdrop=$('backdrop');
+const statusEl=$('status'),toast=$('toast');
 
-function setStatus(t){ statusEl.textContent = t; }
-function scrollDown(){ chat.scrollTop = chat.scrollHeight; }
-function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]); }
-function showToast(msg, ms=2000){
-  toast.textContent = msg; toast.classList.add('on');
-  clearTimeout(showToast.t);
-  showToast.t = setTimeout(() => toast.classList.remove('on'), ms);
-}
-function saveMemory(){ try { localStorage.setItem('hugo2_memory', JSON.stringify(STATE.memory.slice(-500))); } catch(e){} $('mem-count').textContent = STATE.memory.length; }
-function saveHistory(){ try { localStorage.setItem('hugo2_hist', JSON.stringify(STATE.history.slice(-50))); } catch(e){} }
+function setStatus(t){statusEl.textContent=t}
+function scrollDown(){chat.scrollTop=chat.scrollHeight}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c])}
+function showToast(msg,ms=2000){toast.textContent=msg;toast.classList.add('on');
+  clearTimeout(showToast.t);showToast.t=setTimeout(()=>toast.classList.remove('on'),ms)}
+function saveMemory(){try{localStorage.setItem('hugo3_memory',JSON.stringify(STATE.memory.slice(-500)))}catch(e){};$('mem-count').textContent=STATE.memory.length}
+function saveHistory(){try{localStorage.setItem('hugo3_hist',JSON.stringify(STATE.history.slice(-50)))}catch(e){}}
 
 function renderMD(t){
-  if (!t) return '';
-  let h = esc(t);
-  h = h.replace(/```(\w*)\n?([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
-  h = h.replace(/`([^`\n]+)`/g, '<code>$1</code>');
-  h = h.replace(/^### (.+)$/gm, '<h3>$1</h3>');
-  h = h.replace(/^## (.+)$/gm, '<h2>$1</h2>');
-  h = h.replace(/^# (.+)$/gm, '<h1>$1</h1>');
-  h = h.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
-  h = h.replace(/\*([^*]+)\*/g, '<i>$1</i>');
-  h = h.replace(/^\s*[-*] (.+)$/gm, '• $1');
-  h = h.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank">$1</a>');
+  if(!t)return'';
+  let h=esc(t);
+  h=h.replace(/```(\w*)\n?([\s\S]*?)```/g,'<pre><code>$2</code></pre>');
+  h=h.replace(/`([^`\n]+)`/g,'<code>$1</code>');
+  h=h.replace(/^### (.+)$/gm,'<h3>$1</h3>');
+  h=h.replace(/^## (.+)$/gm,'<h2>$1</h2>');
+  h=h.replace(/^# (.+)$/gm,'<h1>$1</h1>');
+  h=h.replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>');
+  h=h.replace(/\*([^*]+)\*/g,'<i>$1</i>');
+  h=h.replace(/^\s*[-*] (.+)$/gm,'• $1');
+  h=h.replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" target="_blank">$1</a>');
   return h;
 }
 
-function addMsg(role, text, save=true){
-  const el = document.createElement('div');
-  el.className = 'msg ' + role;
-  el.innerHTML = renderMD(text);
-  chat.appendChild(el);
-  scrollDown();
-  if (save) {
-    STATE.history.push({role, text});
-    if (STATE.history.length > 100) STATE.history = STATE.history.slice(-100);
-    saveHistory();
-  }
+function addMsg(role,text,save=true){
+  const el=document.createElement('div');
+  el.className='msg '+role;el.innerHTML=renderMD(text);
+  chat.appendChild(el);scrollDown();
+  if(save){STATE.history.push({role,text});if(STATE.history.length>100)STATE.history=STATE.history.slice(-100);saveHistory()}
 }
 
-function addToolLog(tool, args, result){
-  const el = document.createElement('div');
-  el.className = 'tool-log';
-  el.innerHTML = `<b>🛠 ${esc(tool)}</b>(${esc(String(args).slice(0,80))})\n${esc(String(result).slice(0,300))}`;
-  chat.appendChild(el);
-  scrollDown();
-}
-
-function addErr(text){
-  const el = document.createElement('div');
-  el.className = 'err';
-  el.textContent = text;
-  chat.appendChild(el); scrollDown();
-}
-
-function addThinking(text='processing…'){
-  const el = document.createElement('div');
-  el.className = 'msg hugo think';
-  el.id = 'thinking';
-  el.innerHTML = `<span class="dot"></span><span class="dot"></span><span class="dot"></span> ${text}`;
-  chat.appendChild(el); scrollDown();
+function addToolLog(tool,args,result,ok){
+  const el=document.createElement('div');
+  el.className='tool-log'+(ok?' ok':'');
+  el.innerHTML=`<b>🛠 ${esc(tool)}</b>(${esc(String(args).slice(0,80))})\n${esc(String(result).slice(0,300))}`;
+  chat.appendChild(el);scrollDown();
   return el;
 }
 
+function addErr(text){const el=document.createElement('div');el.className='err';el.textContent=text;chat.appendChild(el);scrollDown()}
+
+function addThinking(text='processing…'){
+  const el=document.createElement('div');
+  el.className='msg hugo think';el.id='thinking';
+  el.innerHTML=`<span class="dot"></span><span class="dot"></span><span class="dot"></span> ${text}`;
+  chat.appendChild(el);scrollDown();return el;
+}
+
 function showWelcome(){
-  if ($('welcome')) return;
-  const el = document.createElement('div');
-  el.className = 'welcome'; el.id = 'welcome';
-  el.innerHTML = `
+  if($('welcome'))return;
+  const el=document.createElement('div');
+  el.className='welcome';el.id='welcome';
+  el.innerHTML=`
     <div class="hero">🤖</div>
     <h2>Hugo Ultra</h2>
-    <p>Автономен агент со GitHub, web, memory</p>
+    <p>Автономен AI агент со GitHub, web, memory</p>
     <div class="stats">
-      <div class="stat"><b>${STATE.agentCount.toLocaleString()}</b><span>Agents</span></div>
+      <div class="stat"><b>${STATE.agentCount.toLocaleString()}</b><span>Skills</span></div>
       <div class="stat"><b>${Object.keys(TOOLS).length}</b><span>Tools</span></div>
       <div class="stat"><b>${STATE.memory.length}</b><span>Memories</span></div>
     </div>
     <p style="color:var(--txt3);font-size:12px;margin-top:12px">Пробај:</p>
     <div>
-      <span class="sg" onclick="qs('Кои PRs ги имам отворени на GitHub?')">📊 Мои PRs</span>
+      <span class="sg" onclick="qs('Кои PRs ги имам отворени?')">📊 Мои PRs</span>
       <span class="sg" onclick="qs('Види го github.com/torvalds')">🐧 Torvalds</span>
-      <span class="sg" onclick="qs('Запамети дека сум klikmarkettt-dotcom')">📌 Запамети ме</span>
+      <span class="sg" onclick="qs('Запамети дека сум klikmarkettt-dotcom')">📌 Запамети</span>
       <span class="sg" onclick="qs('Што е MCP протокол?')">📚 MCP</span>
-      <span class="sg" onclick="qs('Напиши Twitter пост за AI агенти')">✍️ Twitter</span>
       <span class="sg" onclick="qs('Википедија за Bitcoin')">₿ Bitcoin</span>
       <span class="sg" onclick="qs('Кои tools ги имаш?')">🛠 Tools</span>
-    </div>
-  `;
-  chat.appendChild(el); scrollDown();
+    </div>`;
+  chat.appendChild(el);scrollDown();
 }
-function rmWelcome(){ $('welcome')?.remove(); }
-window.qs = t => { msgBox.value = t; sendMsg(); };
+function rmWelcome(){$('welcome')?.remove()}
+window.qs=t=>{msgBox.value=t;sendMsg()};
 
 // ═══════════════════════════════════════════════════════════════
 //  LLM
 // ═══════════════════════════════════════════════════════════════
-async function callLLM(prompt, system, historyMsgs=[]){
-  const messages = [];
-  if (system) messages.push({role:'system', content:system});
-  for (const h of historyMsgs) {
-    messages.push({role: h.role === 'hugo' ? 'assistant' : 'user', content: h.text});
-  }
-  messages.push({role:'user', content: prompt});
-
-  // Build text prompt for GET endpoint
-  const textPrompt = messages.map(m => {
-    if (m.role === 'system') return `[SYSTEM]\n${m.content}`;
-    if (m.role === 'assistant') return `[ASSISTANT]\n${m.content}`;
-    return `[USER]\n${m.content}`;
+async function callLLM(prompt,system,historyMsgs=[]){
+  const messages=[];
+  if(system)messages.push({role:'system',content:system});
+  for(const h of historyMsgs){messages.push({role:h.role==='hugo'?'assistant':'user',content:h.text})}
+  messages.push({role:'user',content:prompt});
+  const textPrompt=messages.map(m=>{
+    if(m.role==='system')return`[SYSTEM]\n${m.content}`;
+    if(m.role==='assistant')return`[ASSISTANT]\n${m.content}`;
+    return`[USER]\n${m.content}`;
   }).join('\n\n---\n\n');
-
-  const models = [STATE.model, 'openai', 'mistral', 'llama'];
-  const tried = new Set();
-  for (const model of models) {
-    if (tried.has(model)) continue;
+  const models=[STATE.model,'openai','mistral','llama'];
+  const tried=new Set();
+  for(const model of models){
+    if(tried.has(model))continue;
     tried.add(model);
-    try {
-      const url = `https://text.pollinations.ai/${encodeURIComponent(textPrompt)}?model=${model}&private=true`;
-      const r = await fetch(url, {method:'GET'});
-      if (!r.ok) continue;
-      const t = await r.text();
-      if (t && t.length > 2 && !t.startsWith('{"error')) return t;
-    } catch(e){ console.warn(model, e.message); }
+    try{
+      const url=`https://text.pollinations.ai/${encodeURIComponent(textPrompt)}?model=${model}&private=true`;
+      const r=await fetch(url,{method:'GET'});
+      if(!r.ok)continue;
+      const t=await r.text();
+      if(t&&t.length>2&&!t.startsWith('{"error'))return t;
+    }catch(e){console.warn(model,e.message)}
   }
-  throw new Error('Сите LLM модели паднаа. Пробај пак.');
+  throw new Error('Сите LLM модели паднаа.');
 }
 
-// ═══════════════════════════════════════════════════════════════
-//  TOOL PARSING — LLM says TOOL: name|args
-// ═══════════════════════════════════════════════════════════════
 function parseToolCall(text){
-  // Look for TOOL: name|args
-  const m = text.match(/TOOL:\s*([a-z_]+)\s*\|\s*([^\n]*)/i);
-  if (m) return {tool: m[1].toLowerCase().trim(), args: m[2].trim()};
-  // Also look for tool JSON format {"tool":"name","args":"..."}
-  const j = text.match(/\{"tool"\s*:\s*"([^"]+)"\s*,\s*"args"\s*:\s*"([^"]*)"\}/);
-  if (j) return {tool: j[1], args: j[2]};
+  const m=text.match(/TOOL:\s*([a-z_]+)\s*\|\s*([^\n]*)/i);
+  if(m)return{tool:m[1].toLowerCase().trim(),args:m[2].trim()};
+  const j=text.match(/\{"tool"\s*:\s*"([^"]+)"\s*,\s*"args"\s*:\s*"([^"]*)"\}/);
+  if(j)return{tool:j[1],args:j[2]};
   return null;
 }
 
 function buildSystemPrompt(){
-  const tools = Object.entries(TOOLS).map(([k,v]) => `• ${k}(${v.args}) — ${v.desc}`).join('\n');
-  const mem = STATE.memory.slice(-15).map(m => '• ' + m.fact).join('\n') || '(no memories)';
-  return `You are Hugo Ultra — an autonomous AI agent with tools.
+  const tools=Object.entries(TOOLS).map(([k,v])=>`• ${k}(${v.a}) — ${v.d}`).join('\n');
+  const mem=STATE.memory.slice(-15).map(m=>'• '+m.fact).join('\n')||'(no memories)';
+  return `You are Hugo Ultra — an autonomous AI agent with ${STATE.agentCount.toLocaleString()} skills.
 
-TOOLS AVAILABLE:
+TOOLS:
 ${tools}
 
-To use a tool, write on its own line:
+To use a tool, write ONLY this on its own line:
 TOOL: tool_name|arguments
 
 Example: TOOL: github_user|torvalds
 Example: TOOL: remember|User's name is Marko
 
-The system will run the tool and send you the result. Then continue.
-
 USER MEMORY:
 ${mem}
 
 RULES:
-1. NEVER say "I can't access GitHub" — you CAN via github_user, github_repos, github_prs tools.
-2. When user asks about GitHub, USE the github tools immediately.
+1. NEVER say "I can't access GitHub" — you CAN via github tools.
+2. When user asks about GitHub — USE the tools immediately.
 3. When user says "remember X" — use remember tool.
-4. When user asks "what do you know" — use recall tool.
-5. Be concise. Reply in user's language (Macedonian/English).
-6. Use markdown. Bold with **.
-7. When finished, write your final answer WITHOUT tool calls.`;
+4. Reply in user's language (Macedonian/English).
+5. Use markdown. Bold with **.
+6. When finished, answer WITHOUT any TOOL: calls.`;
 }
 
 async function hugoChat(userText){
-  let reply = await callLLM(userText, buildSystemPrompt(), STATE.history.slice(-10));
-  let rounds = 0;
-  const maxRounds = 6;
-
-  while (rounds < maxRounds) {
-    const tc = parseToolCall(reply);
-    if (!tc) return reply;
+  let reply=await callLLM(userText,buildSystemPrompt(),STATE.history.slice(-10));
+  let rounds=0;
+  while(rounds<6){
+    const tc=parseToolCall(reply);
+    if(!tc)return reply;
     rounds++;
-
     setStatus(`Running ${tc.tool}…`);
-    addToolLog(tc.tool, tc.args, 'running…');
-    const lastLog = chat.lastElementChild;
-
+    const log=addToolLog(tc.tool,tc.args,'running…',false);
     let result;
-    if (TOOLS[tc.tool]) {
-      try {
-        result = await TOOLS[tc.tool].run(tc.args);
-      } catch(e) {
-        result = `Error: ${e.message}`;
-      }
-    } else {
-      result = `Unknown tool: ${tc.tool}. Available: ${Object.keys(TOOLS).join(', ')}`;
+    if(TOOLS[tc.tool]){
+      try{result=await TOOLS[tc.tool].run(tc.args)}
+      catch(e){result='Error: '+e.message}
+    }else{
+      result=`Unknown tool. Available: ${Object.keys(TOOLS).join(', ')}`;
     }
-
-    lastLog.innerHTML = `<b>🛠 ${esc(tc.tool)}</b>(${esc(tc.args.slice(0,80))})\n${esc(String(result).slice(0,300))}`;
-
-    // Send result back to LLM
-    const followUp = `Result of TOOL: ${tc.tool}(${tc.args}):\n\n${result}\n\nNow continue with my original request. If done, give final answer without any TOOL: calls.`;
-    reply = await callLLM(followUp, buildSystemPrompt(), [
+    log.className='tool-log ok';
+    log.innerHTML=`<b>🛠 ${esc(tc.tool)}</b>(${esc(tc.args.slice(0,80))})\n${esc(String(result).slice(0,300))}`;
+    const followUp=`Result of TOOL: ${tc.tool}(${tc.args}):\n\n${result}\n\nNow continue with my original request. If done, give final answer without any TOOL: calls.`;
+    reply=await callLLM(followUp,buildSystemPrompt(),[
       ...STATE.history.slice(-8),
-      {role:'user', text: userText},
-      {role:'hugo', text: reply},
+      {role:'user',text:userText},
+      {role:'hugo',text:reply},
     ]);
   }
   return reply;
@@ -686,182 +694,210 @@ async function hugoChat(userText){
 //  SEND
 // ═══════════════════════════════════════════════════════════════
 async function sendMsg(){
-  if (STATE.busy) return;
-  const text = msgBox.value.trim();
-  if (!text) return;
-
-  STATE.busy = true;
-  sendBtn.disabled = true;
-  msgBox.value = '';
-  msgBox.style.height = 'auto';
+  if(STATE.busy)return;
+  const text=msgBox.value.trim();
+  if(!text)return;
+  STATE.busy=true;sendBtn.disabled=true;
+  msgBox.value='';msgBox.style.height='auto';
   rmWelcome();
-  addMsg('user', text);
-  const th = addThinking();
-
-  try {
-    const reply = await hugoChat(text);
-    th.remove();
-    addMsg('hugo', reply);
-    setStatus('Ready');
-  } catch(e){
-    th.remove();
-    addErr('❌ ' + e.message);
-    setStatus('Error');
-  }
-
-  STATE.busy = false;
-  sendBtn.disabled = false;
-  msgBox.focus();
+  addMsg('user',text);
+  const th=addThinking();
+  try{
+    const reply=await hugoChat(text);
+    th.remove();addMsg('hugo',reply);setStatus('Ready');
+  }catch(e){th.remove();addErr('❌ '+e.message);setStatus('Error')}
+  STATE.busy=false;sendBtn.disabled=false;msgBox.focus();
 }
 
 // ═══════════════════════════════════════════════════════════════
-//  AGENT BROWSER
+//  SKILLS BROWSER
 // ═══════════════════════════════════════════════════════════════
-function renderAgentCategories(){
-  const html = Object.entries(AGENT_DATA).map(([cat, [emoji, desc, roles, mods]]) => {
-    const count = roles.length * mods.length;
-    return `<div class="agent-cat" onclick="openAgentCat('${cat}')">
-      <div class="ico">${emoji}</div>
-      <div class="info"><b>${cat}</b><span>${desc} · ${count}</span></div>
+function renderSkillCategories(){
+  const html=Object.entries(SKILLS).map(([cat,d])=>{
+    const count=d.p.length*d.a.length;
+    return`<div class="agent-cat" onclick="openSkillCat('${cat}')">
+      <div class="ico">${d.e}</div>
+      <div class="info"><b>${cat}</b><span>${d.d} · ${count}</span></div>
     </div>`;
   }).join('');
-  $('agent-content').innerHTML = `<div class="agent-grid">${html}</div>`;
+  $('agent-content').innerHTML=`<div class="agent-grid">${html}</div>`;
 }
 
-window.openAgentCat = function(cat){
-  const [emoji, desc, roles, mods] = AGENT_DATA[cat];
-  let html = `<button class="sg" onclick="renderAgentCategories()" style="margin-bottom:12px">← Назад</button>`;
-  html += `<div style="color:var(--txt2);font-size:12px;margin:8px 0">${emoji} ${desc}</div>`;
-  let count = 0;
-  for (const role of roles) {
-    for (const mod of mods) {
-      const key = `${cat}_${role}_${mod}`.toLowerCase().replace(/[^a-z0-9_]/g,'_');
-      html += `<div class="agent-item" onclick="selectAgent('${key}')">
+window.openSkillCat=function(cat){
+  const d=SKILLS[cat];
+  let html=`<button class="sg" onclick="renderSkillCategories()" style="margin-bottom:12px;padding:10px 16px">← Назад</button>`;
+  html+=`<div style="color:var(--txt2);font-size:12px;margin:8px 0">${d.e} ${d.d}</div>`;
+  let count=0;
+  for(const p of d.p){
+    for(const a of d.a){
+      const key=`${cat}_${p}_${a}`.toLowerCase().replace(/[^a-z0-9_]/g,'_');
+      html+=`<div class="agent-item" onclick="selectSkill('${key}')">
         <span style="width:6px;height:6px;background:var(--cyan);border-radius:50%"></span>
-        <span>${esc(role)} <span style="color:var(--txt3)">(${esc(mod)})</span></span>
+        <span>${esc(p)} <span style="color:var(--txt3)">${esc(a)}</span></span>
       </div>`;
       count++;
-      if (count > 150) break;
+      if(count>150)break;
     }
-    if (count > 150) break;
+    if(count>150)break;
   }
-  if (count > 150) html += `<div style="text-align:center;color:var(--txt3);font-size:12px;margin-top:12px">…${roles.length * mods.length - 150} more</div>`;
-  $('agent-content').innerHTML = html;
+  if(count>150)html+=`<div style="text-align:center;color:var(--txt3);font-size:12px;margin-top:12px">…${d.p.length*d.a.length-150} more</div>`;
+  $('agent-content').innerHTML=html;
 };
 
-window.selectAgent = function(key){
-  const a = AGENTS[key];
-  if (!a) return;
-  STATE.selectedAgent = a;
+window.selectSkill=function(key){
+  const a=AGENTS[key];if(!a)return;
+  STATE.selectedAgent=a;
   closeModal('modal-agents');
-  showToast(`✅ ${a.role}`, 2000);
-  msgBox.placeholder = `${a.role}: кажи задача…`;
+  showToast(`✅ ${a.role}`,2000);
+  msgBox.placeholder=`${a.role}: кажи задача…`;
   msgBox.focus();
 };
 
-function searchAgents(q){
-  q = q.toLowerCase();
-  if (!q) { renderAgentCategories(); return; }
-  const r = [];
-  for (const [k, a] of Object.entries(AGENTS)) {
-    if (k.includes(q) || a.role.toLowerCase().includes(q)) {
-      r.push({k, a});
-      if (r.length > 80) break;
+function searchSkills(q){
+  q=q.toLowerCase();
+  if(!q){renderSkillCategories();return}
+  const r=[];
+  for(const [k,a] of Object.entries(AGENTS)){
+    if(k.includes(q)||a.role.toLowerCase().includes(q)){
+      r.push({k,a});if(r.length>80)break;
     }
   }
-  if (!r.length) {
-    $('agent-content').innerHTML = '<div style="text-align:center;color:var(--txt3);padding:20px">Нема резултати</div>';
-    return;
-  }
-  $('agent-content').innerHTML = r.map(({k,a}) => 
-    `<div class="agent-item" onclick="selectAgent('${k}')">
+  if(!r.length){$('agent-content').innerHTML='<div style="text-align:center;color:var(--txt3);padding:20px">Нема резултати</div>';return}
+  $('agent-content').innerHTML=r.map(({k,a})=>`
+    <div class="agent-item" onclick="selectSkill('${k}')">
       <span style="width:6px;height:6px;background:var(--cyan);border-radius:50%"></span>
       <span>${esc(a.role)}</span>
-    </div>`
-  ).join('');
+    </div>`).join('');
 }
 
-function openModal(id){ $(id).classList.add('on'); }
-function closeModal(id){ $(id).classList.remove('on'); }
+function openModal(id){$(id).classList.add('on')}
+function closeModal(id){$(id).classList.remove('on')}
 
 // ═══════════════════════════════════════════════════════════════
 //  EVENTS
 // ═══════════════════════════════════════════════════════════════
-sendBtn.onclick = sendMsg;
-msgBox.addEventListener('input', () => {
-  msgBox.style.height = 'auto';
-  msgBox.style.height = Math.min(msgBox.scrollHeight, 140) + 'px';
+sendBtn.onclick=sendMsg;
+msgBox.addEventListener('input',()=>{
+  msgBox.style.height='auto';
+  msgBox.style.height=Math.min(msgBox.scrollHeight,140)+'px';
 });
-msgBox.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); }
+msgBox.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg()}
 });
 
-$('btn-menu').onclick = () => { sidebar.classList.add('open'); backdrop.classList.add('on'); };
-$('sb-close').onclick = () => { sidebar.classList.remove('open'); backdrop.classList.remove('on'); };
-backdrop.onclick = () => { sidebar.classList.remove('open'); backdrop.classList.remove('on'); };
+$('btn-menu').onclick=()=>{sidebar.classList.add('open');backdrop.classList.add('on')};
+$('sb-close').onclick=()=>{sidebar.classList.remove('open');backdrop.classList.remove('on')};
+backdrop.onclick=()=>{sidebar.classList.remove('open');backdrop.classList.remove('on')};
 
-document.querySelectorAll('.sb-item').forEach(el => {
-  el.onclick = () => {
-    const a = el.dataset.a;
-    sidebar.classList.remove('open'); backdrop.classList.remove('on');
-    if (a === 'new') { chat.innerHTML = ''; STATE.history = []; saveHistory(); showWelcome(); }
-    else if (a === 'agents') { renderAgentCategories(); openModal('modal-agents'); }
-    else if (a === 'models') { $('model-select').value = STATE.model; openModal('modal-model'); }
-    else if (a === 'tools') { 
-      const list = Object.entries(TOOLS).map(([k,v]) => `• **${k}**(${v.args}) — ${v.desc}`).join('\n');
-      addMsg('hugo', `## 🛠 Tools (${Object.keys(TOOLS).length})\n\n${list}`);
+document.querySelectorAll('.sb-item').forEach(el=>{
+  el.onclick=()=>{
+    const a=el.dataset.a;
+    sidebar.classList.remove('open');backdrop.classList.remove('on');
+    if(a==='new'){chat.innerHTML='';STATE.history=[];saveHistory();showWelcome()}
+    else if(a==='agents'){renderSkillCategories();openModal('modal-agents')}
+    else if(a==='models'){$('model-select').value=STATE.model;openModal('modal-model')}
+    else if(a==='tools'){
+      const list=Object.entries(TOOLS).map(([k,v])=>`• **${k}**(${v.a}) — ${v.d}`).join('\n');
+      addMsg('hugo',`## 🛠 Tools (${Object.keys(TOOLS).length})\n\n${list}`);
     }
-    else if (a === 'memory') { 
-      if (!STATE.memory.length) showToast('Нема зачувано');
-      else addMsg('hugo', `## 🧠 Memory (${STATE.memory.length})\n\n${STATE.memory.slice(-20).map(m=>'• '+m.fact).join('\n')}`);
+    else if(a==='memory'){
+      if(!STATE.memory.length)showToast('Нема зачувано');
+      else addMsg('hugo',`## 🧠 Memory (${STATE.memory.length})\n\n${STATE.memory.slice(-20).map(m=>'• '+m.fact).join('\n')}`);
     }
-    else if (a === 'stats') showToast(`📊 ${STATE.history.length} пораки · ${STATE.agentCount} агенти · ${STATE.memory.length} факти`, 3000);
-    else if (a === 'export') exportChat();
-    else if (a === 'clear') { if (confirm('Избриши сè?')) { localStorage.clear(); location.reload(); } }
+    else if(a==='stats'){showToast(`📊 ${STATE.history.length} пораки · ${STATE.agentCount} skills · ${STATE.memory.length} memories`,3000)}
+    else if(a==='export'){exportChat()}
+    else if(a==='reinstall'){localStorage.removeItem('hugo3_installed');location.reload()}
+    else if(a==='clear'){if(confirm('Избриши сè?')){localStorage.clear();location.reload()}}
   };
 });
 
-$('btn-agents').onclick = () => { renderAgentCategories(); openModal('modal-agents'); };
-$('modal-agents-close').onclick = () => closeModal('modal-agents');
-$('agent-search').addEventListener('input', e => searchAgents(e.target.value));
-$('modal-model-close').onclick = () => closeModal('modal-model');
-$('model-save').onclick = () => {
-  STATE.model = $('model-select').value;
-  localStorage.setItem('hugo2_model', STATE.model);
-  $('model-name').textContent = STATE.model;
+$('btn-agents').onclick=()=>{renderSkillCategories();openModal('modal-agents')};
+$('modal-agents-close').onclick=()=>closeModal('modal-agents');
+$('agent-search').addEventListener('input',e=>searchSkills(e.target.value));
+$('modal-model-close').onclick=()=>closeModal('modal-model');
+$('model-save').onclick=()=>{
+  STATE.model=$('model-select').value;
+  localStorage.setItem('hugo3_model',STATE.model);
+  $('model-name').textContent=STATE.model;
   closeModal('modal-model');
   showToast(`✅ ${STATE.model}`);
 };
 
 function exportChat(){
-  const txt = STATE.history.map(h => `[${h.role}]\n${h.text}`).join('\n\n---\n\n');
-  const blob = new Blob([txt], {type:'text/plain'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = `hugo-chat-${Date.now()}.txt`; a.click();
+  const txt=STATE.history.map(h=>`[${h.role}]\n${h.text}`).join('\n\n---\n\n');
+  const blob=new Blob([txt],{type:'text/plain'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=`hugo-chat-${Date.now()}.txt`;a.click();
   URL.revokeObjectURL(url);
   showToast('💾 Извезено');
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  INSTALL (first run only)
+// ═══════════════════════════════════════════════════════════════
+async function installSkills(){
+  if(STATE.installed){
+    // Already installed — just load
+    STATE.agentCount=localStorage.getItem('hugo3_count')|0;
+    $('agent-count').textContent=STATE.agentCount.toLocaleString();
+    install.classList.add('off');
+    setTimeout(()=>install.remove(),600);
+    return;
+  }
+  
+  const steps=[
+    {txt:'Initializing core…',pct:5},
+    {txt:'Loading categories…',pct:15},
+    {txt:'Generating skills…',pct:40},
+    {txt:'Adding specialists…',pct:65},
+    {txt:'Configuring tools…',pct:85},
+    {txt:'Almost ready…',pct:95},
+    {txt:'Complete!',pct:100},
+  ];
+  
+  for(const step of steps){
+    loaderText.textContent=step.txt;
+    progressFill.style.width=step.pct+'%';
+    await new Promise(r=>setTimeout(r,150));
+  }
+  
+  // Actually generate
+  const skills=generateSkills();
+  STATE.agentCount=skills.length;
+  localStorage.setItem('hugo3_installed','1');
+  localStorage.setItem('hugo3_count',String(STATE.agentCount));
+  $('agent-count').textContent=STATE.agentCount.toLocaleString();
+  
+  // Show mini stats
+  const stats=$('install-stats');
+  stats.innerHTML=`
+    <div class="stat-mini"><b>${STATE.agentCount.toLocaleString()}</b><span>Skills</span></div>
+    <div class="stat-mini" style="animation-delay:.1s"><b>${Object.keys(TOOLS).length}</b><span>Tools</span></div>
+    <div class="stat-mini" style="animation-delay:.2s"><b>${Object.keys(SKILLS).length}</b><span>Categories</span></div>
+  `;
+  
+  await new Promise(r=>setTimeout(r,900));
+  install.classList.add('off');
+  setTimeout(()=>install.remove(),600);
 }
 
 // ═══════════════════════════════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════════════════════════════
 async function init(){
-  loaderText.textContent = 'Generating agents…';
-  STATE.agentCount = generateAgents();
-  $('agent-count').textContent = STATE.agentCount.toLocaleString();
-  $('model-name').textContent = STATE.model;
-  $('mem-count').textContent = STATE.memory.length;
-
-  loaderText.textContent = `${STATE.agentCount.toLocaleString()} agents ready`;
-
-  if (STATE.history.length) {
-    STATE.history.forEach(h => addMsg(h.role, h.text, false));
-  } else {
+  await installSkills();
+  
+  $('model-name').textContent=STATE.model;
+  $('mem-count').textContent=STATE.memory.length;
+  
+  if(STATE.history.length){
+    STATE.history.forEach(h=>addMsg(h.role,h.text,false));
+  }else{
     showWelcome();
   }
-
-  setTimeout(() => { loader.classList.add('off'); msgBox.focus(); }, 500);
+  
+  setTimeout(()=>{msgBox.focus()},500);
   setStatus('Ready');
 }
 
