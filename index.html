@@ -32,7 +32,8 @@ border-bottom-right-radius:6px;font-weight:500}
 .hugo code{background:#0a0a12;padding:2px 6px;border-radius:4px;font-size:13px;color:#19d3ff;font-family:monospace}
 .hugo pre{background:#0a0a12;padding:12px;border-radius:8px;overflow-x:auto;font-size:13px;margin:8px 0}
 .hugo a{color:#19d3ff}
-.think{color:#666;font-style:italic}
+.err{background:#3a1a1a;color:#ff9999;border-left:3px solid #ff5252;font-size:13px}
+.think{color:#888;font-style:italic}
 .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#7c5cff;
 margin:0 2px;animation:b 1.2s infinite}
 .dot:nth-child(2){animation-delay:.15s}.dot:nth-child(3){animation-delay:.3s}
@@ -100,7 +101,12 @@ function add(w,t,save){
   if (save !== false){ history.push({role:w, text:t}); saveHist(); }
   return d;
 }
-function saveHist(){ try { localStorage.setItem('hugo_hist', JSON.stringify(history.slice(-100))); } catch(e){} }
+function addErr(t){
+  const d = document.createElement('div'); d.className = 'msg err';
+  d.textContent = t;
+  chat.appendChild(d); scroll();
+}
+function saveHist(){ try { localStorage.setItem('hugo_hist', JSON.stringify(history.slice(-50))); } catch(e){} }
 function thinking(){
   const d = document.createElement('div'); d.className = 'msg hugo think'; d.id = 'th';
   d.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
@@ -114,37 +120,44 @@ function welcome(){
     '<span class="sg" onclick="qs(\\'Zdravo! Koj si ti?\\')">👋 Запознај се</span>' +
     '<span class="sg" onclick="qs(\\'Напиши краток Twitter пост за AI агенти\\')">✍️ Twitter пост</span>' +
     '<span class="sg" onclick="qs(\\'Објасни ми што е MCP протокол накратко\\')">📚 MCP</span>' +
-    '<span class="sg" onclick="qs(\\'Направи план за денес, 5 задачи\\')">📋 План за денес</span>' +
+    '<span class="sg" onclick="qs(\\'Направи план за денес, 5 задачи\\')">📋 План</span>' +
     '</div>';
   chat.appendChild(w); scroll();
 }
 window.qs = t => { msgBox.value = t; send(); };
 
-async function callLLM(messages){
-  const models = ['openai', 'mistral', 'llama'];
-  for (let attempt = 0; attempt < 3; attempt++){
-    for (const model of models){
-      try {
-        const r = await fetch('https://text.pollinations.ai/openai', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({model, messages, private: true})
-        });
-        if (r.ok){
-          const d = await r.json();
-          return d.choices[0].message.content;
-        }
-      } catch(e){}
+// ═══ LLM CALL — GET endpoint (works from any origin) ═══
+async function callLLM(prompt, systemMsg){
+  const fullPrompt = (systemMsg ? systemMsg + '\\n\\n' : '') + prompt;
+  const encoded = encodeURIComponent(fullPrompt);
+  // Multiple endpoints, try in order
+  const endpoints = [
+    'https://text.pollinations.ai/' + encoded + '?model=openai&private=true',
+    'https://text.pollinations.ai/' + encoded,
+  ];
+  for (const url of endpoints){
+    try {
+      setSub('Connecting…');
+      const r = await fetch(url, {method: 'GET'});
+      if (!r.ok){
+        console.warn('HTTP', r.status, url);
+        continue;
+      }
+      const text = await r.text();
+      if (text && text.length > 0){
+        return text;
+      }
+    } catch(e){
+      console.warn('fetch fail:', e.message);
     }
-    await new Promise(rs => setTimeout(rs, 1000));
   }
-  return '[LLM unavailable — обиди се пак]';
+  throw new Error('LLM не одговара. Обиди се пак.');
 }
 
 async function send(text){
-  if (sendBtn.disabled) return;
   text = (text || msgBox.value).trim();
   if (!text) return;
+  if (sendBtn.disabled) return;
   msgBox.value = '';
   msgBox.style.height = 'auto';
   document.getElementById('wc')?.remove();
@@ -153,23 +166,19 @@ async function send(text){
   setSub('Thinking…');
   sendBtn.disabled = true;
 
-  const msgs = [
-    {role: 'system', content: 'You are Hugo, a helpful autonomous AI agent. Reply in the user\\'s language (Macedonian or English). Be concise, useful, and proactive. Never refuse without trying.'}
-  ];
-  // Include last 10 exchanges for context
-  const recent = history.slice(-20);
-  recent.forEach(h => msgs.push({role: h.role === 'hugo' ? 'assistant' : 'user', content: h.text}));
-  // Ensure last is user
-  if (msgs[msgs.length-1].role !== 'user') msgs.push({role: 'user', content: text});
-
   try {
-    const reply = await callLLM(msgs);
+    const reply = await callLLM(text, 'You are Hugo, a helpful AI agent. Reply in the same language the user writes in (Macedonian or English). Be concise and useful.');
     th.remove();
-    add('hugo', reply);
-    setSub('Ready');
+    if (!reply || reply.length < 1){
+      addErr('Празен одговор од LLM.');
+      setSub('Empty');
+    } else {
+      add('hugo', reply);
+      setSub('Ready');
+    }
   } catch(e){
     th.remove();
-    add('hugo', '❌ ' + e.message);
+    addErr('❌ ' + e.message);
     setSub('Error');
   }
   sendBtn.disabled = false;
@@ -190,7 +199,6 @@ document.getElementById('clear').onclick = () => {
   chat.innerHTML = ''; welcome();
 };
 
-// Init
 if (history.length){
   history.forEach(h => add(h.role, h.text, false));
 } else {
