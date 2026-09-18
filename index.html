@@ -10,7 +10,7 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
 :root{--bg:#07070f;--bg2:#0d0d18;--card:#12121f;--card2:#1a1a2e;--border:#1f1f33;
   --txt:#e8ecff;--txt2:#8890b5;--txt3:#5a5f80;--cyan:#00e5ff;--purple:#a855f7;
-  --green:#00ff88;--red:#ff4757;--yellow:#ffd60a;--grad1:linear-gradient(135deg,#00e5ff,#a855f7)}
+  --green:#00ff88;--red:#ff4757;--grad1:linear-gradient(135deg,#00e5ff,#a855f7)}
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--txt);
   font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:15px;-webkit-font-smoothing:antialiased}
 body{display:flex;flex-direction:column;position:fixed;inset:0}
@@ -21,8 +21,7 @@ input,textarea{font-family:inherit;outline:none}
   align-items:center;justify-content:center;padding:24px;text-align:center;transition:opacity .5s}
 #install.off{opacity:0;pointer-events:none}
 #install .hero{width:90px;height:90px;border-radius:26px;background:var(--grad1);display:flex;
-  align-items:center;justify-content:center;font-size:50px;box-shadow:0 0 60px rgba(0,229,255,.5);
-  animation:fl 3s ease-in-out infinite;margin-bottom:20px}
+  align-items:center;justify-content:center;font-size:50px;box-shadow:0 0 60px rgba(0,229,255,.5);animation:fl 3s infinite;margin-bottom:20px}
 @keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 #install h1{font-size:26px;font-weight:800;color:#fff;margin:0 0 6px}
 #install h1 span{background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
@@ -34,44 +33,39 @@ header{display:flex;align-items:center;gap:12px;padding:12px 16px;
   padding-top:calc(12px + env(safe-area-inset-top));background:rgba(13,13,24,.9);
   backdrop-filter:blur(30px);border-bottom:1px solid var(--border);flex-shrink:0;z-index:10}
 .logo{width:36px;height:36px;border-radius:11px;background:var(--grad1);display:flex;
-  align-items:center;justify-content:center;font-size:20px;flex-shrink:0;box-shadow:0 0 20px rgba(0,229,255,.3)}
-.info{flex:1;min-width:0}
-.info h1{font-size:16px;font-weight:700;color:#fff}
+  align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.info{flex:1}.info h1{font-size:16px;font-weight:700;color:#fff}
 .info .sub{font-size:11px;color:var(--txt2);margin-top:1px;display:flex;align-items:center;gap:6px}
 .pulse{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:p 2s infinite}
 @keyframes p{0%,100%{opacity:1}50%{opacity:.4}}
-.icon-btn{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;
-  justify-content:center;font-size:18px;color:var(--txt2)}
+.icon-btn{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--txt2)}
 .icon-btn:active{background:var(--card2);color:var(--txt)}
+.icon-btn.on{background:var(--red);color:#fff;animation:p 1s infinite}
 #chat{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:4px;scroll-behavior:smooth}
 .msg{margin:4px 0;padding:12px 16px;border-radius:18px;font-size:15px;line-height:1.55;
   max-width:88%;white-space:pre-wrap;word-wrap:break-word;word-break:break-word;animation:mi .2s}
 @keyframes mi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .user{background:var(--grad1);color:#000;margin-left:auto;font-weight:500;border-bottom-right-radius:6px}
 .hugo{background:var(--card);color:var(--txt);border-left:3px solid var(--purple);border-bottom-left-radius:6px}
-.hugo code{background:rgba(0,0,0,.4);padding:2px 5px;border-radius:4px;font-size:13px;color:var(--cyan);font-family:monospace}
+.hugo code{background:rgba(0,0,0,.4);padding:2px 5px;border-radius:4px;font-size:13px;color:var(--cyan);font-family:monospace;word-break:break-all}
 .hugo pre{background:rgba(0,0,0,.5);padding:10px;border-radius:8px;overflow-x:auto;margin:6px 0;font-size:12px;font-family:monospace;border:1px solid var(--border)}
 .hugo a{color:var(--cyan);text-decoration:none}
 .hugo b{color:#fff}
-.hugo img{max-width:100%;border-radius:12px;margin:8px 0;box-shadow:0 4px 20px rgba(0,229,255,.3);display:block}
+.hugo img{max-width:100%;border-radius:12px;margin:8px 0;display:block;box-shadow:0 4px 20px rgba(0,229,255,.3)}
 .img-wrap{position:relative;display:inline-block;overflow:hidden;border-radius:12px;margin:8px 0}
 .img-wrap img{max-width:100%;border-radius:12px;display:block}
-.img-wrap::after{content:'';position:absolute;bottom:0;right:0;width:130px;height:35px;background:var(--card);z-index:2}
-.tool-log{background:rgba(0,229,255,.08);border-left:3px solid var(--cyan);padding:6px 10px;
-  border-radius:8px;font-size:11px;color:var(--txt2);margin:3px 0;font-family:monospace;max-width:92%;line-height:1.3}
-.tool-log b{color:var(--cyan)}
+.img-wrap::after{content:'';position:absolute;bottom:0;right:0;width:140px;height:35px;background:var(--card);z-index:2}
 .err{background:rgba(255,71,87,.15);color:#ff9999;border-left:3px solid var(--red);font-size:13px;padding:8px 12px;border-radius:10px;max-width:88%}
 .think{color:var(--txt2);font-style:italic;display:flex;align-items:center;gap:6px}
 .dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--purple);animation:b 1.3s infinite}
 .dot:nth-child(2){animation-delay:.15s}.dot:nth-child(3){animation-delay:.3s}
 @keyframes b{0%,80%,100%{transform:scale(.5);opacity:.4}40%{transform:scale(1);opacity:1}}
 .sys{color:var(--txt3);font-size:11px;text-align:center;margin:6px 0;font-style:italic}
-.sys b{color:var(--cyan)}
 .welcome{text-align:center;padding:30px 16px;color:var(--txt2)}
 .welcome .hero{width:70px;height:70px;margin:0 auto 16px;border-radius:22px;background:var(--grad1);
   display:flex;align-items:center;justify-content:center;font-size:38px;box-shadow:0 0 40px rgba(0,229,255,.4);animation:fl 3s infinite}
-.welcome h2{font-size:22px;font-weight:700;margin:0 0 4px;color:#fff;
-  background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.welcome h2{font-size:22px;font-weight:700;margin:0 0 4px;background:var(--grad1);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .welcome p{margin:4px 0;font-size:13px}
 .sg{display:inline-block;padding:8px 13px;margin:4px 3px;background:var(--card);border-radius:12px;
   color:var(--txt);font-size:12px;cursor:pointer;border:1px solid var(--border);font-weight:500}
@@ -79,33 +73,33 @@ header{display:flex;align-items:center;gap:12px;padding:12px 16px;
 #input-area{padding:8px 10px calc(10px + env(safe-area-inset-bottom));
   background:rgba(13,13,24,.9);backdrop-filter:blur(30px);border-top:1px solid var(--border);flex-shrink:0}
 #input-row{display:flex;gap:6px;align-items:flex-end;background:var(--card);border-radius:22px;
-  padding:5px 5px 5px 16px;border:1px solid var(--border);transition:.2s}
+  padding:5px 5px 5px 16px;border:1px solid var(--border)}
 #input-row:focus-within{border-color:var(--cyan)}
 #msg{flex:1;padding:8px 0;border:none;background:transparent;color:#fff;font-size:16px;resize:none;max-height:120px;min-height:22px;line-height:1.4}
 #msg::placeholder{color:var(--txt3)}
-#send{width:38px;height:38px;border-radius:50%;flex-shrink:0;background:var(--grad1);color:#000;
-  display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700}
+#send{width:38px;height:38px;border-radius:50%;flex-shrink:0;background:var(--grad1);color:#000;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700}
 #send:active{transform:scale(.9)}#send:disabled{opacity:.4}
-#sidebar{position:fixed;top:0;left:0;bottom:0;width:290px;max-width:85vw;background:var(--bg2);
-  border-right:1px solid var(--border);transform:translateX(-100%);
-  transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:100;display:flex;flex-direction:column;
-  padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+#mic{width:38px;height:38px;border-radius:50%;flex-shrink:0;background:var(--card2);color:var(--cyan);
+  display:flex;align-items:center;justify-content:center;font-size:18px;border:1px solid var(--border)}
+#mic:active{transform:scale(.9)}#mic.on{background:var(--red);color:#fff;border-color:var(--red);animation:p 1s infinite}
+#cam{width:38px;height:38px;border-radius:50%;flex-shrink:0;background:var(--card2);color:var(--cyan);
+  display:flex;align-items:center;justify-content:center;font-size:18px;border:1px solid var(--border)}
+#cam:active{transform:scale(.9)}
+#sidebar{position:fixed;top:0;left:0;bottom:0;width:280px;max-width:85vw;background:var(--bg2);
+  border-right:1px solid var(--border);transform:translateX(-100%);transition:transform .3s;z-index:100;
+  display:flex;flex-direction:column;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
 #sidebar.open{transform:translateX(0)}
 .sb-header{padding:18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
-.sb-header h2{font-size:18px;font-weight:700;background:var(--grad1);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sb-header h2{font-size:18px;font-weight:700;background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .sb-body{flex:1;overflow-y:auto;padding:8px}
-.sb-item{padding:11px 13px;border-radius:10px;margin-bottom:2px;display:flex;align-items:center;
-  gap:10px;color:var(--txt);font-size:14px;cursor:pointer;font-weight:500}
+.sb-item{padding:11px 13px;border-radius:10px;margin-bottom:2px;display:flex;align-items:center;gap:10px;color:var(--txt);font-size:14px;cursor:pointer;font-weight:500}
 .sb-item:active{background:var(--card)}
-.sb-item .ico{width:30px;height:30px;border-radius:8px;background:var(--card);display:flex;
-  align-items:center;justify-content:center;font-size:15px;flex-shrink:0;border:1px solid var(--border)}
+.sb-item .ico{width:30px;height:30px;border-radius:8px;background:var(--card);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;border:1px solid var(--border)}
 .sb-item .text{flex:1}
 .sb-item .badge{font-size:10px;padding:2px 6px;border-radius:5px;background:rgba(0,229,255,.15);color:var(--cyan);font-weight:600}
 .sb-item.danger{color:var(--red)}
 .sb-section{padding:14px 13px 5px;font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:1.2px;font-weight:700}
-.close-btn{width:34px;height:34px;border-radius:50%;background:var(--card);display:flex;
-  align-items:center;justify-content:center;font-size:16px;color:var(--txt2);cursor:pointer}
+.close-btn{width:34px;height:34px;border-radius:50%;background:var(--card);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--txt2);cursor:pointer}
 #backdrop{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:99;opacity:0;pointer-events:none;transition:opacity .25s}
 #backdrop.on{opacity:1;pointer-events:auto}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(8px)}
@@ -116,22 +110,25 @@ header{display:flex;align-items:center;gap:12px;padding:12px 16px;
 .modal-header h2{font-size:18px;font-weight:700;color:#fff}
 .modal input{width:100%;padding:12px 14px;border-radius:10px;background:var(--card);
   color:#fff;border:1px solid var(--border);font-size:14px;margin-bottom:10px}
-.kb-item{padding:10px 12px;background:var(--card);border:1px solid var(--border);border-radius:10px;
-  margin-bottom:6px;font-size:13px;cursor:pointer}
-.kb-item:active{background:var(--card2);border-color:var(--cyan)}
-.kb-item b{color:var(--cyan);font-family:monospace}
+#camera-modal{position:fixed;inset:0;background:#000;z-index:300;display:none;flex-direction:column;align-items:center;justify-content:center}
+#camera-modal.on{display:flex}
+#camera-video{max-width:100%;max-height:80vh;border-radius:12px}
+.cam-actions{position:absolute;bottom:30px;left:0;right:0;display:flex;justify-content:center;gap:20px}
+.cam-btn{width:70px;height:70px;border-radius:50%;background:var(--grad1);color:#000;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;border:none;cursor:pointer;box-shadow:0 0 40px rgba(0,229,255,.5)}
+.cam-close{width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;border:none;cursor:pointer}
 #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(100px);
   background:var(--card);color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;
-  box-shadow:0 8px 24px rgba(0,0,0,.6);border:1px solid var(--border);z-index:500;opacity:0;transition:.3s;pointer-events:none;max-width:90vw}
+  box-shadow:0 8px 24px rgba(0,0,0,.6);border:1px solid var(--border);z-index:500;opacity:0;transition:.3s;pointer-events:none}
 #toast.on{transform:translateX(-50%) translateY(0);opacity:1}
+.speak-badge{display:inline-block;color:var(--cyan);font-size:11px;margin-left:6px;cursor:pointer}
 </style>
 </head>
 <body>
 
 <div id="install">
   <div class="hero">🤖</div>
-  <h1>Hugo <span>Ultra</span></h1>
-  <div class="tagline">Loading knowledge base…</div>
+  <h1>Hugo <span>AI</span></h1>
+  <div class="tagline">Loading voice, vision, memory, GitHub…</div>
   <div class="progress"><div class="progress-fill" id="pf" style="width:0%"></div></div>
   <div class="status-text" id="st">Initializing…</div>
 </div>
@@ -142,12 +139,15 @@ header{display:flex;align-items:center;gap:12px;padding:12px 16px;
     <button class="close-btn" id="sb-close">✕</button></div>
   <div class="sb-body">
     <div class="sb-item" data-a="new"><div class="ico">💬</div><div class="text">Нов разговор</div></div>
-    <div class="sb-item" data-a="kb"><div class="ico">📚</div><div class="text">Knowledge Base</div><div class="badge" id="kb-count">0</div></div>
-    <div class="sb-item" data-a="learned"><div class="ico">🎓</div><div class="text">Научени од GitHub</div><div class="badge" id="mem-count">0</div></div>
-    <div class="sb-section">Инструменти</div>
-    <div class="sb-item" data-a="tools"><div class="ico">🛠</div><div class="text">Достапни tools</div></div>
-    <div class="sb-item" data-a="import"><div class="ico">📥</div><div class="text">Импорт memory</div></div>
-    <div class="sb-item" data-a="export"><div class="ico">💾</div><div class="text">Извези memory</div></div>
+    <div class="sb-item" data-a="help"><div class="ico">❓</div><div class="text">Што можам</div></div>
+    <div class="sb-section">Глас</div>
+    <div class="sb-item" data-a="tts-toggle"><div class="ico">🔊</div><div class="text">Auto-speak</div><div class="badge" id="tts-badge">OFF</div></div>
+    <div class="sb-item" data-a="voice-lang"><div class="ico">🌐</div><div class="text">Јазик: <span id="voice-lang">MK</span></div></div>
+    <div class="sb-section">GitHub Memory</div>
+    <div class="sb-item" data-a="gh-token"><div class="ico">🔑</div><div class="text">GitHub token</div></div>
+    <div class="sb-item" data-a="sync"><div class="ico">☁️</div><div class="text">Sync сега</div></div>
+    <div class="sb-item" data-a="pull"><div class="ico">⬇️</div><div class="text">Повлечи од GitHub</div></div>
+    <div class="sb-item" data-a="mem"><div class="ico">🧠</div><div class="text">Меморија</div><div class="badge" id="mem-count">0</div></div>
     <div class="sb-section">Опасно</div>
     <div class="sb-item danger" data-a="clear"><div class="ico">🗑</div><div class="text">Избриши сè</div></div>
   </div>
@@ -156,617 +156,752 @@ header{display:flex;align-items:center;gap:12px;padding:12px 16px;
 <header>
   <button class="icon-btn" id="btn-menu">☰</button>
   <div class="logo">🤖</div>
-  <div class="info"><h1>Hugo Ultra</h1>
+  <div class="info"><h1>Hugo AI</h1>
     <div class="sub"><span class="pulse"></span><span id="status">Ready</span></div></div>
-  <button class="icon-btn" id="btn-kb">📚</button>
+  <button class="icon-btn" id="btn-help">❓</button>
 </header>
 
 <div id="chat"></div>
 
 <div id="input-area">
   <div id="input-row">
-    <textarea id="msg" placeholder="Направи слика на… / Цена на BTC / Кои PRs ги имам" rows="1"></textarea>
+    <textarea id="msg" placeholder="Кажи или пиши…" rows="1"></textarea>
+    <button id="mic" title="Глас">🎤</button>
+    <button id="cam" title="Камера">📷</button>
     <button id="send">➤</button>
+  </div>
+</div>
+
+<div id="camera-modal">
+  <video id="camera-video" autoplay playsinline></video>
+  <div class="cam-actions">
+    <button class="cam-close" id="cam-close">✕</button>
+    <button class="cam-btn" id="cam-snap">📸</button>
+  </div>
+</div>
+
+<div class="modal" id="modal-token">
+  <div class="modal-content">
+    <div class="modal-header"><h2>🔑 GitHub Token</h2>
+      <button class="close-btn" id="modal-token-close">✕</button></div>
+    <p style="color:var(--txt2);font-size:12px;margin-bottom:12px">
+      За да синхронизираш меморија помеѓу уреди. Креирај на
+      <a href="https://github.com/settings/tokens/new?scopes=gist&description=Hugo" target="_blank" style="color:var(--cyan)">github.com/settings/tokens</a>
+      (scope: gist).
+    </p>
+    <input type="password" id="token-input" placeholder="ghp_...">
+    <button class="sg" id="token-save" style="width:100%;padding:14px;text-align:center">Зачувај</button>
   </div>
 </div>
 
 <div id="toast"></div>
 
-<div class="modal" id="modal-kb">
-  <div class="modal-content">
-    <div class="modal-header"><h2>📚 Knowledge Base</h2>
-      <button class="close-btn" id="modal-kb-close">✕</button></div>
-    <input type="search" id="kb-search" placeholder="Пребарај recipe…">
-    <div id="kb-content"></div>
-  </div>
-</div>
-
 <script>
 'use strict';
 
-// ═══════════════════════════════════════════════════════════════
-//  📚 KNOWLEDGE BASE — 150+ recipes baked in
-// ═══════════════════════════════════════════════════════════════
-const KB = {
-  // ==== IMAGE GENERATION ====
-  'image:generate':{cat:'image',title:'Generate image',usage:'Направи слика на [опис]',
-    fn:async p=>{
-      const translated=await translatePrompt(p);
-      const url=`https://image.pollinations.ai/prompt/${encodeURIComponent(translated)}?width=768&height=768&seed=${Math.floor(Math.random()*1e6)}&nologo=true&model=flux`;
-      return`__IMAGE__${url}__PROMPT__${translated}`;
-    }},
-  'image:logo':{cat:'image',title:'Generate logo',usage:'Направи лого за [бренд]',
-    fn:async p=>{
-      const url=`https://image.pollinations.ai/prompt/${encodeURIComponent('minimalist logo design for '+p+', clean vector, professional, white background')}?width=512&height=512&nologo=true&model=flux`;
-      return`__IMAGE__${url}__PROMPT__Logo: ${p}`;
-    }},
-  'image:icon':{cat:'image',title:'Generate icon',usage:'Направи икона за [тема]',
-    fn:async p=>{
-      const url=`https://image.pollinations.ai/prompt/${encodeURIComponent('flat minimalist icon of '+p+', app icon style, simple shapes')}?width=512&height=512&nologo=true&model=flux`;
-      return`__IMAGE__${url}__PROMPT__Icon: ${p}`;
-    }},
+const $ = id => document.getElementById(id);
+const chat = $('chat'), msgBox = $('msg'), sendBtn = $('send'), micBtn = $('mic'), camBtn = $('cam');
+const sidebar = $('sidebar'), backdrop = $('backdrop');
+const statusEl = $('status'), toast = $('toast');
+const install = $('install'), loaderText = $('st'), progressFill = $('pf');
+const cameraModal = $('camera-modal'), cameraVideo = $('camera-video');
+const tokenModal = $('modal-token');
 
-  // ==== CRYPTO / TRADING ====
-  'crypto:price':{cat:'crypto',title:'Crypto price',usage:'Цена на BTC / ETH / SOL',
-    fn:async symbol=>{
-      const s=symbol.toUpperCase().replace(/[^A-Z]/g,'')||'BTC';
-      const r=await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${getCoinId(s)}&vs_currencies=usd,eur&include_24hr_change=true`);
-      if(!r.ok)return`❌ Не можам да земам цена за ${s}`;
-      const d=await r.json();
-      const key=Object.keys(d)[0];
-      if(!key)return`❌ ${s} не е најден`;
-      const info=d[key];
-      const change=info.usd_24h_change>=0?'🟢 +':'🔴 ';
-      return`💰 **${s}** = **$${info.usd.toLocaleString()}** (${change}${info.usd_24h_change?.toFixed(2)}%)\n€${info.eur.toLocaleString()}`;
-    }},
-  'crypto:top':{cat:'crypto',title:'Top coins',usage:'Топ 10 крипто',
-    fn:async()=>{
-      const r=await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10');
-      const d=await r.json();
-      return`📊 **Top 10:**\n\n`+d.map((c,i)=>`${i+1}. **${c.symbol.toUpperCase()}** $${c.current_price.toLocaleString()} ${c.price_change_percentage_24h>=0?'🟢':'🔴'} ${c.price_change_percentage_24h.toFixed(1)}%`).join('\n');
-    }},
-  'crypto:trending':{cat:'crypto',title:'Trending',usage:'Трендинг крипто',
-    fn:async()=>{
-      const r=await fetch('https://api.coingecko.com/api/v3/search/trending');
-      const d=await r.json();
-      return`🔥 **Trending:**\n\n`+d.coins.slice(0,10).map((c,i)=>`${i+1}. **${c.item.symbol}** — ${c.item.name} (rank #${c.item.market_cap_rank||'?'})`).join('\n');
-    }},
-
-  // ==== NEWS ====
-  'news:hackernews':{cat:'news',title:'Hacker News top',usage:'Хакер њуз',
-    fn:async()=>{
-      const r=await fetch('https://hacker-news.firebaseio.com/v0/topstories.json');
-      const ids=(await r.json()).slice(0,10);
-      const items=await Promise.all(ids.map(id=>fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(x=>x.json())));
-      return`📰 **HN Top 10:**\n\n`+items.map((x,i)=>`${i+1}. [${x.title}](${x.url||'https://news.ycombinator.com/item?id='+x.id}) ⭐${x.score}`).join('\n\n');
-    }},
-  'news:crypto':{cat:'news',title:'Crypto news',usage:'Крипто вести',
-    fn:async()=>{
-      try{
-        const r=await fetch('https://api.coinstats.app/public/v1/news?skip=0&limit=10');
-        if(!r.ok)throw 0;
-        const d=await r.json();
-        return`📰 **Crypto news:**\n\n`+d.news.map(n=>`• [${n.title}](${n.link})`).join('\n');
-      }catch(e){
-        // fallback via RSS
-        return`📰 Не можам да земам вести моментално. Пробај подоцна.`;
-      }
-    }},
-  'news:rss':{cat:'news',title:'RSS feed',usage:'RSS [url]',
-    fn:async url=>{
-      const r=await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
-      const d=await r.json();
-      if(d.status!=='ok')return`❌ Feed error`;
-      return`📡 **${d.feed.title}:**\n\n`+d.items.slice(0,10).map(x=>`• [${x.title}](${x.link})`).join('\n');
-    }},
-
-  // ==== WEB / WIKI ====
-  'web:wikipedia':{cat:'web',title:'Wikipedia',usage:'Википедија за [тема]',
-    fn:async q=>{
-      const r=await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(q.trim())}`);
-      if(!r.ok)return'❌ Не е најдено';
-      const d=await r.json();
-      return`📖 **${d.title}**\n\n${d.extract}\n\n🔗 ${d.content_urls?.desktop?.page||''}`;
-    }},
-  'web:define':{cat:'web',title:'Define word',usage:'Што значи [збор]',
-    fn:async w=>{
-      const r=await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(w.trim())}`);
-      if(!r.ok)return'❌ Не е најден';
-      const d=await r.json();
-      const first=d[0];
-      return`📚 **${first.word}** (${first.phonetic||''})\n\n`+first.meanings.slice(0,3).map(m=>`*${m.partOfSpeech}:* ${m.definitions[0].definition}`).join('\n\n');
-    }},
-  'web:translate':{cat:'web',title:'Translate',usage:'Преведи [текст] на [јазик]',
-    fn:async t=>{
-      const m=t.match(/(.+?)\s+(?:на|to|into)\s+([a-z]+)/i);
-      if(!m)return'❌ Формат: Преведи [текст] на [јазик]';
-      const text=m[1],lang=m[2];
-      const r=await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=mk|${lang}`);
-      const d=await r.json();
-      if(!d.responseData)return'❌ Error';
-      return`🌐 **${text}** → **${d.responseData.translatedText}**`;
-    }},
-  'web:weather':{cat:'web',title:'Weather',usage:'Време [град]',
-    fn:async city=>{
-      const r=await fetch(`https://wttr.in/${encodeURIComponent(city.trim())}?format=j1`);
-      if(!r.ok)return'❌ Град не е најден';
-      const d=await r.json();
-      const c=d.current_condition[0];
-      return`🌤 **${city}**\n🌡 ${c.temp_C}°C (feels ${c.FeelsLikeC}°C)\n💧 Humidity: ${c.humidity}%\n💨 Wind: ${c.windspeedKmph} km/h\n☁ ${c.weatherDesc[0].value}`;
-    }},
-
-  // ==== GITHUB ====
-  'gh:user':{cat:'gh',title:'GitHub user',usage:'GitHub [username]',
-    fn:async u=>{
-      const r=await fetch(`https://api.github.com/users/${u.trim()}`);
-      if(!r.ok)return`❌ User "${u}" не е најден`;
-      const d=await r.json();
-      return`**${d.login}**${d.name?' ('+d.name+')':''}\n📝 ${d.bio||'—'}\n📦 ${d.public_repos} repos · 👥 ${d.followers} followers\n🔗 ${d.html_url}`;
-    }},
-  'gh:repos':{cat:'gh',title:'GitHub repos',usage:'Repos na [user]',
-    fn:async u=>{
-      const r=await fetch(`https://api.github.com/users/${u.trim()}/repos?per_page=15&sort=updated`);
-      if(!r.ok)return`❌ Error`;
-      const d=await r.json();
-      return`📦 **${u}** (${d.length}):\n\n`+d.map(x=>`• **${x.name}** ⭐${x.stargazers_count} ${x.language?'· '+x.language:''}`).join('\n');
-    }},
-  'gh:repo':{cat:'gh',title:'GitHub repo info',usage:'Info za [owner/repo]',
-    fn:async r=>{
-      const res=await fetch(`https://api.github.com/repos/${r.trim()}`);
-      if(!res.ok)return`❌ Not found`;
-      const d=await res.json();
-      return`📦 **${d.full_name}**\n⭐ ${d.stargazers_count} · 🍴 ${d.forks_count}\n💻 ${d.language||'—'}\n📝 ${d.description||''}\n🔗 ${d.html_url}`;
-    }},
-  'gh:prs':{cat:'gh',title:'My PRs',usage:'Моите PRs',
-    fn:async user=>{
-      user=user.trim()||'klikmarkettt-dotcom';
-      const r=await fetch(`https://api.github.com/search/issues?q=author:${user}+is:pr+is:open&per_page=20`);
-      const d=await r.json();
-      if(!d.items?.length)return`📋 Нема отворени PRs.`;
-      return`📋 **Open PRs: ${d.total_count}**\n\n`+d.items.map(x=>`• #${x.number} **${x.title}**\n  ${x.repository_url.split('/').slice(-2).join('/')}`).join('\n');
-    }},
-  'gh:search':{cat:'gh',title:'Search GitHub',usage:'Пребарај GitHub [query]',
-    fn:async q=>{
-      const r=await fetch(`https://api.github.com/search/repositories?q=${encodeURIComponent(q.trim())}&sort=stars&per_page=10`);
-      const d=await r.json();
-      if(!d.items?.length)return`🔍 Нема резултати`;
-      return`🔍 **${d.total_count} results:**\n\n`+d.items.map(x=>`• **${x.full_name}** ⭐${x.stargazers_count}\n  ${x.description||''}`).join('\n\n');
-    }},
-  'gh:clone':{cat:'gh',title:'Clone repo info',usage:'Клонирај [owner/repo]',
-    fn:async r=>{
-      const res=await fetch(`https://api.github.com/repos/${r.trim()}`);
-      if(!res.ok)return`❌ Not found`;
-      const d=await res.json();
-      // Fetch README
-      let readme='';
-      for(const br of [d.default_branch,'main','master']){
-        try{
-          const rr=await fetch(`https://raw.githubusercontent.com/${r}/${br}/README.md`);
-          if(rr.ok){readme=await rr.text();break}
-        }catch(e){}
-      }
-      // Save to learned
-      const lines=readme.split('\n');
-      let learned=0;
-      for(const line of lines){
-        const m=line.match(/^\s*[-*]\s+\[([^\]]+)\]\(([^)]+)\)\s*[-–—:]\s*(.+)$/);
-        if(m&&m[1].length>2&&m[3].length>8){
-          STATE.learned.push({name:m[1],desc:m[3].slice(0,150),url:m[2],source:r});
-          learned++;
-        }
-      }
-      if(STATE.learned.length>5000)STATE.learned=STATE.learned.slice(-5000);
-      saveLearned();
-      return`📦 **${d.full_name}** ⭐${d.stargazers_count}\n\n${d.description||''}\n\n✅ Екстрактирав **${learned}** items од README.\n📚 Вкупно научени: **${STATE.learned.length}**`;
-    }},
-  'gh:trending':{cat:'gh',title:'GitHub trending',usage:'Трендинг GitHub',
-    fn:async()=>{
-      const r=await fetch('https://api.github.com/search/repositories?q=stars:%3E1000+created:>2024-01-01&sort=stars&per_page=15');
-      const d=await r.json();
-      return`🔥 **Trending repos:**\n\n`+d.items.map(x=>`• **${x.full_name}** ⭐${x.stargazers_count}\n  ${x.description||''}`).join('\n\n');
-    }},
-
-  // ==== TEXT / PRODUCTIVITY ====
-  'text:summarize':{cat:'text',title:'Summarize text',usage:'Резимирај [текст]',
-    fn:async t=>{
-      const r=await callLLM(`Summarize this in 3 bullet points in Macedonian:\n\n${t}`,'');
-      return r||'❌ LLM unavailable';
-    }},
-  'text:rewrite':{cat:'text',title:'Rewrite text',usage:'Препиши [текст]',
-    fn:async t=>{
-      const r=await callLLM(`Rewrite this text in Macedonian, keep meaning, make it clearer:\n\n${t}`,'');
-      return r||'❌ LLM unavailable';
-    }},
-  'text:email':{cat:'text',title:'Write email',usage:'Email за [тема]',
-    fn:async t=>{
-      const r=await callLLM(`Write a professional email in Macedonian about: ${t}`,'');
-      return r||'❌ LLM unavailable';
-    }},
-  'text:tweet':{cat:'text',title:'Write tweet',usage:'Твит за [тема]',
-    fn:async t=>{
-      const r=await callLLM(`Write an engaging Twitter post (max 280 chars) about: ${t}. Return ONLY the tweet text.`,'');
-      return r?`🐦 **Tweet:**\n\n${r}`:'❌ LLM unavailable';
-    }},
-
-  // ==== MISC UTILITIES ====
-  'util:qr':{cat:'util',title:'QR code',usage:'QR [текст]',
-    fn:async t=>`__IMAGE__https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(t)}__PROMPT__QR: ${t}`},
-  'util:time':{cat:'util',title:'Current time',usage:'Колку е часот',
-    fn:async()=>`🕐 ${new Date().toLocaleString('mk-MK',{dateStyle:'full',timeStyle:'short'})}`},
-  'util:ip':{cat:'util',title:'My IP',usage:'Мој IP',
-    fn:async()=>{
-      try{
-        const r=await fetch('https://api.ipify.org?format=json');
-        const d=await r.json();
-        return`🌐 Вашиот IP: **${d.ip}**`;
-      }catch(e){return'❌ Не можам да земам IP'}
-    }},
-  'util:uuid':{cat:'util',title:'UUID',usage:'Генерирај UUID',
-    fn:async()=>`🆔 \`${crypto.randomUUID()}\``},
-  'util:password':{cat:'util',title:'Password',usage:'Генерирај лозинка',
-    fn:async()=>{
-      const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
-      let pwd='';
-      for(let i=0;i<20;i++)pwd+=chars[Math.floor(Math.random()*chars.length)];
-      return`🔐 \`${pwd}\``;
-    }},
-};
-
-const COIN_IDS={BTC:'bitcoin',ETH:'ethereum',SOL:'solana',BNB:'binancecoin',XRP:'ripple',ADA:'cardano',DOGE:'dogecoin',AVAX:'avalanche-2',DOT:'polkadot',MATIC:'matic-network',LINK:'chainlink',TON:'the-open-network'};
-function getCoinId(s){return COIN_IDS[s.toUpperCase()]||s.toLowerCase()}
-
-// ═══ AGENTS (SIMPLE) ═══
-const AGENT_CATS=['coding','trading','defi','security','analytics','writing','marketing','research','creative','business','personal','social','learning','crypto','language','health','law','music','gaming'];
-let AGENT_COUNT=0;
-
-// ═══ TRANSLATION ═══
-const DICT={
-  'kuce':'a cute dog','куче':'a cute dog','kukja':'a house','куќа':'a house',
-  'macka':'a cute cat','мачка':'a cute cat','zivotni':'wild animals in nature','животни':'wild animals in nature',
-  'coek':'a man','човек':'a man','covek':'a man','zhena':'a woman','жена':'a woman',
-  'dete':'a child','дете':'a child','deca':'children playing','деца':'children playing',
-  'sonce':'bright sun in sky','сонце':'bright sun in sky','mesec':'full moon at night','месец':'full moon at night',
-  'dzvezdi':'starry night sky','zvezdi':'starry night sky','sвезди':'starry night sky',
-  'more':'beautiful sea','море':'beautiful sea','planina':'majestic mountain','планина':'majestic mountain',
-  'reka':'flowing river','река':'flowing river','ezero':'calm lake','езеро':'calm lake',
-  'drvo':'a tree','дрво':'a tree','cveke':'colorful flowers','цвеќе':'colorful flowers',
-  'kola':'a car','кола':'a car','avion':'an airplane','авион':'an airplane',
-  'grad':'a modern city','град':'a modern city','selo':'a peaceful village','село':'a peaceful village',
-  'robot':'a futuristic robot','робот':'a futuristic robot','astronaut':'an astronaut','астронаут':'an astronaut',
-  'mars':'planet Mars landscape','марс':'planet Mars landscape','zemja':'planet Earth','земја':'planet Earth',
-  'son':'a dream','сон':'a dream','ljubov':'love','љубов':'love','srekja':'happiness','среќа':'happiness',
-};
-
-function translatePrompt(text){
-  const words=text.toLowerCase().split(/\s+/);
-  const translated=words.map(w=>{
-    const clean=w.replace(/[.,!?;:]/g,'');
-    return DICT[clean]||DICT[w]||w;
-  }).join(' ');
-  return translated+', photorealistic, high quality, detailed, 4k';
+function setStatus(t){ statusEl.textContent = t }
+function scrollDown(){ chat.scrollTop = chat.scrollHeight }
+function esc(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]) }
+function showToast(m, ms=2500){
+  toast.textContent = m; toast.classList.add('on');
+  clearTimeout(showToast.t);
+  showToast.t = setTimeout(() => toast.classList.remove('on'), ms);
 }
 
 // ═══ STATE ═══
-const STATE={
-  history:JSON.parse(localStorage.getItem('hugo11_hist')||'[]'),
-  learned:JSON.parse(localStorage.getItem('hugo11_learned')||'[]'),
-  busy:false,
+const STATE = {
+  history: JSON.parse(localStorage.getItem('hugo13_hist') || '[]'),
+  memory: JSON.parse(localStorage.getItem('hugo13_memory') || '[]'),
+  learned: JSON.parse(localStorage.getItem('hugo13_learned') || '[]'),
+  token: localStorage.getItem('hugo13_token') || '',
+  speak: localStorage.getItem('hugo13_speak') === '1',
+  lang: localStorage.getItem('hugo13_lang') || 'mk-MK',
+  busy: false,
+  listening: false,
 };
-function saveLearned(){try{localStorage.setItem('hugo11_learned',JSON.stringify(STATE.learned.slice(-5000)))}catch(e){}
-  if($('mem-count'))$('mem-count').textContent=STATE.learned.length;
-  if($('kb-count'))$('kb-count').textContent=Object.keys(KB).length}
-function saveHistory(){try{localStorage.setItem('hugo11_hist',JSON.stringify(STATE.history.slice(-50)))}catch(e){}}
+function save(){
+  try {
+    localStorage.setItem('hugo13_hist', JSON.stringify(STATE.history.slice(-50)));
+    localStorage.setItem('hugo13_memory', JSON.stringify(STATE.memory.slice(-500)));
+    localStorage.setItem('hugo13_learned', JSON.stringify(STATE.learned.slice(-1000)));
+  } catch(e){}
+  if ($('mem-count')) $('mem-count').textContent = STATE.memory.length + STATE.learned.length;
+}
 
-const $=id=>document.getElementById(id);
-const chat=$('chat'),msgBox=$('msg'),sendBtn=$('send');
-const sidebar=$('sidebar'),backdrop=$('backdrop');
-const statusEl=$('status'),toast=$('toast');
-const install=$('install'),loaderText=$('st'),progressFill=$('pf');
+// ═══ VOICE OUTPUT (TTS — browser native, free) ═══
+function speak(text){
+  if (!STATE.speak) return;
+  if (!('speechSynthesis' in window)) return;
+  try {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text.replace(/[#*`_\[\]()]/g,'').slice(0, 400));
+    u.lang = STATE.lang;
+    u.rate = 1.05;
+    u.pitch = 1.0;
+    const voices = speechSynthesis.getVoices();
+    const match = voices.find(v => v.lang.startsWith(STATE.lang.split('-')[0]));
+    if (match) u.voice = match;
+    speechSynthesis.speak(u);
+  } catch(e){}
+}
 
-function setStatus(t){statusEl.textContent=t}
-function scrollDown(){chat.scrollTop=chat.scrollHeight}
-function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c])}
-function showToast(m,ms=2000){toast.textContent=m;toast.classList.add('on');
-  clearTimeout(showToast.t);showToast.t=setTimeout(()=>toast.classList.remove('on'),ms)}
+// ═══ VOICE INPUT (STT — Web Speech API, free) ═══
+let recognition = null;
+function initSTT(){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return null;
+  const r = new SR();
+  r.continuous = false;
+  r.interimResults = true;
+  r.lang = STATE.lang;
+  r.onresult = (e) => {
+    let final = '';
+    for (let i = e.resultIndex; i < e.results.length; i++){
+      if (e.results[i].isFinal) final += e.results[i][0].transcript;
+    }
+    if (final){
+      msgBox.value = final;
+      setTimeout(() => sendMsg(), 200);
+    } else {
+      msgBox.value = e.results[e.results.length-1][0].transcript;
+    }
+  };
+  r.onend = () => {
+    STATE.listening = false;
+    micBtn.classList.remove('on');
+    setStatus('Ready');
+  };
+  r.onerror = (e) => {
+    STATE.listening = false;
+    micBtn.classList.remove('on');
+    setStatus('Ready');
+    if (e.error === 'not-allowed') showToast('❌ Дозволи микрофон');
+    else if (e.error === 'no-speech') showToast('Не слушнав ништо');
+  };
+  return r;
+}
 
-function renderMD(t){
-  if(!t)return'';
-  const imgMatch=t.match(/__IMAGE__(.+)__PROMPT__(.+)$/);
-  if(imgMatch){
-    const url=imgMatch[1],prompt=imgMatch[2];
-    return`🎨 **${esc(prompt)}**\n\n<div class="img-wrap"><img src="${esc(url)}" loading="lazy"></div>`;
+micBtn.onclick = () => {
+  if (!recognition) recognition = initSTT();
+  if (!recognition){
+    showToast('❌ Browser не поддржува STT. Користи Chrome.');
+    return;
   }
-  let h=esc(t);
-  h=h.replace(/```(\w*)\n?([\s\S]*?)```/g,'<pre><code>$2</code></pre>');
-  h=h.replace(/`([^`\n]+)`/g,'<code>$1</code>');
-  h=h.replace(/^### (.+)$/gm,'<h3>$1</h3>');
-  h=h.replace(/^## (.+)$/gm,'<h2>$1</h2>');
-  h=h.replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>');
-  h=h.replace(/^\s*[-*] (.+)$/gm,'• $1');
-  h=h.replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g,'<a href="$2" target="_blank">$1</a>');
-  h=h.replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" target="_blank">$1</a>');
+  if (STATE.listening){
+    recognition.stop();
+    STATE.listening = false;
+    micBtn.classList.remove('on');
+    setStatus('Ready');
+  } else {
+    recognition.lang = STATE.lang;
+    try {
+      recognition.start();
+      STATE.listening = true;
+      micBtn.classList.add('on');
+      setStatus('🎤 Слушам…');
+    } catch(e){
+      showToast('Грешка: ' + e.message);
+    }
+  }
+};
+
+// ═══ VISION (Camera + Pollinations vision) ═══
+let cameraStream = null;
+camBtn.onclick = async () => {
+  try {
+    cameraStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment' }, audio: false
+    });
+    cameraVideo.srcObject = cameraStream;
+    cameraModal.classList.add('on');
+  } catch(e){
+    showToast('❌ Нема пристап до камера: ' + e.message);
+  }
+};
+$('cam-close').onclick = () => {
+  if (cameraStream) cameraStream.getTracks().forEach(t => t.stop());
+  cameraModal.classList.remove('on');
+};
+$('cam-snap').onclick = async () => {
+  const canvas = document.createElement('canvas');
+  canvas.width = cameraVideo.videoWidth;
+  canvas.height = cameraVideo.videoHeight;
+  canvas.getContext('2d').drawImage(cameraVideo, 0, 0);
+  const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+  if (cameraStream) cameraStream.getTracks().forEach(t => t.stop());
+  cameraModal.classList.remove('on');
+
+  addMsg('user', '📷 [Слика од камера]');
+  const th = addThinking('👁 Гледам…');
+  setStatus('👁 Анализирам слика…');
+
+  try {
+    const base64 = dataUrl.split(',')[1];
+    const r = await fetch('https://text.pollinations.ai/openai', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'openai',
+        messages:[{
+          role:'user',
+          content:[
+            {type:'text', text:'Опиши детално што гледаш на оваа слика. Одговори на македонски, кратко (3-4 реченици).'},
+            {type:'image_url', image_url:{url:dataUrl}}
+          ]
+        }],
+        private:true
+      })
+    });
+    let reply;
+    if (r.ok){
+      const d = await r.json();
+      reply = d.choices[0].message.content;
+    } else {
+      // Fallback: simple describe
+      reply = '📷 Сликата е зачувана, но vision API моментално е недостапен. Обиди се пак.';
+    }
+    th.remove();
+    addMsg('hugo', '👁 **Што гледам:**\n\n' + reply);
+    speak(reply.slice(0, 200));
+  } catch(e){
+    th.remove();
+    addMsg('hugo', '❌ Vision error: ' + e.message);
+  }
+  setStatus('Ready');
+};
+
+// ═══ UI ═══
+function renderMD(t){
+  if (!t) return '';
+  const im = t.match(/__IMAGE__(.+)__PROMPT__(.+)$/);
+  if (im) return `🎨 **${esc(im[2])}**\n\n<div class="img-wrap"><img src="${esc(im[1])}" loading="lazy"></div>`;
+  let h = esc(t);
+  h = h.replace(/```(\w*)\n?([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+  h = h.replace(/`([^`\n]+)`/g, '<code>$1</code>');
+  h = h.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  h = h.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+  h = h.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+  h = h.replace(/^\s*[-*] (.+)$/gm, '• $1');
+  h = h.replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+  h = h.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank">$1</a>');
   return h;
 }
-function addMsg(role,text,save=true){
-  const el=document.createElement('div');
-  el.className='msg '+role;el.innerHTML=renderMD(text);
-  chat.appendChild(el);scrollDown();
-  if(save){STATE.history.push({role,text});saveHistory()}
+function addMsg(role, text, save=true){
+  const el = document.createElement('div');
+  el.className = 'msg ' + role;
+  el.innerHTML = renderMD(text);
+  chat.appendChild(el);
+  scrollDown();
+  if (save){
+    STATE.history.push({role, text});
+    save();
+  }
 }
-function addErr(t){const el=document.createElement('div');el.className='err';el.textContent=t;chat.appendChild(el);scrollDown()}
 function addThinking(t='…'){
-  const el=document.createElement('div');
-  el.className='msg hugo think';el.id='thinking';
-  el.innerHTML=`<span class="dot"></span><span class="dot"></span><span class="dot"></span> ${t}`;
-  chat.appendChild(el);scrollDown();return el;
+  const el = document.createElement('div');
+  el.className = 'msg hugo think';
+  el.id = 'thinking';
+  el.innerHTML = `<span class="dot"></span><span class="dot"></span><span class="dot"></span> ${t}`;
+  chat.appendChild(el);
+  scrollDown();
+  return el;
 }
 function showWelcome(){
-  if($('welcome'))return;
-  const el=document.createElement('div');
-  el.className='welcome';el.id='welcome';
-  el.innerHTML=`
+  if ($('welcome')) return;
+  const el = document.createElement('div');
+  el.className = 'welcome'; el.id = 'welcome';
+  el.innerHTML = `
     <div class="hero">🤖</div>
-    <h2>Hugo Ultra v11</h2>
-    <p>${Object.keys(KB).length} recipes · ${STATE.learned.length} learned</p>
+    <h2>Hugo AI</h2>
+    <p>Глас · Камера · Memory · GitHub · Сè бесплатно</p>
     <div style="margin-top:20px">
-      <span class="sg" onclick="qs('Направи слика на куче')">🐕 Куче</span>
+      <span class="sg" onclick="qs('Направи слика на куче')">🎨 Слика</span>
       <span class="sg" onclick="qs('Цена на BTC')">💰 BTC</span>
-      <span class="sg" onclick="qs('Топ 10 крипто')">📊 Top</span>
       <span class="sg" onclick="qs('Хакер њуз')">📰 HN</span>
-      <span class="sg" onclick="qs('Википедија за Bitcoin')">📖 BTC Wiki</span>
-      <span class="sg" onclick="qs('Време Скопје')">🌤 Weather</span>
-      <span class="sg" onclick="qs('Клонирај e2b-dev/awesome-ai-agents')">📦 Clone</span>
+      <span class="sg" onclick="qs('Вести Македонија')">🇲🇰 Вести</span>
+      <span class="sg" onclick="qs('Време Скопје')">🌤 Време</span>
       <span class="sg" onclick="qs('Моите PRs')">📋 PRs</span>
-      <span class="sg" onclick="qs('QR https://github.com')">📱 QR</span>
-      <span class="sg" onclick="qs('Лозинка')">🔐 Password</span>
-    </div>`;
-  chat.appendChild(el);scrollDown();
+      <span class="sg" onclick="qs('Лозинка')">🔐 Лозинка</span>
+      <span class="sg" onclick="qs('Што можеш?')">❓ Помош</span>
+    </div>
+    <p style="color:var(--txt3);font-size:11px;margin-top:20px">
+      💡 Кликни 🎤 за глас · 📷 за камера · ☰ за мени
+    </p>`;
+  chat.appendChild(el);
+  scrollDown();
 }
-function rmWelcome(){$('welcome')?.remove()}
-window.qs=t=>{msgBox.value=t;sendMsg()};
+function rmWelcome(){ $('welcome')?.remove() }
+window.qs = t => { msgBox.value = t; sendMsg() };
 
 // ═══ LLM ═══
-async function callLLM(prompt,system=''){
-  const full=(system?system+'\n\n':'')+prompt;
-  const enc=encodeURIComponent(full);
-  const endpoints=[
+async function callLLM(prompt, system=''){
+  const full = (system ? system + '\n\n' : '') + prompt;
+  const enc = encodeURIComponent(full);
+  for (const url of [
     `https://text.pollinations.ai/${enc}?model=openai&private=true`,
     `https://text.pollinations.ai/${enc}?model=mistral&private=true`,
-    `https://text.pollinations.ai/${enc}?model=llama`,
     `https://text.pollinations.ai/${enc}`,
-  ];
-  for(const url of endpoints){
-    try{
-      const r=await fetch(url);
-      if(!r.ok)continue;
-      const t=await r.text();
-      if(t&&t.length>2&&!t.startsWith('{"error')&&!t.startsWith('<!'))return t;
-    }catch(e){}
+  ]){
+    try {
+      const r = await fetch(url);
+      if (!r.ok) continue;
+      const t = await r.text();
+      if (t && t.length > 2 && !t.startsWith('{"error') && !t.startsWith('<!')) return t;
+    } catch(e){}
   }
   return null;
+}
+
+// ═══ TRANSLATION FOR IMAGES ═══
+const DICT = {
+  'kuce':'a cute fluffy puppy, golden retriever','куче':'a cute fluffy puppy, golden retriever',
+  'kukja':'an old charming village house','куќа':'an old charming village house',
+  'macka':'a fluffy orange cat','мачка':'a fluffy orange cat',
+  'zivotni':'wild animals in their natural habitat','животни':'wild animals in their natural habitat',
+  'lav':'a majestic male lion with mane','лав':'a majestic male lion with mane',
+  'tigar':'a bengal tiger in jungle','тигар':'a bengal tiger in jungle',
+  'slon':'a huge african elephant','слон':'a huge african elephant',
+  'medved':'a brown grizzly bear','медвед':'a brown grizzly bear',
+  'volk':'a grey wolf in snow','волк':'a grey wolf in snow',
+  'sonce':'the sun setting over mountains','сонце':'the sun setting over mountains',
+  'mesec':'a full bright moon in dark sky','месец':'a full bright moon in dark sky',
+  'more':'a vast turquoise sea with waves','море':'a vast turquoise sea with waves',
+  'planina':'a majestic snowy mountain peak','планина':'a majestic snowy mountain peak',
+  'reka':'a flowing clear river in forest','река':'a flowing clear river in forest',
+  'suma':'a lush green forest with sunlight','шума':'a lush green forest with sunlight',
+  'grad':'a modern city skyline at sunset','град':'a modern city skyline at sunset',
+  'selo':'a peaceful mountain village','село':'a peaceful mountain village',
+  'robot':'a futuristic shiny humanoid robot','робот':'a futuristic shiny humanoid robot',
+  'astronaut':'an astronaut floating in space','астронаут':'an astronaut floating in space',
+  'mars':'the red desert surface of Mars','марс':'the red desert surface of Mars',
+  'kosmos':'a colorful nebula in deep space','космос':'a colorful nebula in deep space',
+  'cveke':'colorful wildflowers in meadow','цвеќе':'colorful wildflowers in meadow',
+};
+function translate(text){
+  return text.toLowerCase().split(/\s+/).map(w => {
+    const c = w.replace(/[.,!?;:]/g,'');
+    return DICT[c] || w;
+  }).join(' ') + ', photorealistic, 8k, cinematic lighting, highly detailed';
+}
+
+// ═══ TOOLS ═══
+async function toolImage(p){
+  const t = translate(p);
+  const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(t)}?width=768&height=768&seed=${Math.floor(Math.random()*1e6)}&nologo=true&model=flux`;
+  return `__IMAGE__${url}__PROMPT__${t}`;
+}
+async function toolCrypto(sym){
+  const ids = {BTC:'bitcoin',ETH:'ethereum',SOL:'solana',BNB:'binancecoin',XRP:'ripple',ADA:'cardano',DOGE:'dogecoin',AVAX:'avalanche-2',DOT:'polkadot',LINK:'chainlink',TON:'the-open-network'};
+  const id = ids[sym.toUpperCase()] || sym.toLowerCase();
+  try {
+    const r = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${id}&vs_currencies=usd,eur&include_24hr_change=true`);
+    const d = await r.json();
+    const k = Object.keys(d)[0];
+    if (!k) return `❌ ${sym} не е најден`;
+    const i = d[k];
+    const ch = i.usd_24h_change >= 0 ? '🟢 +' : '🔴 ';
+    return `💰 **${sym.toUpperCase()}** = **$${i.usd.toLocaleString()}** (${ch}${i.usd_24h_change?.toFixed(2)}%)\n€${i.eur.toLocaleString()}`;
+  } catch(e){ return '❌ Error'; }
+}
+async function toolTop(){
+  try {
+    const r = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10');
+    const d = await r.json();
+    return `📊 **Top 10:**\n\n` + d.map((c,i) => `${i+1}. **${c.symbol.toUpperCase()}** $${c.current_price.toLocaleString()} ${c.price_change_percentage_24h>=0?'🟢':'🔴'} ${c.price_change_percentage_24h?.toFixed(1)}%`).join('\n');
+  } catch(e){ return '❌ Error'; }
+}
+async function toolHN(){
+  try {
+    const r = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json');
+    const ids = (await r.json()).slice(0,10);
+    const items = await Promise.all(ids.map(id => fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(x => x.json())));
+    return `📰 **Hacker News Top 10:**\n\n` + items.map((x,i) => `${i+1}. [${x.title}](${x.url||`https://news.ycombinator.com/item?id=${x.id}`}) ⭐${x.score}`).join('\n\n');
+  } catch(e){ return '❌ Error'; }
+}
+async function toolMKDNews(){
+  const feeds = [
+    {name:'MIA', url:'https://mia.mk/feed/'},
+    {name:'Meta.mk', url:'https://meta.mk/feed/'},
+    {name:'Sloboden Pecat', url:'https://www.slobodenpecat.mk/feed/'},
+  ];
+  for (const f of feeds){
+    try {
+      const r = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(f.url)}&count=10`);
+      const d = await r.json();
+      if (d.status === 'ok' && d.items?.length){
+        return `📰 **${f.name} — топ вести:**\n\n` + d.items.slice(0,8).map((x,i) => `${i+1}. [${x.title}](${x.link})`).join('\n');
+      }
+    } catch(e){}
+  }
+  return `📰 Feed недостапен. Пробај: https://mia.mk`;
+}
+async function toolWiki(q){
+  try {
+    const r = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(q.trim())}`);
+    if (!r.ok) return '❌ Не е најдено';
+    const d = await r.json();
+    return `📖 **${d.title}**\n\n${d.extract}`;
+  } catch(e){ return '❌ Error'; }
+}
+async function toolWeather(city){
+  try {
+    const r = await fetch(`https://wttr.in/${encodeURIComponent(city.trim())}?format=j1`);
+    if (!r.ok) return '❌ Град не е најден';
+    const d = await r.json();
+    const c = d.current_condition[0];
+    return `🌤 **${city}**\n🌡 ${c.temp_C}°C\n💧 ${c.humidity}%\n💨 ${c.windspeedKmph} km/h\n☁ ${c.weatherDesc[0].value}`;
+  } catch(e){ return '❌ Error'; }
+}
+async function toolPRs(){
+  try {
+    const r = await fetch(`https://api.github.com/search/issues?q=author:klikmarkettt-dotcom+is:pr+is:open&per_page=20`);
+    const d = await r.json();
+    if (!d.items?.length) return `📋 Нема отворени PRs`;
+    return `📋 **Open PRs: ${d.total_count}**\n\n` + d.items.map(x => `• #${x.number} **${x.title}**\n  ${x.repository_url.split('/').slice(-2).join('/')}`).join('\n');
+  } catch(e){ return '❌ Error'; }
+}
+async function toolGHUser(u){
+  try {
+    const r = await fetch(`https://api.github.com/users/${u.trim()}`);
+    if (!r.ok) return `❌ Не е најден`;
+    const d = await r.json();
+    return `**${d.login}**${d.name?' ('+d.name+')':''}\n📝 ${d.bio||'—'}\n📦 ${d.public_repos} repos · 👥 ${d.followers}\n🔗 ${d.html_url}`;
+  } catch(e){ return '❌ Error'; }
+}
+async function toolPassword(){
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*-_=+';
+  const arr = new Uint32Array(24);
+  crypto.getRandomValues(arr);
+  let pwd = '';
+  for (let i = 0; i < 24; i++) pwd += chars[arr[i] % chars.length];
+  return `🔐 **Лозинка (24):**\n\n\`${pwd}\``;
 }
 
 // ═══ INTENT DETECTION ═══
 function detectIntent(text){
-  const t=text.toLowerCase().trim();
-  if(!t)return null;
-  const m=text.match(/TOOL:\s*([a-z:_]+)\s*\|\s*(.+)/i);
-  if(m)return{tool:m[1],args:m[2].trim()};
+  const t = text.toLowerCase().trim();
+  if (!t) return null;
 
   // Image
-  const imgKw=/(?:направи|napravi|нацртај|nacrtaj|генерирај|generiraj|create|make|generate|draw|slika|слика|image)\s+(?:slika|слика|image|на|na|so|со|of|with|за|од)?\s*(.+)/i;
-  const m2=text.match(imgKw);
-  if(m2&&/(?:slika|слика|image|нацртај|nacrtaj|генерирај|generiraj|draw)/i.test(text)){
-    return{tool:'image:generate',args:m2[1].trim()};
+  let m = text.match(/(?:направи|napravi|нацртај|nacrtaj|генерирај|generiraj|create|make|generate|draw)\s+(?:slika|слика|image)?\s*(?:на|na|so|со|of|with|за)?\s*(.+)/i);
+  if (m && /(?:slika|слика|image|нацртај|nacrtaj|генерирај)/i.test(text)){
+    return {tool:'image', args:m[1].trim()};
   }
 
-  // Crypto price
-  let mm=t.match(/цена на ([a-z]{2,6})/i)||t.match(/price of ([a-z]{2,6})/i)||t.match(/^([a-z]{2,6}) price/i);
-  if(mm)return{tool:'crypto:price',args:mm[1]};
-  if(/^btc$/i.test(t))return{tool:'crypto:price',args:'BTC'};
-  if(/^eth$/i.test(t))return{tool:'crypto:price',args:'ETH'};
-  if(/(?:топ|top).*(?:крипто|crypto|coins)/i.test(text))return{tool:'crypto:top',args:''};
-  if(/(?:трендинг|trending).*(?:крипто|crypto)/i.test(text))return{tool:'crypto:trending',args:''};
+  // Crypto
+  m = text.match(/(?:цена|price|cena)\s+(?:на\s+|na\s+|of\s+)?([A-Z]{2,6})/i);
+  if (m) return {tool:'crypto', args:m[1]};
+  if (/^(?:btc|eth|sol|bnb|xrp|ada|doge|avax|dot|link|ton)$/i.test(t.trim())) return {tool:'crypto', args:t.trim()};
+  if (/(?:топ|top).*(?:крипто|crypto|coins)/i.test(text)) return {tool:'top', args:''};
 
   // News
-  if(/(?:хакер|hacker).*(?:њуз|news)/i.test(text)||/^hn$/i.test(t))return{tool:'news:hackernews',args:''};
+  if (/(?:хакер|hacker|hn|hacker\s*news)/i.test(text)) return {tool:'hn', args:''};
+  if (/(?:вести|news|vesti)/i.test(text)) return {tool:'mkdnews', args:''};
 
-  // Wikipedia
-  mm=text.match(/(?:википедија|wikipedia|wiki)\s+(?:за\s+|za\s+|about\s+)?(.+)/i);
-  if(mm)return{tool:'web:wikipedia',args:mm[1].trim()};
+  // Wiki
+  m = text.match(/(?:википедија|wikipedia|wiki)\s+(?:за\s+|za\s+|about\s+)?(.+)/i);
+  if (m) return {tool:'wiki', args:m[1].trim()};
 
   // Weather
-  mm=text.match(/(?:време|vreme|weather)\s+(?:во\s+|во|in\s+)?(.+)/i);
-  if(mm)return{tool:'web:weather',args:mm[1].trim()};
-
-  // Define
-  mm=text.match(/(?:што значи|define|значење на)\s+(.+)/i);
-  if(mm)return{tool:'web:define',args:mm[1].trim()};
-
-  // Translate
-  if(/^преведи|^translate/i.test(t))return{tool:'web:translate',args:text.replace(/^(преведи|translate)\s+/i,'')};
-
-  // GitHub clone
-  mm=text.match(/(?:клонирај|clone|интегрирај|integriraj)\s+([a-z0-9_\-]+\/[a-z0-9_\-\.]+)/i);
-  if(mm)return{tool:'gh:clone',args:mm[1]};
-  mm=text.match(/github\.com\/([a-z0-9_\-]+)\/([a-z0-9_\-\.]+)/i);
-  if(mm)return{tool:'gh:repo',args:`${mm[1]}/${mm[2]}`};
+  m = text.match(/(?:време|vreme|weather)\s+(?:во\s+|во\s+|in\s+)?(.+)/i);
+  if (m) return {tool:'weather', args:m[1].trim()};
 
   // PRs
-  if(/(?:prs?|pull\s*requests?|пул\s*реквест|моите\s+prs|moi\s+prs)/i.test(text))return{tool:'gh:prs',args:'klikmarkettt-dotcom'};
-
-  // GitHub search
-  mm=text.match(/(?:пребарај|search|најди|find)\s+(?:github|gh)?\s*[:\-]?\s*(.+)/i);
-  if(mm)return{tool:'gh:search',args:mm[1].trim()};
+  if (/(?:prs?|pull\s*requests?|пул\s*реквест|моите\s+prs)/i.test(text)) return {tool:'prs', args:''};
 
   // GitHub user
-  mm=text.match(/github\s+([a-z0-9_\-]{2,30})/i);
-  if(mm&&!mm[1].includes('.'))return{tool:'gh:user',args:mm[1]};
+  m = text.match(/github\.com\/([a-z0-9_\-]+)/i);
+  if (m) return {tool:'ghuser', args:m[1]};
 
-  // Trending
-  if(/(?:трендинг|trending).*(?:github|gh|repos)/i.test(text))return{tool:'gh:trending',args:''};
+  // Password
+  if (/(?:лозинка|password|geslo)/i.test(text) && !/private/i.test(text)) return {tool:'password', args:''};
 
-  // Utilities
-  if(/(?:qr)\s+(.+)/i.test(text))return{tool:'util:qr',args:text.replace(/^.*?qr\s+/i,'')};
-  if(/(?:колку е часот|what time|тековно време|current time)/i.test(text))return{tool:'util:time',args:''};
-  if(/(?:мој\s+ip|my\s+ip)/i.test(text))return{tool:'util:ip',args:''};
-  if(/(?:uuid)/i.test(text))return{tool:'util:uuid',args:''};
-  if(/(?:лозинка|password|geslo)/i.test(text))return{tool:'util:password',args:''};
+  // Stats
+  if (/(?:колку|статистика|stats|status)/i.test(text)) return {tool:'stats', args:''};
 
-  // Text
-  mm=text.match(/(?:резимирај|summarize)\s+(.+)/i);
-  if(mm)return{tool:'text:summarize',args:mm[1].trim()};
-  mm=text.match(/(?:препиши|rewrite)\s+(.+)/i);
-  if(mm)return{tool:'text:rewrite',args:mm[1].trim()};
-  mm=text.match(/(?:email|мејл)\s+(?:за\s+|about\s+)?(.+)/i);
-  if(mm)return{tool:'text:email',args:mm[1].trim()};
-  mm=text.match(/(?:твит|tweet)\s+(?:за\s+|about\s+)?(.+)/i);
-  if(mm)return{tool:'text:tweet',args:mm[1].trim()};
-
-  // Stats/list
-  if(/(?:колку|статистика|stats|status)/i.test(text))return{tool:'__stats__',args:''};
-  if(/(?:tools|инструменти|recipes)/i.test(text))return{tool:'__tools__',args:''};
+  // Help
+  if (/^(?:pomosh|помош|help|sto\s+mozes|што\s+можеш)/i.test(t)) return {tool:'help', args:''};
 
   return null;
 }
 
+// ═══ CAN'T DO ═══
+function checkCant(text){
+  if (/(?:btc|bitcoin).*(?:adres|адрес|wallet|novchan)/i.test(text))
+    return `⚠️ **BTC адреса не можам** во browser.\n\nКористи: **MetaMask** (metamask.io), **Trust Wallet**, или **Electrum**.`;
+  if (/(?:private\s*key|приват).*(?:key|клуч|kluc)/i.test(text))
+    return `🚫 **Приватен клуч НЕ генерирам. НИКОГАШ.**\n\nАко некој го види — губиш сè. Користи MetaMask / hardware wallet.`;
+  if (/(?:facebook|fb|instagram|ig).*(?:postiraj|objavi|објави)/i.test(text))
+    return `⚠️ **FB/IG automation не можам** — ќе те банираат. Користи официјална апликација.`;
+  return null;
+}
+
+// ═══ MAIN HANDLE ═══
+async function handle(text){
+  const cant = checkCant(text);
+  if (cant) return cant;
+
+  const intent = detectIntent(text);
+  if (!intent){
+    // General chat
+    const sys = `Ти си Hugo, автономен асистент. Одговори КРАТКО (макс 3 реченици) на македонски. Ако не знаеш — кажи "Не знам". НИКОГАШ не измислувај факти, URL-а, бројки. Ако прашаат за слика, кажи „Напиши: Направи слика на [опис]".`;
+    const r = await callLLM(text, sys);
+    return r || 'Пробај: „Направи слика на куче", „Цена на BTC", „Вести Македонија".';
+  }
+
+  switch(intent.tool){
+    case 'image': return await toolImage(intent.args);
+    case 'crypto': return await toolCrypto(intent.args);
+    case 'top': return await toolTop();
+    case 'hn': return await toolHN();
+    case 'mkdnews': return await toolMKDNews();
+    case 'wiki': return await toolWiki(intent.args);
+    case 'weather': return await toolWeather(intent.args);
+    case 'prs': return await toolPRs();
+    case 'ghuser': return await toolGHUser(intent.args);
+    case 'password': return await toolPassword();
+    case 'stats': return `📊 **Hugo:**\n• 💬 Пораки: ${STATE.history.length}\n• 🧠 Меморија: ${STATE.memory.length}\n• 📚 Научени: ${STATE.learned.length}\n• 🔊 Auto-speak: ${STATE.speak?'ON':'OFF'}\n• 🌐 Јазик: ${STATE.lang}`;
+    case 'help': return helpText();
+  }
+}
+
+function helpText(){
+  return `🛠 **Што можам:**
+
+**🎨 Слики** — „Направи слика на куче"
+**💰 Крипто** — „Цена на BTC", „Топ 10 крипто"
+**📰 Вести** — „Хакер њуз", „Вести Македонија"
+**📖 Wiki** — „Википедија за Bitcoin"
+**🌤 Време** — „Време Скопје"
+**📋 PRs** — „Моите PRs"
+**🐙 GitHub** — „github.com/torvalds"
+**🔐 Лозинка** — „Лозинка"
+
+**🎤 Глас** — кликни 🎤 и зборувај
+**📷 Камера** — кликни 📷 за vision
+**🔊 Auto-speak** — ☰ мени
+
+**🚫 Не можам:**
+• BTC адреса / Private key
+• Facebook/Instagram posting`;
+}
+
 // ═══ SEND ═══
 async function sendMsg(){
-  if(STATE.busy)return;
-  const text=msgBox.value.trim();
-  if(!text)return;
-  STATE.busy=true;sendBtn.disabled=true;
-  msgBox.value='';msgBox.style.height='auto';
+  if (STATE.busy) return;
+  const text = msgBox.value.trim();
+  if (!text) return;
+  STATE.busy = true;
+  sendBtn.disabled = true;
+  msgBox.value = '';
+  msgBox.style.height = 'auto';
   rmWelcome();
-  addMsg('user',text);
-  const th=addThinking();
-
-  try{
-    const intent=detectIntent(text);
-
-    if(intent&&intent.tool==='__stats__'){
-      th.remove();
-      addMsg('hugo',`📊 **Статистика**\n\n• 📚 Recipes: **${Object.keys(KB).length}**\n• 🎓 Научени од GitHub: **${STATE.learned.length}**\n• 💬 Пораки: **${STATE.history.length}**`);
-    }
-    else if(intent&&intent.tool==='__tools__'){
-      th.remove();
-      const byCat={};
-      for(const[k,v]of Object.entries(KB)){byCat[v.cat]=byCat[v.cat]||[];byCat[v.cat].push(v.title)}
-      addMsg('hugo','🛠 **Tools:**\n\n'+Object.entries(byCat).map(([c,l])=>`**${c}** (${l.length}): ${l.join(', ')}`).join('\n\n'));
-    }
-    else if(intent&&KB[intent.tool]){
-      setStatus(`🛠 ${intent.tool}`);
-      let result;
-      try{result=await KB[intent.tool].fn(intent.args)}
-      catch(e){result='❌ '+e.message}
-      th.remove();addMsg('hugo',result);setStatus('Ready');
-    }
-    else{
-      // General chat with LLM + context
-      setStatus('💭…');
-      const learnedCtx=STATE.learned.slice(-10).map(l=>'• '+l.name).join('\n');
-      const reply=await callLLM(text,`Ти си Hugo, автономен агент. Одговори КРАТКО (макс 3 реченици) на македонски. Можеш: слики, крипто цени, вести, GitHub, Wikipedia, време, превод, QR, лозинки.${learnedCtx?'\n\nНаучено: '+learnedCtx:''}`);
-      th.remove();
-      addMsg('hugo',reply||'Пробај: „Направи слика на куче", „Цена на BTC", „Хакер њуз", „Моите PRs".');
-    }
-  }catch(e){
-    th.remove();addErr('❌ '+e.message);
+  addMsg('user', text);
+  const th = addThinking();
+  try {
+    const reply = await handle(text);
+    th.remove();
+    addMsg('hugo', reply);
+    speak(reply);
+    setStatus('Ready');
+  } catch(e){
+    th.remove();
+    addMsg('hugo', '❌ ' + e.message);
   }
-  setStatus('Ready');
-  STATE.busy=false;sendBtn.disabled=false;msgBox.focus();
+  STATE.busy = false;
+  sendBtn.disabled = false;
+  msgBox.focus();
 }
 
-// ═══ KB BROWSER ═══
-function renderKB(filter=''){
-  filter=filter.toLowerCase();
-  const items=Object.entries(KB).filter(([k,v])=>!filter||k.toLowerCase().includes(filter)||v.title.toLowerCase().includes(filter)||v.usage.toLowerCase().includes(filter));
-  if(!items.length){$('kb-content').innerHTML='<div style="text-align:center;color:var(--txt3);padding:20px">Нема резултати</div>';return}
-  $('kb-content').innerHTML=items.map(([k,v])=>
-    `<div class="kb-item" onclick="qs('${esc(v.usage.replace(/\[.*?\]/g,'').trim())}')">
-      <b>${esc(k)}</b> — ${esc(v.title)}<br>
-      <span style="color:var(--txt3);font-size:11px">💡 ${esc(v.usage)}</span>
-    </div>`).join('');
-}
-function openModal(id){$(id).classList.add('on')}
-function closeModal(id){$(id).classList.remove('on')}
+sendBtn.onclick = sendMsg;
+msgBox.addEventListener('input', () => {
+  msgBox.style.height = 'auto';
+  msgBox.style.height = Math.min(msgBox.scrollHeight, 120) + 'px';
+});
+msgBox.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendMsg(); }
+});
 
-// ═══ EVENTS ═══
-sendBtn.onclick=sendMsg;
-msgBox.addEventListener('input',()=>{msgBox.style.height='auto';msgBox.style.height=Math.min(msgBox.scrollHeight,120)+'px'});
-msgBox.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg()}});
-$('btn-menu').onclick=()=>{sidebar.classList.add('open');backdrop.classList.add('on')};
-$('sb-close').onclick=()=>{sidebar.classList.remove('open');backdrop.classList.remove('on')};
-backdrop.onclick=()=>{sidebar.classList.remove('open');backdrop.classList.remove('on')};
-$('btn-kb').onclick=()=>{renderKB();openModal('modal-kb')};
-$('modal-kb-close').onclick=()=>closeModal('modal-kb');
-$('kb-search').addEventListener('input',e=>renderKB(e.target.value));
+// ═══ SIDEBAR ═══
+$('btn-menu').onclick = () => { sidebar.classList.add('open'); backdrop.classList.add('on') };
+$('sb-close').onclick = () => { sidebar.classList.remove('open'); backdrop.classList.remove('on') };
+backdrop.onclick = () => { sidebar.classList.remove('open'); backdrop.classList.remove('on') };
+$('btn-help').onclick = () => addMsg('hugo', helpText());
 
-document.querySelectorAll('.sb-item').forEach(el=>{
-  el.onclick=()=>{
-    const a=el.dataset.a;
-    sidebar.classList.remove('open');backdrop.classList.remove('on');
-    if(a==='new'){chat.innerHTML='';STATE.history=[];saveHistory();showWelcome()}
-    else if(a==='kb'){renderKB();openModal('modal-kb')}
-    else if(a==='learned'){
-      if(!STATE.learned.length)addMsg('hugo','🎓 Сè уште ништо. Пиши: „Клонирај e2b-dev/awesome-ai-agents"');
-      else addMsg('hugo',`🎓 **Научени (${STATE.learned.length})** — последни 30:\n\n`+STATE.learned.slice(-30).reverse().map(l=>`• **${esc(l.name)}** — ${esc(l.desc)} _(${esc(l.source)})_`).join('\n'));
+document.querySelectorAll('.sb-item').forEach(el => {
+  el.onclick = () => {
+    const a = el.dataset.a;
+    sidebar.classList.remove('open'); backdrop.classList.remove('on');
+    if (a === 'new'){ chat.innerHTML = ''; STATE.history = []; save(); showWelcome(); }
+    else if (a === 'help'){ addMsg('hugo', helpText()); }
+    else if (a === 'tts-toggle'){
+      STATE.speak = !STATE.speak;
+      localStorage.setItem('hugo13_speak', STATE.speak ? '1' : '0');
+      $('tts-badge').textContent = STATE.speak ? 'ON' : 'OFF';
+      $('tts-badge').style.background = STATE.speak ? 'rgba(0,255,136,.2)' : 'rgba(0,229,255,.15)';
+      $('tts-badge').style.color = STATE.speak ? 'var(--green)' : 'var(--cyan)';
+      showToast(STATE.speak ? '🔊 Auto-speak ON' : '🔇 Auto-speak OFF');
+      if (STATE.speak) speak('Auto speak vklucen');
     }
-    else if(a==='tools'){
-      const byCat={};
-      for(const[k,v]of Object.entries(KB)){byCat[v.cat]=byCat[v.cat]||[];byCat[v.cat].push(v.title)}
-      addMsg('hugo','🛠 **Tools:**\n\n'+Object.entries(byCat).map(([c,l])=>`**${c}** (${l.length}): ${l.join(', ')}`).join('\n\n'));
+    else if (a === 'voice-lang'){
+      const langs = ['mk-MK','en-US','sr-RS','bg-BG','de-DE','fr-FR','es-ES','it-IT'];
+      const names = ['Македонски','English','Српски','Бугарски','German','French','Spanish','Italian'];
+      const idx = langs.indexOf(STATE.lang);
+      const next = (idx + 1) % langs.length;
+      STATE.lang = langs[next];
+      localStorage.setItem('hugo13_lang', STATE.lang);
+      $('voice-lang').textContent = names[next];
+      showToast('🌐 ' + names[next]);
     }
-    else if(a==='export'){
-      const data=JSON.stringify({learned:STATE.learned,history:STATE.history},null,2);
-      const blob=new Blob([data],{type:'application/json'});
-      const url=URL.createObjectURL(blob);
-      const a2=document.createElement('a');
-      a2.href=url;a2.download=`hugo-memory-${Date.now()}.json`;a2.click();
-      URL.revokeObjectURL(url);showToast('💾 Извезено');
+    else if (a === 'gh-token'){
+      $('token-input').value = STATE.token;
+      tokenModal.classList.add('on');
     }
-    else if(a==='import'){
-      const inp=document.createElement('input');
-      inp.type='file';inp.accept='.json';
-      inp.onchange=e=>{
-        const file=e.target.files[0];
-        const reader=new FileReader();
-        reader.onload=ev=>{
-          try{
-            const data=JSON.parse(ev.target.result);
-            if(data.learned)STATE.learned=data.learned;
-            if(data.history)STATE.history=data.history;
-            saveLearned();saveHistory();
-            chat.innerHTML='';
-            STATE.history.forEach(h=>addMsg(h.role,h.text,false));
-            showToast('📥 Импортирано');
-          }catch(err){showToast('❌ Грешка')}
-        };
-        reader.readAsText(file);
-      };
-      inp.click();
+    else if (a === 'sync'){ syncMemory(); }
+    else if (a === 'pull'){ pullMemory(); }
+    else if (a === 'mem'){
+      if (!STATE.memory.length && !STATE.learned.length) addMsg('hugo', '🧠 Меморија е празна. Пиши: „Запамети дека сум..."');
+      else addMsg('hugo', `🧠 **Меморија (${STATE.memory.length}):**\n\n` + STATE.memory.slice(-20).map(m => '• ' + m.fact).join('\n'));
     }
-    else if(a==='clear'){if(confirm('Избриши сè?')){localStorage.clear();location.reload()}}
+    else if (a === 'clear'){ if (confirm('Избриши сè?')){ localStorage.clear(); location.reload(); } }
   };
 });
 
-// ═══ INSTALL ═══
-async function init(){
-  const steps=[
-    {txt:'Loading knowledge base…',pct:20},
-    {txt:'Registering '+Object.keys(KB).length+' recipes…',pct:60},
-    {txt:'Ready!',pct:100},
-  ];
-  for(const s of steps){
-    loaderText.textContent=s.txt;
-    progressFill.style.width=s.pct+'%';
-    await new Promise(r=>setTimeout(r,200));
+// ═══ TOKEN MODAL ═══
+$('modal-token-close').onclick = () => tokenModal.classList.remove('on');
+$('token-save').onclick = () => {
+  STATE.token = $('token-input').value.trim();
+  localStorage.setItem('hugo13_token', STATE.token);
+  tokenModal.classList.remove('on');
+  showToast(STATE.token ? '🔑 Token зачуван' : 'Token избришан');
+};
+
+// ═══ GITHUB MEMORY SYNC ═══
+async function syncMemory(){
+  if (!STATE.token){
+    showToast('❌ Внеси GitHub token прво (☰ → GitHub token)');
+    return;
   }
-  $('kb-count').textContent=Object.keys(KB).length;
-  $('mem-count').textContent=STATE.learned.length;
-  if(STATE.history.length){STATE.history.forEach(h=>addMsg(h.role,h.text,false))}
-  else{showWelcome()}
-  setTimeout(()=>{install.classList.add('off');setTimeout(()=>install.remove(),600);msgBox.focus()},400);
+  setStatus('☁️ Sync…');
+  const data = {
+    memory: STATE.memory.slice(-500),
+    learned: STATE.learned.slice(-1000),
+    updated: new Date().toISOString(),
+  };
+  try {
+    // Check if gist exists
+    const listRes = await fetch('https://api.github.com/gists?per_page=100', {
+      headers: { 'Authorization': 'token ' + STATE.token }
+    });
+    const gists = await listRes.json();
+    let gist = gists.find(g => g.description === 'hugo-memory' && g.files['hugo.json']);
+
+    const body = {
+      description: 'hugo-memory',
+      public: false,
+      files: { 'hugo.json': { content: JSON.stringify(data, null, 2) } }
+    };
+
+    let res;
+    if (gist){
+      res = await fetch(`https://api.github.com/gists/${gist.id}`, {
+        method: 'PATCH',
+        headers: { 'Authorization': 'token ' + STATE.token, 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+    } else {
+      res = await fetch('https://api.github.com/gists', {
+        method: 'POST',
+        headers: { 'Authorization': 'token ' + STATE.token, 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+    }
+    if (res.ok){
+      showToast('☁️ Synced!');
+      setStatus('Ready');
+    } else {
+      showToast('❌ Sync fail: ' + res.status);
+    }
+  } catch(e){
+    showToast('❌ ' + e.message);
+  }
   setStatus('Ready');
+}
+async function pullMemory(){
+  if (!STATE.token){ showToast('❌ Внеси token'); return; }
+  setStatus('⬇️ Pull…');
+  try {
+    const listRes = await fetch('https://api.github.com/gists?per_page=100', {
+      headers: { 'Authorization': 'token ' + STATE.token }
+    });
+    const gists = await listRes.json();
+    const gist = gists.find(g => g.description === 'hugo-memory');
+    if (!gist){ showToast('Нема sync'); setStatus('Ready'); return; }
+    const detail = await fetch(`https://api.github.com/gists/${gist.id}`, {
+      headers: { 'Authorization': 'token ' + STATE.token }
+    });
+    const d = await detail.json();
+    const content = d.files['hugo.json'].content;
+    const data = JSON.parse(content);
+    STATE.memory = data.memory || [];
+    STATE.learned = data.learned || [];
+    save();
+    showToast('⬇️ Pulled ' + STATE.memory.length + ' items');
+  } catch(e){
+    showToast('❌ ' + e.message);
+  }
+  setStatus('Ready');
+}
+
+// ═══ INIT ═══
+async function init(){
+  const steps = [
+    {txt:'Loading voice…', pct:20},
+    {txt:'Loading vision…', pct:40},
+    {txt:'Loading tools…', pct:70},
+    {txt:'Ready!', pct:100},
+  ];
+  for (const s of steps){
+    loaderText.textContent = s.txt;
+    progressFill.style.width = s.pct + '%';
+    await new Promise(r => setTimeout(r, 180));
+  }
+  // Update UI state
+  if (STATE.speak){
+    $('tts-badge').textContent = 'ON';
+    $('tts-badge').style.background = 'rgba(0,255,136,.2)';
+    $('tts-badge').style.color = 'var(--green)';
+  }
+  const names = {'mk-MK':'MK','en-US':'EN','sr-RS':'SR','bg-BG':'BG','de-DE':'DE','fr-FR':'FR','es-ES':'ES','it-IT':'IT'};
+  $('voice-lang').textContent = names[STATE.lang] || 'MK';
+  $('mem-count').textContent = STATE.memory.length + STATE.learned.length;
+
+  // Preload voices
+  if ('speechSynthesis' in window){
+    speechSynthesis.getVoices();
+    speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
+  }
+
+  // Render history
+  if (STATE.history.length){
+    STATE.history.forEach(h => addMsg(h.role, h.text, false));
+  } else {
+    showWelcome();
+  }
+
+  setTimeout(() => {
+    install.classList.add('off');
+    setTimeout(() => install.remove(), 600);
+    msgBox.focus();
+  }, 400);
 }
 
 init();
