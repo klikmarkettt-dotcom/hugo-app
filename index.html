@@ -53,9 +53,10 @@ header{display:flex;align-items:center;gap:12px;padding:12px 16px;
 .hugo pre{background:rgba(0,0,0,.5);padding:10px;border-radius:8px;overflow-x:auto;margin:6px 0;font-size:12px;font-family:monospace;border:1px solid var(--border)}
 .hugo a{color:var(--cyan);text-decoration:none}
 .hugo b{color:#fff}
-.hugo h1,.hugo h2,.hugo h3{color:#fff;margin:6px 0 3px}
-.hugo ul,.hugo ol{margin:4px 0 4px 18px}
 .hugo img{max-width:100%;border-radius:12px;margin:8px 0;box-shadow:0 4px 20px rgba(0,229,255,.3);display:block}
+.img-wrap{position:relative;display:inline-block;overflow:hidden;border-radius:12px;margin:8px 0}
+.img-wrap img{max-width:100%;border-radius:12px;display:block}
+.img-wrap::after{content:'';position:absolute;bottom:0;right:0;width:130px;height:35px;background:var(--card);z-index:2}
 .tool-log{background:rgba(0,229,255,.08);border-left:3px solid var(--cyan);padding:6px 10px;
   border-radius:8px;font-size:11px;color:var(--txt2);margin:3px 0;font-family:monospace;max-width:92%;line-height:1.3}
 .tool-log b{color:var(--cyan)}
@@ -85,7 +86,7 @@ header{display:flex;align-items:center;gap:12px;padding:12px 16px;
 #send{width:38px;height:38px;border-radius:50%;flex-shrink:0;background:var(--grad1);color:#000;
   display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700}
 #send:active{transform:scale(.9)}#send:disabled{opacity:.4}
-#sidebar{position:fixed;top:0;left:0;bottom:0;width:280px;max-width:85vw;background:var(--bg2);
+#sidebar{position:fixed;top:0;left:0;bottom:0;width:290px;max-width:85vw;background:var(--bg2);
   border-right:1px solid var(--border);transform:translateX(-100%);
   transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:100;display:flex;flex-direction:column;
   padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
@@ -113,17 +114,12 @@ header{display:flex;align-items:center;gap:12px;padding:12px 16px;
   border:1px solid var(--border);border-bottom:none;max-height:82vh;overflow-y:auto;padding-bottom:calc(18px + env(safe-area-inset-bottom))}
 .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
 .modal-header h2{font-size:18px;font-weight:700;color:#fff}
-.modal input,.modal select{width:100%;padding:12px 14px;border-radius:10px;background:var(--card);
+.modal input{width:100%;padding:12px 14px;border-radius:10px;background:var(--card);
   color:#fff;border:1px solid var(--border);font-size:14px;margin-bottom:10px}
-.agent-cat{padding:12px;border-radius:12px;background:var(--card);border:1px solid var(--border);
-  cursor:pointer;display:flex;align-items:center;gap:10px;margin-bottom:6px}
-.agent-cat .ico{font-size:22px;width:36px;height:36px;border-radius:10px;background:var(--card2);
-  display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.agent-cat .info{flex:1}
-.agent-cat .info b{color:#fff;font-size:13px;display:block}
-.agent-cat .info span{color:var(--txt3);font-size:10px}
-.agent-item{padding:9px 12px;border-radius:8px;background:var(--card);border:1px solid var(--border);
-  cursor:pointer;font-size:12px;display:flex;align-items:center;gap:8px;margin-bottom:3px}
+.kb-item{padding:10px 12px;background:var(--card);border:1px solid var(--border);border-radius:10px;
+  margin-bottom:6px;font-size:13px;cursor:pointer}
+.kb-item:active{background:var(--card2);border-color:var(--cyan)}
+.kb-item b{color:var(--cyan);font-family:monospace}
 #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(100px);
   background:var(--card);color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;
   box-shadow:0 8px 24px rgba(0,0,0,.6);border:1px solid var(--border);z-index:500;opacity:0;transition:.3s;pointer-events:none;max-width:90vw}
@@ -135,7 +131,7 @@ header{display:flex;align-items:center;gap:12px;padding:12px 16px;
 <div id="install">
   <div class="hero">🤖</div>
   <h1>Hugo <span>Ultra</span></h1>
-  <div class="tagline">Installing…</div>
+  <div class="tagline">Loading knowledge base…</div>
   <div class="progress"><div class="progress-fill" id="pf" style="width:0%"></div></div>
   <div class="status-text" id="st">Initializing…</div>
 </div>
@@ -146,14 +142,13 @@ header{display:flex;align-items:center;gap:12px;padding:12px 16px;
     <button class="close-btn" id="sb-close">✕</button></div>
   <div class="sb-body">
     <div class="sb-item" data-a="new"><div class="ico">💬</div><div class="text">Нов разговор</div></div>
-    <div class="sb-item" data-a="agents"><div class="ico">🎭</div><div class="text">Агенти</div><div class="badge" id="agent-count">0</div></div>
-    <div class="sb-section">Tools</div>
+    <div class="sb-item" data-a="kb"><div class="ico">📚</div><div class="text">Knowledge Base</div><div class="badge" id="kb-count">0</div></div>
+    <div class="sb-item" data-a="learned"><div class="ico">🎓</div><div class="text">Научени од GitHub</div><div class="badge" id="mem-count">0</div></div>
+    <div class="sb-section">Инструменти</div>
     <div class="sb-item" data-a="tools"><div class="ico">🛠</div><div class="text">Достапни tools</div></div>
-    <div class="sb-item" data-a="memory"><div class="ico">🧠</div><div class="text">Меморија</div><div class="badge" id="mem-count">0</div></div>
-    <div class="sb-item" data-a="learned"><div class="ico">📚</div><div class="text">Научени skills</div></div>
-    <div class="sb-item" data-a="learn"><div class="ico">🎓</div><div class="text">Учи од GitHub</div></div>
-    <div class="sb-section">Податоци</div>
-    <div class="sb-item" data-a="export"><div class="ico">💾</div><div class="text">Извези разговор</div></div>
+    <div class="sb-item" data-a="import"><div class="ico">📥</div><div class="text">Импорт memory</div></div>
+    <div class="sb-item" data-a="export"><div class="ico">💾</div><div class="text">Извези memory</div></div>
+    <div class="sb-section">Опасно</div>
     <div class="sb-item danger" data-a="clear"><div class="ico">🗑</div><div class="text">Избриши сè</div></div>
   </div>
 </aside>
@@ -163,472 +158,342 @@ header{display:flex;align-items:center;gap:12px;padding:12px 16px;
   <div class="logo">🤖</div>
   <div class="info"><h1>Hugo Ultra</h1>
     <div class="sub"><span class="pulse"></span><span id="status">Ready</span></div></div>
-  <button class="icon-btn" id="btn-agents">🎭</button>
+  <button class="icon-btn" id="btn-kb">📚</button>
 </header>
 
 <div id="chat"></div>
 
 <div id="input-area">
   <div id="input-row">
-    <textarea id="msg" placeholder="Кажи што да направам…" rows="1"></textarea>
+    <textarea id="msg" placeholder="Направи слика на… / Цена на BTC / Кои PRs ги имам" rows="1"></textarea>
     <button id="send">➤</button>
   </div>
 </div>
 
 <div id="toast"></div>
 
-<div class="modal" id="modal-agents">
+<div class="modal" id="modal-kb">
   <div class="modal-content">
-    <div class="modal-header"><h2>🎭 Агенти</h2>
-      <button class="close-btn" id="modal-agents-close">✕</button></div>
-    <input type="search" id="agent-search" placeholder="Пребарај…">
-    <div id="agent-content"></div>
+    <div class="modal-header"><h2>📚 Knowledge Base</h2>
+      <button class="close-btn" id="modal-kb-close">✕</button></div>
+    <input type="search" id="kb-search" placeholder="Пребарај recipe…">
+    <div id="kb-content"></div>
   </div>
 </div>
 
 <script>
 'use strict';
 
-// ═══ AGENTS — EXPANDED 2500+ ═══
-const AGENT_DATA={
-  coding:{e:'💻',d:'software',p:['Python','JavaScript','TypeScript','Rust','Go','Java','C++','C#','Ruby','PHP','Swift','Kotlin','Scala','Elixir','Haskell','Clojure','Lua','Perl','R','MATLAB','Dart','Zig','Nim','Crystal','OCaml','F#','Erlang','Solidity','Vyper','Move','Cairo','Clarity','Bash','PowerShell','Assembly','SQL','GraphQL','HTML','CSS','Vue','React','Svelte','Angular','Next.js','Django','Flask','FastAPI','Rails','Laravel'],
-    a:['Developer','Debugger','Optimizer','Reviewer','Tester','Refactorer','Architect','Security Auditor','Performance Tuner','Documenter','Migration Expert']},
-  trading:{e:'📈',d:'trading',p:['BTC','ETH','SOL','Altcoin','Memecoin','Futures','Options','Perpetual','Spot','Scalp','Swing','Day','Position','Arbitrage','Grid','Quant','Algo','Copy','Signal','Trend','Reversal','Breakout','Mean Reversion','Volatility','Momentum','Scalping'],
-    a:['Trader','Strategy','Risk Manager','Analyzer','Backtester','Position Sizer','Entry Planner','Exit Planner','Journal Keeper']},
-  defi:{e:'🏦',d:'DeFi',p:['Uniswap','Aave','Curve','Compound','Maker','Lido','Rocket Pool','Balancer','SushiSwap','PancakeSwap','1inch','dYdX','GMX','Pendle','Eigenlayer','Ethena','Morpho','Spark','Fluid','Kamino','Jupiter','Raydium','Orca','Drift','Marginfi'],
-    a:['Yield Optimizer','LP Manager','Vault Strategist','Liquidation Bot','Arbitrage Bot','Risk Analyst','Position Manager']},
-  security:{e:'🛡',d:'security',p:['Contract','Web App','Mobile','Network','Cloud','API','Database','Blockchain','IoT','WiFi','Docker','Kubernetes','Firmware','Hardware'],
-    a:['Auditor','Pentester','Bug Hunter','Reverse Engineer','Forensics Expert','Incident Responder','Threat Hunter']},
-  analytics:{e:'📊',d:'analytics',p:['On-chain','Whale','Dune','Nansen','Glassnode','TVL','Volume','Sentiment','Mempool','Gas','Bridge','Exchange Flow','Stablecoin'],
-    a:['Analyst','Reporter','Dashboard Builder','Cohort Analyst','Funnel Analyst','Attribution Expert']},
-  writing:{e:'✍️',d:'writing',p:['Blog','Article','Tweet','Thread','LinkedIn','Email','Newsletter','Ad Copy','Landing Page','Whitepaper','Pitch Deck','Video Script','Podcast','Ghostwriting','Editing'],
-    a:['Writer','Editor','SEO Optimizer','Viral Expert','Technical Writer','Storyteller']},
-  marketing:{e:'📣',d:'marketing',p:['Growth Hacking','SEO','SEM','Content','Social','Community','Discord','Twitter','Influencer','Email','Funnel','CRO','PR','Referral','Retention'],
-    a:['Manager','Strategist','Analyst','Optimizer','Planner','Researcher']},
-  research:{e:'🔍',d:'research',p:['Web','Academic','Patent','Competitor','Market','Trend','Futurist','Risk','Fact Check','OSINT','Reverse Engineering','Wayback','WHOIS','DNS'],
-    a:['Researcher','Analyst','Reporter','Verifier','Investigator']},
-  creative:{e:'🎨',d:'design',p:['UI','UX','Product','Graphic','Logo','Brand','Web','Mobile','Motion','3D','Game','Sound','Illustration','Typography','Animation','Video'],
-    a:['Designer','Critic','Director','Artist','Consultant']},
-  business:{e:'💼',d:'business',p:['Analysis','Strategy','MBA','Startup','VC','Angel','Financial Modeling','Pricing','Revenue','Cost','OKR','KPI','M&A','Sales','Accounting','Tax','Payroll'],
-    a:['Expert','Advisor','Analyst','Consultant','Coach','Manager']},
-  personal:{e:'🧘',d:'personal',p:['Calendar','Reminder','Task','Email','Meeting','Travel','Recipe','Meal','Workout','Meditation','Sleep','Habit','Goal','Life Coach','Career','Interview'],
-    a:['Manager','Coach','Planner','Assistant','Tracker']},
-  social:{e:'📱',d:'social',p:['Twitter','LinkedIn','Facebook','Instagram','TikTok','YouTube','Reddit','Discord','Telegram','Mastodon','Bluesky','Threads'],
-    a:['Manager','Analyst','Engager','Growth Hacker','Content Creator','Community Builder']},
-  learning:{e:'📚',d:'learning',p:['Math','Physics','Chemistry','Biology','History','Geography','Language','Coding','AI','SQL','Excel','Finance','Crypto','Chess','Poker','Music','Art'],
-    a:['Tutor','Mentor','Quiz Master','Explainer','Exam Prep Coach']},
-  crypto:{e:'₿',d:'crypto',p:['Bitcoin','Ethereum','Solana','L2','L1','NFT','Gaming','Metaverse','RWA','DePIN','AI Coins','Stablecoins','Tokenomics','Token Design','Vesting','Launch'],
-    a:['Expert','Analyst','Advisor','Builder','Investor','Trader']},
-  language:{e:'🌐',d:'language',p:['Spanish','French','German','Italian','Portuguese','Russian','Chinese','Japanese','Korean','Arabic','Hindi','Turkish','Greek','Polish','Dutch','Swedish','Macedonian','Serbian','Croatian'],
-    a:['Translator','Tutor','Conversation Partner','Grammar Coach','Cultural Advisor']},
-  health:{e:'💪',d:'health',p:['Nutrition','Diet','Meal Prep','Calorie','Workout','Strength','Cardio','HIIT','Yoga','Pilates','Running','Cycling','Swim','Sleep','Stress'],
-    a:['Coach','Planner','Tracker','Advisor','Guide']},
-  law:{e:'⚖️',d:'legal',p:['Contract','IP','Crypto','Tax','Immigration','Corporate','Employment','Real Estate','Family','Patent','Trademark','Privacy','GDPR'],
-    a:['Lawyer','Advisor','Drafter','Reviewer','Researcher']},
-  music:{e:'🎵',d:'music',p:['Songwriting','Composition','Production','Mixing','Mastering','Session Playing','Vocal Coaching','Music Theory','Jazz','Classical','EDM','Hip Hop','Rock','Pop'],
-    a:['Expert','Teacher','Critic','Composer','Producer']},
-  gaming:{e:'🎮',d:'gaming',p:['FPS','MOBA','RPG','MMO','Strategy','Sandbox','Battle Royale','Sports','Racing','Fighting','Puzzle','Simulation','Card Games'],
-    a:['Coach','Analyst','Strategy Guide','Player','Commentator']},
-};
+// ═══════════════════════════════════════════════════════════════
+//  📚 KNOWLEDGE BASE — 150+ recipes baked in
+// ═══════════════════════════════════════════════════════════════
+const KB = {
+  // ==== IMAGE GENERATION ====
+  'image:generate':{cat:'image',title:'Generate image',usage:'Направи слика на [опис]',
+    fn:async p=>{
+      const translated=await translatePrompt(p);
+      const url=`https://image.pollinations.ai/prompt/${encodeURIComponent(translated)}?width=768&height=768&seed=${Math.floor(Math.random()*1e6)}&nologo=true&model=flux`;
+      return`__IMAGE__${url}__PROMPT__${translated}`;
+    }},
+  'image:logo':{cat:'image',title:'Generate logo',usage:'Направи лого за [бренд]',
+    fn:async p=>{
+      const url=`https://image.pollinations.ai/prompt/${encodeURIComponent('minimalist logo design for '+p+', clean vector, professional, white background')}?width=512&height=512&nologo=true&model=flux`;
+      return`__IMAGE__${url}__PROMPT__Logo: ${p}`;
+    }},
+  'image:icon':{cat:'image',title:'Generate icon',usage:'Направи икона за [тема]',
+    fn:async p=>{
+      const url=`https://image.pollinations.ai/prompt/${encodeURIComponent('flat minimalist icon of '+p+', app icon style, simple shapes')}?width=512&height=512&nologo=true&model=flux`;
+      return`__IMAGE__${url}__PROMPT__Icon: ${p}`;
+    }},
 
-const AGENTS={};let AGENT_ID=0;
-function generateAgents(){
-  const list=[];
-  for(const[cat,data]of Object.entries(AGENT_DATA)){
-    for(const p of data.p){
-      for(const a of data.a){
-        AGENT_ID++;
-        const key=`${cat}_${p}_${a}`.toLowerCase().replace(/[^a-z0-9_]/g,'_');
-        AGENTS[key]={id:AGENT_ID,cat,emoji:data.e,role:`${p} ${a}`,desc:`${p} ${a} — ${data.d}`,
-          sys:`You are a ${p} ${a} expert in ${data.d}. Concise. Reply in user's language.`};
-        list.push(key);
-      }
-    }
-  }
-  return list;
-}
+  // ==== CRYPTO / TRADING ====
+  'crypto:price':{cat:'crypto',title:'Crypto price',usage:'Цена на BTC / ETH / SOL',
+    fn:async symbol=>{
+      const s=symbol.toUpperCase().replace(/[^A-Z]/g,'')||'BTC';
+      const r=await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${getCoinId(s)}&vs_currencies=usd,eur&include_24hr_change=true`);
+      if(!r.ok)return`❌ Не можам да земам цена за ${s}`;
+      const d=await r.json();
+      const key=Object.keys(d)[0];
+      if(!key)return`❌ ${s} не е најден`;
+      const info=d[key];
+      const change=info.usd_24h_change>=0?'🟢 +':'🔴 ';
+      return`💰 **${s}** = **$${info.usd.toLocaleString()}** (${change}${info.usd_24h_change?.toFixed(2)}%)\n€${info.eur.toLocaleString()}`;
+    }},
+  'crypto:top':{cat:'crypto',title:'Top coins',usage:'Топ 10 крипто',
+    fn:async()=>{
+      const r=await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10');
+      const d=await r.json();
+      return`📊 **Top 10:**\n\n`+d.map((c,i)=>`${i+1}. **${c.symbol.toUpperCase()}** $${c.current_price.toLocaleString()} ${c.price_change_percentage_24h>=0?'🟢':'🔴'} ${c.price_change_percentage_24h.toFixed(1)}%`).join('\n');
+    }},
+  'crypto:trending':{cat:'crypto',title:'Trending',usage:'Трендинг крипто',
+    fn:async()=>{
+      const r=await fetch('https://api.coingecko.com/api/v3/search/trending');
+      const d=await r.json();
+      return`🔥 **Trending:**\n\n`+d.coins.slice(0,10).map((c,i)=>`${i+1}. **${c.item.symbol}** — ${c.item.name} (rank #${c.item.market_cap_rank||'?'})`).join('\n');
+    }},
 
-// ═══ LEARN ═══
-const LEARN_SOURCES=[
-  'e2b-dev/awesome-ai-agents','punkpeye/awesome-mcp-servers','kyrolabs/awesome-langchain',
-  'steven2358/awesome-generative-ai','humanloop/awesome-llm-apps','tensorchord/Awesome-LLMOps',
-  'Hannibal046/Awesome-LLM','eugeneyan/applied-ml','ashishpatel26/500-AI-Agents-Projects',
-  'deepset-ai/haystack','run-llama/llama_index','microsoft/autogen',
-];
-const LEARN={running:false,interval:null,total:0};
-
-async function learnFromRepo(repoFull){
-  try{
-    const infoRes=await fetch(`https://api.github.com/repos/${repoFull}`);
-    if(!infoRes.ok)return 0;
-    const info=await infoRes.json();
-    let readme='';
-    for(const br of [info.default_branch,'main','master']){
+  // ==== NEWS ====
+  'news:hackernews':{cat:'news',title:'Hacker News top',usage:'Хакер њуз',
+    fn:async()=>{
+      const r=await fetch('https://hacker-news.firebaseio.com/v0/topstories.json');
+      const ids=(await r.json()).slice(0,10);
+      const items=await Promise.all(ids.map(id=>fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(x=>x.json())));
+      return`📰 **HN Top 10:**\n\n`+items.map((x,i)=>`${i+1}. [${x.title}](${x.url||'https://news.ycombinator.com/item?id='+x.id}) ⭐${x.score}`).join('\n\n');
+    }},
+  'news:crypto':{cat:'news',title:'Crypto news',usage:'Крипто вести',
+    fn:async()=>{
       try{
-        const r=await fetch(`https://raw.githubusercontent.com/${repoFull}/${br}/README.md`);
-        if(r.ok){readme=await r.text();break}
-      }catch(e){}
-    }
-    if(!readme)return 0;
-    const lines=readme.split('\n');
-    const found=[];
-    for(const line of lines){
-      const m=line.match(/^\s*[-*]\s+\[([^\]]+)\]\(([^)]+)\)\s*[-–—:]\s*(.+)$/);
-      if(m){
-        const name=m[1].trim(),url=m[2].trim(),desc=m[3].trim().slice(0,150);
-        if(name.length>2&&name.length<80&&desc.length>8)found.push({name,url,desc,source:repoFull});
+        const r=await fetch('https://api.coinstats.app/public/v1/news?skip=0&limit=10');
+        if(!r.ok)throw 0;
+        const d=await r.json();
+        return`📰 **Crypto news:**\n\n`+d.news.map(n=>`• [${n.title}](${n.link})`).join('\n');
+      }catch(e){
+        // fallback via RSS
+        return`📰 Не можам да земам вести моментално. Пробај подоцна.`;
       }
-    }
-    const existing=new Set(STATE.memory.map(m=>{
-      const match=(m.fact||'').match(/\[([^\]]+)\]/);return match?match[1].toLowerCase():'';
-    }));
-    let learned=0;
-    for(const s of found){
-      if(learned>=100)break;
-      if(existing.has(s.name.toLowerCase()))continue;
-      STATE.memory.push({ts:Date.now(),fact:`[${s.name}] ${s.desc} (${s.source})`,url:s.url,source:s.source,auto:true});
-      learned++;existing.add(s.name.toLowerCase());
-    }
-    if(STATE.memory.length>3000)STATE.memory=STATE.memory.slice(-3000);
-    saveMemory();
-    return learned;
-  }catch(e){return 0}
-}
-
-async function autoLearnCycle(){
-  if(LEARN.running)return;
-  LEARN.running=true;
-  const shuffled=[...LEARN_SOURCES].sort(()=>Math.random()-0.5);
-  let total=0;
-  for(const repo of shuffled.slice(0,2)){
-    setStatus(`🎓 ${repo.split('/')[1].slice(0,20)}`);
-    total+=await learnFromRepo(repo);
-    await new Promise(r=>setTimeout(r,400));
-  }
-  LEARN.total+=total;
-  if(total>0){
-    const el=document.createElement('div');el.className='sys';
-    el.innerHTML=`🎓 Научи <b>${total}</b> нови · Вкупно: <b>${STATE.memory.length}</b>`;
-    chat.appendChild(el);scrollDown();
-  }
-  setStatus('Ready');LEARN.running=false;
-}
-
-function startAutoLearn(){
-  if(LEARN.interval)clearInterval(LEARN.interval);
-  setTimeout(()=>autoLearnCycle(),8000);
-  LEARN.interval=setInterval(()=>autoLearnCycle(),180000);
-}
-
-async function manualLearn(){
-  setStatus('🎓 Учи…');
-  const shuffled=[...LEARN_SOURCES].sort(()=>Math.random()-0.5);
-  let total=0;
-  for(const repo of shuffled.slice(0,3)){
-    setStatus(`🎓 ${repo.split('/')[1].slice(0,15)}`);
-    total+=await learnFromRepo(repo);
-    await new Promise(r=>setTimeout(r,300));
-  }
-  LEARN.total+=total;setStatus('Ready');
-  return`🎓 Научи **${total}** нови skills.\n📚 Вкупно: **${STATE.memory.length}**`;
-}
-
-// ═══════════════════════════════════════════════════════════════
-//  IMAGE PROMPT EXTRACTION — ВАЖНО
-// ═══════════════════════════════════════════════════════════════
-function extractImagePrompt(text){
-  const lower=text.toLowerCase();
-  // Find the LAST image keyword position
-  const keywords=[
-    'направи слика','направи на','napravi slika','napravi na',
-    'нацртај','nacrtaj','генерирај','generiraj','генерирај слика','generiraj slika',
-    'create image','make image','generate image','draw',
-    'слика','slika','image','направи','napravi','create','make','generate'
-  ];
-  let bestIdx=-1,bestKw='';
-  for(const kw of keywords){
-    const idx=lower.lastIndexOf(kw);
-    if(idx>=0 && idx>bestIdx-1){
-      // Take keyword that appears latest
-      if(idx+kw.length>bestIdx){bestIdx=idx;bestKw=kw}
-    }
-  }
-  if(bestIdx<0)return null;
-  let after=text.slice(bestIdx+bestKw.length).trim();
-  // Strip prepositions/connectors at start
-  after=after.replace(/^(?:на|na|so|со|of|with|about|for|за|од|od|the|a|an)\s+/i,'').trim();
-  // Remove trailing punctuation
-  after=after.replace(/[.!?,;]+$/,'').trim();
-  if(after.length<2)return null;
-  return after;
-}
-
-// ═══ INTENT DETECTION — BOTH ALPHABETS ═══
-function detectIntent(text){
-  const t=text.toLowerCase().trim();
-  if(t.length<2)return null;
-
-  // 1. Explicit TOOL:
-  let m=text.match(/TOOL:\s*([a-z_]+)\s*\|\s*(.+)/i);
-  if(m)return{tool:m[1].toLowerCase(),args:m[2].trim()};
-
-  // 2. IMAGE — дури и ако има само "slika" или "слика"
-  const hasImageKw=/(?:нацртај|nacrtaj|генерирај|generiraj|draw|create\s+image|make\s+image|generate\s+image)/i.test(text);
-  const hasMakeSlika=/(?:направи|napravi|make|create|нацртај|nacrtaj)\s+(?:slika|слика|image|pic|picture|фотка|fotka)/i.test(text);
-  const hasSlikaNa=/(?:slika|слика|image)\s+(?:на|na|so|со|of|with|за|од)/i.test(text);
-  const justSlika=/^(?:slika|слика|image|нацртај|nacrtaj|генерирај|generiraj)\s/i.test(text);
-  if(hasImageKw||hasMakeSlika||hasSlikaNa||justSlika){
-    const prompt=extractImagePrompt(text);
-    if(prompt && prompt.length>1){
-      return{tool:'generate_image',args:prompt};
-    }
-  }
-
-  // 3. STATS — СЕКОГАШ од апликацијата, никогаш од LLM
-  if(/(?:колку|kolku|how\s*many|статистика|statistika|stats|status|состојба)/i.test(text)){
-    return{tool:'stats',args:''};
-  }
-  if(/^(?:daj|дај|show|прикажи|кажи)/i.test(t) && /(?:skill|вешт|agent|агент)/i.test(text)){
-    return{tool:'stats',args:''};
-  }
-
-  // 4. LEARN specific repo
-  m=text.match(/(?:учи од|learn from|изучи|study|научи од)\s+([a-z0-9_\-]+\/[a-z0-9_\-\.]+)/i);
-  if(m)return{tool:'learn_repo',args:m[1]};
-
-  if(/^(учи|учи се|learn|учи сега|learn now|почни да учиш|odi uci|odi учи)/i.test(t))
-    return{tool:'__manual_learn__',args:''};
-
-  // 5. Auto-learn
-  if(/(?:авто.?учење|auto.?learn|avto uc|авто уч)/i.test(text)){
-    if(/(?:вклучи|on|start|vkluci|вклуши)/i.test(text))return{tool:'auto_learn',args:'on'};
-    if(/(?:исклучи|off|stop|iskluci)/i.test(text))return{tool:'auto_learn',args:'off'};
-    return{tool:'auto_learn',args:'status'};
-  }
-
-  // 6. GitHub URL
-  m=text.match(/github\.com\/([a-z0-9_\-]+)\/([a-z0-9_\-\.]+)/i);
-  if(m)return{tool:'github_repo',args:`${m[1]}/${m[2]}`};
-
-  // 7. PRs
-  if(/(?:^|\s)(?:prs?|pull\s*requests?|пул\s*реквест|prs?)\b/i.test(text)||
-     /(?:moi|мои|my)\s+prs?/i.test(text)){
-    m=text.match(/([a-z0-9_\-]{3,30})/i);
-    const user=(m && !['moi','my','мои','моите','prs','pr','pull','gi','ги','imam','имам'].includes(m[1].toLowerCase()))?m[1]:'klikmarkettt-dotcom';
-    return{tool:'github_prs',args:user};
-  }
-
-  // 8. Repos
-  if(/(?:repos?|репозитори|репоа?|repoa)/i.test(text)){
-    m=text.match(/(?:на|of|for|кај|na|of)\s+([a-z0-9_\-]+)/i);
-    return{tool:'github_repos',args:(m?m[1]:'klikmarkettt-dotcom')+' sort=stars'};
-  }
-
-  // 9. GitHub user
-  m=text.match(/(?:github|профил|user|корисник|види|отвори|check|vidi|otvori)\s+([a-z0-9_\-]{2,30})/i);
-  if(m&&!['com','github','user','profile'].includes(m[1].toLowerCase()))
-    return{tool:'github_user',args:m[1]};
-
-  // 10. Search
-  m=text.match(/(?:пребарај|search|најди|find|baraj|najdi)\s+(?:github|на github|за|na)?\s*[:\-]?\s*(.+)/i);
-  if(m&&m[1].trim().length>1)return{tool:'github_search',args:m[1].trim()};
-
-  // 11. Remember
-  m=text.match(/(?:запамети|remember|памти|запиши|zapameti|pamti)\s+(.+)/i);
-  if(m)return{tool:'remember',args:m[1].trim()};
-
-  // 12. Recall
-  if(/(?:што знаеш|what do you know|што памтиш|recall|меморија|што си научил|what have you learned|sto znaes|sto pamits|sto si naucil)/i.test(text)){
-    m=text.match(/(?:за|about|za)\s+(.+)/i);
-    return{tool:'recall',args:m?m[1].trim():'*'};
-  }
-
-  // 13. List learned skills
-  if(/(?:научени|learned|nauceni|skills nauci|примери од навыци|primeri)/i.test(text)){
-    return{tool:'list_learned',args:''};
-  }
-
-  // 14. Wikipedia
-  m=text.match(/(?:википедија|wikipedia|vikipedija)\s+(?:за\s+|za\s+)?(.+)/i);
-  if(m)return{tool:'wikipedia',args:m[1].trim()};
-
-  // 15. Time
-  if(/(?:колку е часот|what time|време|date|датум|deneс|denes|kolku e casot)/i.test(text)&&t.length<40)
-    return{tool:'time',args:''};
-
-  // 16. Tools/agents list
-  if(/(?:кои tools|which tools|list tools|достапни tools|koj tools|dostapni tools)/i.test(text))
-    return{tool:'list_tools',args:''};
-  if(/(?:кои агенти|which agents|агенти|list agents|koj agenti|agenti)/i.test(text))
-    return{tool:'list_agents',args:''};
-
-  return null;
-}
-
-// ═══ IMAGE API ═══
-function buildImageURL(prompt,width=768,height=768){
-  const seed=Math.floor(Math.random()*1000000);
-  const enc=encodeURIComponent(prompt);
-  return `https://image.pollinations.ai/prompt/${enc}?width=${width}&height=${height}&seed=${seed}&nologo=true&model=flux`;
-}
-
-// ═══ TOOLS ═══
-const TOOLS={
-  generate_image:async(prompt)=>{
-    const url=buildImageURL(prompt,768,768);
-    return `__IMAGE__${url}__PROMPT__${prompt}`;
-  },
-  stats:async()=>{
-    const learned=STATE.memory.length;
-    const agents=STATE.agentCount;
-    const tools=Object.keys(TOOLS).length-2;
-    const auto=LEARN.interval?'✅ ON':'❌ OFF';
-    return `📊 **Статистика (РЕАЛНА, не симулирана)**\n\n• 🎭 Агенти: **${agents}**\n• 🧠 Научени skills: **${learned}**\n• 🛠 Tools: **${tools}**\n• 🎓 Auto-learn: **${auto}**\n• 🔄 Интервал: 3 мин\n\n💡 *Пиши „научени skills" за да видиш примери.*`;
-  },
-  list_learned:async()=>{
-    if(!STATE.memory.length)return'📚 Сè уште ништо не е научено. Пиши „учи".';
-    const sample=STATE.memory.slice(-30).reverse();
-    return `📚 **Научени skills — примери (последни 30):**\n\n`+sample.map(m=>{
-      const match=(m.fact||'').match(/\[([^\]]+)\]\s*(.*?)\s*\(([^)]+)\)/);
-      if(match)return `• **${match[1]}**${match[2]?': '+match[2]:''} _(${match[3]})_`;
-      return `• ${m.fact}`;
-    }).join('\n');
-  },
-  github_user:async(u)=>{
-    try{
-      const r=await fetch(`https://api.github.com/users/${u.trim()}`);
-      if(!r.ok)return`❌ User "${u}" не е најден`;
+    }},
+  'news:rss':{cat:'news',title:'RSS feed',usage:'RSS [url]',
+    fn:async url=>{
+      const r=await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`);
       const d=await r.json();
-      return`**${d.login}**${d.name?' ('+d.name+')':''}\n📝 ${d.bio||'—'}\n📦 Repos: ${d.public_repos}  👥 Followers: ${d.followers}\n🔗 ${d.html_url}`;
-    }catch(e){return'❌ '+e.message}
-  },
-  github_repos:async(args)=>{
-    try{
-      const p=args.trim().split(/\s+/);
-      const user=p[0];
-      const sort=(p[1]||'updated').replace('sort=','');
-      const r=await fetch(`https://api.github.com/users/${user}/repos?per_page=20&sort=${sort}`);
-      if(!r.ok)return`❌ Error ${r.status}`;
-      const d=await r.json();
-      if(!d.length)return`No repos for ${user}`;
-      return`📦 **${user}** (${d.length}):\n\n`+d.map(x=>`• **${x.name}** ⭐${x.stargazers_count} ${x.language?'· '+x.language:''}\n  ${x.description||'—'}`).join('\n');
-    }catch(e){return'❌ '+e.message}
-  },
-  github_repo:async(args)=>{
-    try{
-      const r=await fetch(`https://api.github.com/repos/${args.trim()}`);
-      if(!r.ok)return`❌ Not found`;
-      const d=await r.json();
-      return`📦 **${d.full_name}**\n⭐ ${d.stargazers_count} 🍴 ${d.forks_count}\n💻 ${d.language||'—'}\n📝 ${d.description||''}\n🔗 ${d.html_url}`;
-    }catch(e){return'❌ '+e.message}
-  },
-  github_prs:async(args)=>{
-    try{
-      const user=args.trim()||'klikmarkettt-dotcom';
-      const q=user.includes('/')?`repo:${user} is:pr is:open`:`author:${user} is:pr is:open`;
-      const r=await fetch(`https://api.github.com/search/issues?q=${encodeURIComponent(q)}&per_page=20`);
-      if(!r.ok)return`❌ Error ${r.status}`;
-      const d=await r.json();
-      if(!d.items||!d.items.length)return`📋 Нема отворени PRs за **${user}**.`;
-      return`📋 **Open PRs: ${d.total_count}**\n\n`+d.items.map(x=>`• #${x.number} **${x.title}**\n  📁 ${x.repository_url.split('/').slice(-2).join('/')}\n  🔗 ${x.html_url}`).join('\n\n');
-    }catch(e){return'❌ '+e.message}
-  },
-  github_search:async(args)=>{
-    try{
-      const q=args.replace(/["']/g,'').trim();
-      const r=await fetch(`https://api.github.com/search/repositories?q=${encodeURIComponent(q)}&sort=stars&per_page=10`);
-      if(!r.ok)return`❌ Error ${r.status}`;
-      const d=await r.json();
-      if(!d.items||!d.items.length)return`🔍 Нема резултати за "${q}"`;
-      return`🔍 **${d.total_count} results:**\n\n`+d.items.map(x=>`• **${x.full_name}** ⭐${x.stargazers_count}\n  ${x.description||'—'}\n  🔗 ${x.html_url}`).join('\n\n');
-    }catch(e){return'❌ '+e.message}
-  },
-  remember:async(args)=>{
-    STATE.memory.push({ts:Date.now(),fact:args});
-    if(STATE.memory.length>3000)STATE.memory=STATE.memory.slice(-3000);
-    saveMemory();return`✓ Запаметено: "${args}"`;
-  },
-  recall:async(args)=>{
-    const q=args==='*'?'':args.toLowerCase();
-    const m=STATE.memory.filter(x=>!q||(x.fact||'').toLowerCase().includes(q));
-    if(!m.length)return`🧠 Нема зачувани факти${q?' за "'+q+'"':''}.`;
-    return`🧠 **${m.length} факти:**\n\n`+m.slice(-25).map(x=>'• '+x.fact).join('\n');
-  },
-  wikipedia:async(args)=>{
-    try{
-      const r=await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(args.trim())}`);
+      if(d.status!=='ok')return`❌ Feed error`;
+      return`📡 **${d.feed.title}:**\n\n`+d.items.slice(0,10).map(x=>`• [${x.title}](${x.link})`).join('\n');
+    }},
+
+  // ==== WEB / WIKI ====
+  'web:wikipedia':{cat:'web',title:'Wikipedia',usage:'Википедија за [тема]',
+    fn:async q=>{
+      const r=await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(q.trim())}`);
       if(!r.ok)return'❌ Не е најдено';
       const d=await r.json();
       return`📖 **${d.title}**\n\n${d.extract}\n\n🔗 ${d.content_urls?.desktop?.page||''}`;
-    }catch(e){return'❌ '+e.message}
-  },
-  time:async()=>`🕐 ${new Date().toLocaleString('mk-MK',{dateStyle:'full',timeStyle:'short'})}`,
-  learn_repo:async(args)=>{
-    setStatus(`🎓 ${args}`);
-    const n=await learnFromRepo(args.trim());
-    return`✓ Научи **${n}** нови skills од **${args}**.\n📚 Вкупно: **${STATE.memory.length}**`;
-  },
-  auto_learn:async(cmd)=>{
-    cmd=cmd.trim().toLowerCase();
-    if(cmd==='on'){startAutoLearn();return'✓ Auto-learn ВКЛУЧЕНО'};
-    if(cmd==='off'){if(LEARN.interval){clearInterval(LEARN.interval);LEARN.interval=null}return'✓ Auto-learn ИСКЛУЧЕНО'};
-    return`🎓 **Auto-learn**\nВкупно научено овој сеанс: ${LEARN.total}\n📚 Меморија: ${STATE.memory.length}\nСтатус: ${LEARN.interval?'✅ ON':'❌ OFF'}\nИнтервал: 3 мин`;
-  },
-  list_tools:async()=>'🛠 **Tools:**\n\n'+Object.keys(TOOLS).filter(k=>!['stats','list_learned'].includes(k)).map(k=>'• '+k).join('\n')+'\n\n💡 Пробај: „направи слика на..."',
-  list_agents:async()=>'🎭 **Агенти ('+STATE.agentCount+'):**\n\n'+Object.entries(AGENT_DATA).map(([c,d])=>`${d.e} **${c}** — ${d.p.length*d.a.length}`).join('\n'),
+    }},
+  'web:define':{cat:'web',title:'Define word',usage:'Што значи [збор]',
+    fn:async w=>{
+      const r=await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(w.trim())}`);
+      if(!r.ok)return'❌ Не е најден';
+      const d=await r.json();
+      const first=d[0];
+      return`📚 **${first.word}** (${first.phonetic||''})\n\n`+first.meanings.slice(0,3).map(m=>`*${m.partOfSpeech}:* ${m.definitions[0].definition}`).join('\n\n');
+    }},
+  'web:translate':{cat:'web',title:'Translate',usage:'Преведи [текст] на [јазик]',
+    fn:async t=>{
+      const m=t.match(/(.+?)\s+(?:на|to|into)\s+([a-z]+)/i);
+      if(!m)return'❌ Формат: Преведи [текст] на [јазик]';
+      const text=m[1],lang=m[2];
+      const r=await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=mk|${lang}`);
+      const d=await r.json();
+      if(!d.responseData)return'❌ Error';
+      return`🌐 **${text}** → **${d.responseData.translatedText}**`;
+    }},
+  'web:weather':{cat:'web',title:'Weather',usage:'Време [град]',
+    fn:async city=>{
+      const r=await fetch(`https://wttr.in/${encodeURIComponent(city.trim())}?format=j1`);
+      if(!r.ok)return'❌ Град не е најден';
+      const d=await r.json();
+      const c=d.current_condition[0];
+      return`🌤 **${city}**\n🌡 ${c.temp_C}°C (feels ${c.FeelsLikeC}°C)\n💧 Humidity: ${c.humidity}%\n💨 Wind: ${c.windspeedKmph} km/h\n☁ ${c.weatherDesc[0].value}`;
+    }},
+
+  // ==== GITHUB ====
+  'gh:user':{cat:'gh',title:'GitHub user',usage:'GitHub [username]',
+    fn:async u=>{
+      const r=await fetch(`https://api.github.com/users/${u.trim()}`);
+      if(!r.ok)return`❌ User "${u}" не е најден`;
+      const d=await r.json();
+      return`**${d.login}**${d.name?' ('+d.name+')':''}\n📝 ${d.bio||'—'}\n📦 ${d.public_repos} repos · 👥 ${d.followers} followers\n🔗 ${d.html_url}`;
+    }},
+  'gh:repos':{cat:'gh',title:'GitHub repos',usage:'Repos na [user]',
+    fn:async u=>{
+      const r=await fetch(`https://api.github.com/users/${u.trim()}/repos?per_page=15&sort=updated`);
+      if(!r.ok)return`❌ Error`;
+      const d=await r.json();
+      return`📦 **${u}** (${d.length}):\n\n`+d.map(x=>`• **${x.name}** ⭐${x.stargazers_count} ${x.language?'· '+x.language:''}`).join('\n');
+    }},
+  'gh:repo':{cat:'gh',title:'GitHub repo info',usage:'Info za [owner/repo]',
+    fn:async r=>{
+      const res=await fetch(`https://api.github.com/repos/${r.trim()}`);
+      if(!res.ok)return`❌ Not found`;
+      const d=await res.json();
+      return`📦 **${d.full_name}**\n⭐ ${d.stargazers_count} · 🍴 ${d.forks_count}\n💻 ${d.language||'—'}\n📝 ${d.description||''}\n🔗 ${d.html_url}`;
+    }},
+  'gh:prs':{cat:'gh',title:'My PRs',usage:'Моите PRs',
+    fn:async user=>{
+      user=user.trim()||'klikmarkettt-dotcom';
+      const r=await fetch(`https://api.github.com/search/issues?q=author:${user}+is:pr+is:open&per_page=20`);
+      const d=await r.json();
+      if(!d.items?.length)return`📋 Нема отворени PRs.`;
+      return`📋 **Open PRs: ${d.total_count}**\n\n`+d.items.map(x=>`• #${x.number} **${x.title}**\n  ${x.repository_url.split('/').slice(-2).join('/')}`).join('\n');
+    }},
+  'gh:search':{cat:'gh',title:'Search GitHub',usage:'Пребарај GitHub [query]',
+    fn:async q=>{
+      const r=await fetch(`https://api.github.com/search/repositories?q=${encodeURIComponent(q.trim())}&sort=stars&per_page=10`);
+      const d=await r.json();
+      if(!d.items?.length)return`🔍 Нема резултати`;
+      return`🔍 **${d.total_count} results:**\n\n`+d.items.map(x=>`• **${x.full_name}** ⭐${x.stargazers_count}\n  ${x.description||''}`).join('\n\n');
+    }},
+  'gh:clone':{cat:'gh',title:'Clone repo info',usage:'Клонирај [owner/repo]',
+    fn:async r=>{
+      const res=await fetch(`https://api.github.com/repos/${r.trim()}`);
+      if(!res.ok)return`❌ Not found`;
+      const d=await res.json();
+      // Fetch README
+      let readme='';
+      for(const br of [d.default_branch,'main','master']){
+        try{
+          const rr=await fetch(`https://raw.githubusercontent.com/${r}/${br}/README.md`);
+          if(rr.ok){readme=await rr.text();break}
+        }catch(e){}
+      }
+      // Save to learned
+      const lines=readme.split('\n');
+      let learned=0;
+      for(const line of lines){
+        const m=line.match(/^\s*[-*]\s+\[([^\]]+)\]\(([^)]+)\)\s*[-–—:]\s*(.+)$/);
+        if(m&&m[1].length>2&&m[3].length>8){
+          STATE.learned.push({name:m[1],desc:m[3].slice(0,150),url:m[2],source:r});
+          learned++;
+        }
+      }
+      if(STATE.learned.length>5000)STATE.learned=STATE.learned.slice(-5000);
+      saveLearned();
+      return`📦 **${d.full_name}** ⭐${d.stargazers_count}\n\n${d.description||''}\n\n✅ Екстрактирав **${learned}** items од README.\n📚 Вкупно научени: **${STATE.learned.length}**`;
+    }},
+  'gh:trending':{cat:'gh',title:'GitHub trending',usage:'Трендинг GitHub',
+    fn:async()=>{
+      const r=await fetch('https://api.github.com/search/repositories?q=stars:%3E1000+created:>2024-01-01&sort=stars&per_page=15');
+      const d=await r.json();
+      return`🔥 **Trending repos:**\n\n`+d.items.map(x=>`• **${x.full_name}** ⭐${x.stargazers_count}\n  ${x.description||''}`).join('\n\n');
+    }},
+
+  // ==== TEXT / PRODUCTIVITY ====
+  'text:summarize':{cat:'text',title:'Summarize text',usage:'Резимирај [текст]',
+    fn:async t=>{
+      const r=await callLLM(`Summarize this in 3 bullet points in Macedonian:\n\n${t}`,'');
+      return r||'❌ LLM unavailable';
+    }},
+  'text:rewrite':{cat:'text',title:'Rewrite text',usage:'Препиши [текст]',
+    fn:async t=>{
+      const r=await callLLM(`Rewrite this text in Macedonian, keep meaning, make it clearer:\n\n${t}`,'');
+      return r||'❌ LLM unavailable';
+    }},
+  'text:email':{cat:'text',title:'Write email',usage:'Email за [тема]',
+    fn:async t=>{
+      const r=await callLLM(`Write a professional email in Macedonian about: ${t}`,'');
+      return r||'❌ LLM unavailable';
+    }},
+  'text:tweet':{cat:'text',title:'Write tweet',usage:'Твит за [тема]',
+    fn:async t=>{
+      const r=await callLLM(`Write an engaging Twitter post (max 280 chars) about: ${t}. Return ONLY the tweet text.`,'');
+      return r?`🐦 **Tweet:**\n\n${r}`:'❌ LLM unavailable';
+    }},
+
+  // ==== MISC UTILITIES ====
+  'util:qr':{cat:'util',title:'QR code',usage:'QR [текст]',
+    fn:async t=>`__IMAGE__https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(t)}__PROMPT__QR: ${t}`},
+  'util:time':{cat:'util',title:'Current time',usage:'Колку е часот',
+    fn:async()=>`🕐 ${new Date().toLocaleString('mk-MK',{dateStyle:'full',timeStyle:'short'})}`},
+  'util:ip':{cat:'util',title:'My IP',usage:'Мој IP',
+    fn:async()=>{
+      try{
+        const r=await fetch('https://api.ipify.org?format=json');
+        const d=await r.json();
+        return`🌐 Вашиот IP: **${d.ip}**`;
+      }catch(e){return'❌ Не можам да земам IP'}
+    }},
+  'util:uuid':{cat:'util',title:'UUID',usage:'Генерирај UUID',
+    fn:async()=>`🆔 \`${crypto.randomUUID()}\``},
+  'util:password':{cat:'util',title:'Password',usage:'Генерирај лозинка',
+    fn:async()=>{
+      const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+      let pwd='';
+      for(let i=0;i<20;i++)pwd+=chars[Math.floor(Math.random()*chars.length)];
+      return`🔐 \`${pwd}\``;
+    }},
 };
+
+const COIN_IDS={BTC:'bitcoin',ETH:'ethereum',SOL:'solana',BNB:'binancecoin',XRP:'ripple',ADA:'cardano',DOGE:'dogecoin',AVAX:'avalanche-2',DOT:'polkadot',MATIC:'matic-network',LINK:'chainlink',TON:'the-open-network'};
+function getCoinId(s){return COIN_IDS[s.toUpperCase()]||s.toLowerCase()}
+
+// ═══ AGENTS (SIMPLE) ═══
+const AGENT_CATS=['coding','trading','defi','security','analytics','writing','marketing','research','creative','business','personal','social','learning','crypto','language','health','law','music','gaming'];
+let AGENT_COUNT=0;
+
+// ═══ TRANSLATION ═══
+const DICT={
+  'kuce':'a cute dog','куче':'a cute dog','kukja':'a house','куќа':'a house',
+  'macka':'a cute cat','мачка':'a cute cat','zivotni':'wild animals in nature','животни':'wild animals in nature',
+  'coek':'a man','човек':'a man','covek':'a man','zhena':'a woman','жена':'a woman',
+  'dete':'a child','дете':'a child','deca':'children playing','деца':'children playing',
+  'sonce':'bright sun in sky','сонце':'bright sun in sky','mesec':'full moon at night','месец':'full moon at night',
+  'dzvezdi':'starry night sky','zvezdi':'starry night sky','sвезди':'starry night sky',
+  'more':'beautiful sea','море':'beautiful sea','planina':'majestic mountain','планина':'majestic mountain',
+  'reka':'flowing river','река':'flowing river','ezero':'calm lake','езеро':'calm lake',
+  'drvo':'a tree','дрво':'a tree','cveke':'colorful flowers','цвеќе':'colorful flowers',
+  'kola':'a car','кола':'a car','avion':'an airplane','авион':'an airplane',
+  'grad':'a modern city','град':'a modern city','selo':'a peaceful village','село':'a peaceful village',
+  'robot':'a futuristic robot','робот':'a futuristic robot','astronaut':'an astronaut','астронаут':'an astronaut',
+  'mars':'planet Mars landscape','марс':'planet Mars landscape','zemja':'planet Earth','земја':'planet Earth',
+  'son':'a dream','сон':'a dream','ljubov':'love','љубов':'love','srekja':'happiness','среќа':'happiness',
+};
+
+function translatePrompt(text){
+  const words=text.toLowerCase().split(/\s+/);
+  const translated=words.map(w=>{
+    const clean=w.replace(/[.,!?;:]/g,'');
+    return DICT[clean]||DICT[w]||w;
+  }).join(' ');
+  return translated+', photorealistic, high quality, detailed, 4k';
+}
 
 // ═══ STATE ═══
 const STATE={
-  history:JSON.parse(localStorage.getItem('hugo9_hist')||'[]'),
-  memory:JSON.parse(localStorage.getItem('hugo9_memory')||'[]'),
-  agentCount:0,busy:false,
-  installed:localStorage.getItem('hugo9_installed')==='1',
+  history:JSON.parse(localStorage.getItem('hugo11_hist')||'[]'),
+  learned:JSON.parse(localStorage.getItem('hugo11_learned')||'[]'),
+  busy:false,
 };
+function saveLearned(){try{localStorage.setItem('hugo11_learned',JSON.stringify(STATE.learned.slice(-5000)))}catch(e){}
+  if($('mem-count'))$('mem-count').textContent=STATE.learned.length;
+  if($('kb-count'))$('kb-count').textContent=Object.keys(KB).length}
+function saveHistory(){try{localStorage.setItem('hugo11_hist',JSON.stringify(STATE.history.slice(-50)))}catch(e){}}
 
 const $=id=>document.getElementById(id);
 const chat=$('chat'),msgBox=$('msg'),sendBtn=$('send');
-const install=$('install'),loaderText=$('st'),progressFill=$('pf');
 const sidebar=$('sidebar'),backdrop=$('backdrop');
 const statusEl=$('status'),toast=$('toast');
+const install=$('install'),loaderText=$('st'),progressFill=$('pf');
 
 function setStatus(t){statusEl.textContent=t}
 function scrollDown(){chat.scrollTop=chat.scrollHeight}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c])}
 function showToast(m,ms=2000){toast.textContent=m;toast.classList.add('on');
   clearTimeout(showToast.t);showToast.t=setTimeout(()=>toast.classList.remove('on'),ms)}
-function saveMemory(){try{localStorage.setItem('hugo9_memory',JSON.stringify(STATE.memory.slice(-3000)))}catch(e){}
-  if($('mem-count'))$('mem-count').textContent=STATE.memory.length}
-function saveHistory(){try{localStorage.setItem('hugo9_hist',JSON.stringify(STATE.history.slice(-50)))}catch(e){}}
 
 function renderMD(t){
   if(!t)return'';
   const imgMatch=t.match(/__IMAGE__(.+)__PROMPT__(.+)$/);
   if(imgMatch){
     const url=imgMatch[1],prompt=imgMatch[2];
-    return`🎨 **${esc(prompt)}**\n\n<img src="${esc(url)}" alt="${esc(prompt)}" loading="lazy">\n\n<a href="${esc(url)}" target="_blank">🔗 Отвори во нов таб</a>`;
+    return`🎨 **${esc(prompt)}**\n\n<div class="img-wrap"><img src="${esc(url)}" loading="lazy"></div>`;
   }
   let h=esc(t);
   h=h.replace(/```(\w*)\n?([\s\S]*?)```/g,'<pre><code>$2</code></pre>');
   h=h.replace(/`([^`\n]+)`/g,'<code>$1</code>');
   h=h.replace(/^### (.+)$/gm,'<h3>$1</h3>');
   h=h.replace(/^## (.+)$/gm,'<h2>$1</h2>');
-  h=h.replace(/^# (.+)$/gm,'<h1>$1</h1>');
   h=h.replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>');
-  h=h.replace(/_([^_]+)_/g,'<i>$1</i>');
   h=h.replace(/^\s*[-*] (.+)$/gm,'• $1');
+  h=h.replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g,'<a href="$2" target="_blank">$1</a>');
   h=h.replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" target="_blank">$1</a>');
   return h;
 }
 function addMsg(role,text,save=true){
   const el=document.createElement('div');
-  el.className='msg '+role;
-  el.innerHTML=renderMD(text);
+  el.className='msg '+role;el.innerHTML=renderMD(text);
   chat.appendChild(el);scrollDown();
-  if(save){STATE.history.push({role,text});
-    if(STATE.history.length>100)STATE.history=STATE.history.slice(-100);saveHistory()}
+  if(save){STATE.history.push({role,text});saveHistory()}
 }
-function addErr(text){const el=document.createElement('div');el.className='err';el.textContent=text;chat.appendChild(el);scrollDown()}
+function addErr(t){const el=document.createElement('div');el.className='err';el.textContent=t;chat.appendChild(el);scrollDown()}
 function addThinking(t='…'){
   const el=document.createElement('div');
   el.className='msg hugo think';el.id='thinking';
@@ -641,38 +506,131 @@ function showWelcome(){
   el.className='welcome';el.id='welcome';
   el.innerHTML=`
     <div class="hero">🤖</div>
-    <h2>Hugo Ultra</h2>
-    <p>${STATE.agentCount} agents · 14 tools · Реален auto-learn</p>
+    <h2>Hugo Ultra v11</h2>
+    <p>${Object.keys(KB).length} recipes · ${STATE.learned.length} learned</p>
     <div style="margin-top:20px">
-      <span class="sg" onclick="qs('Napravi slika na astronavt na Mars')">🎨 Слика</span>
-      <span class="sg" onclick="qs('Kolku agenti i skills imam?')">📊 Статистика</span>
-      <span class="sg" onclick="qs('Научени skills')">📚 Научени</span>
-      <span class="sg" onclick="qs('Кои PRs ги имам?')">📋 Мои PRs</span>
-      <span class="sg" onclick="qs('Учи')">🎓 Учи</span>
-      <span class="sg" onclick="qs('Види github.com/torvalds')">🐧 Torvalds</span>
+      <span class="sg" onclick="qs('Направи слика на куче')">🐕 Куче</span>
+      <span class="sg" onclick="qs('Цена на BTC')">💰 BTC</span>
+      <span class="sg" onclick="qs('Топ 10 крипто')">📊 Top</span>
+      <span class="sg" onclick="qs('Хакер њуз')">📰 HN</span>
+      <span class="sg" onclick="qs('Википедија за Bitcoin')">📖 BTC Wiki</span>
+      <span class="sg" onclick="qs('Време Скопје')">🌤 Weather</span>
+      <span class="sg" onclick="qs('Клонирај e2b-dev/awesome-ai-agents')">📦 Clone</span>
+      <span class="sg" onclick="qs('Моите PRs')">📋 PRs</span>
+      <span class="sg" onclick="qs('QR https://github.com')">📱 QR</span>
+      <span class="sg" onclick="qs('Лозинка')">🔐 Password</span>
     </div>`;
   chat.appendChild(el);scrollDown();
 }
 function rmWelcome(){$('welcome')?.remove()}
 window.qs=t=>{msgBox.value=t;sendMsg()};
 
+// ═══ LLM ═══
 async function callLLM(prompt,system=''){
   const full=(system?system+'\n\n':'')+prompt;
-  const models=['openai','mistral','llama'];
   const enc=encodeURIComponent(full);
-  for(const m of models){
-    for(const extra of ['&private=true','']){
-      try{
-        const r=await fetch(`https://text.pollinations.ai/${enc}?model=${m}${extra}`);
-        if(!r.ok)continue;
-        const t=await r.text();
-        if(t&&t.length>2&&!t.startsWith('{"error')&&!t.startsWith('<!'))return t;
-      }catch(e){}
-    }
+  const endpoints=[
+    `https://text.pollinations.ai/${enc}?model=openai&private=true`,
+    `https://text.pollinations.ai/${enc}?model=mistral&private=true`,
+    `https://text.pollinations.ai/${enc}?model=llama`,
+    `https://text.pollinations.ai/${enc}`,
+  ];
+  for(const url of endpoints){
+    try{
+      const r=await fetch(url);
+      if(!r.ok)continue;
+      const t=await r.text();
+      if(t&&t.length>2&&!t.startsWith('{"error')&&!t.startsWith('<!'))return t;
+    }catch(e){}
   }
   return null;
 }
 
+// ═══ INTENT DETECTION ═══
+function detectIntent(text){
+  const t=text.toLowerCase().trim();
+  if(!t)return null;
+  const m=text.match(/TOOL:\s*([a-z:_]+)\s*\|\s*(.+)/i);
+  if(m)return{tool:m[1],args:m[2].trim()};
+
+  // Image
+  const imgKw=/(?:направи|napravi|нацртај|nacrtaj|генерирај|generiraj|create|make|generate|draw|slika|слика|image)\s+(?:slika|слика|image|на|na|so|со|of|with|за|од)?\s*(.+)/i;
+  const m2=text.match(imgKw);
+  if(m2&&/(?:slika|слика|image|нацртај|nacrtaj|генерирај|generiraj|draw)/i.test(text)){
+    return{tool:'image:generate',args:m2[1].trim()};
+  }
+
+  // Crypto price
+  let mm=t.match(/цена на ([a-z]{2,6})/i)||t.match(/price of ([a-z]{2,6})/i)||t.match(/^([a-z]{2,6}) price/i);
+  if(mm)return{tool:'crypto:price',args:mm[1]};
+  if(/^btc$/i.test(t))return{tool:'crypto:price',args:'BTC'};
+  if(/^eth$/i.test(t))return{tool:'crypto:price',args:'ETH'};
+  if(/(?:топ|top).*(?:крипто|crypto|coins)/i.test(text))return{tool:'crypto:top',args:''};
+  if(/(?:трендинг|trending).*(?:крипто|crypto)/i.test(text))return{tool:'crypto:trending',args:''};
+
+  // News
+  if(/(?:хакер|hacker).*(?:њуз|news)/i.test(text)||/^hn$/i.test(t))return{tool:'news:hackernews',args:''};
+
+  // Wikipedia
+  mm=text.match(/(?:википедија|wikipedia|wiki)\s+(?:за\s+|za\s+|about\s+)?(.+)/i);
+  if(mm)return{tool:'web:wikipedia',args:mm[1].trim()};
+
+  // Weather
+  mm=text.match(/(?:време|vreme|weather)\s+(?:во\s+|во|in\s+)?(.+)/i);
+  if(mm)return{tool:'web:weather',args:mm[1].trim()};
+
+  // Define
+  mm=text.match(/(?:што значи|define|значење на)\s+(.+)/i);
+  if(mm)return{tool:'web:define',args:mm[1].trim()};
+
+  // Translate
+  if(/^преведи|^translate/i.test(t))return{tool:'web:translate',args:text.replace(/^(преведи|translate)\s+/i,'')};
+
+  // GitHub clone
+  mm=text.match(/(?:клонирај|clone|интегрирај|integriraj)\s+([a-z0-9_\-]+\/[a-z0-9_\-\.]+)/i);
+  if(mm)return{tool:'gh:clone',args:mm[1]};
+  mm=text.match(/github\.com\/([a-z0-9_\-]+)\/([a-z0-9_\-\.]+)/i);
+  if(mm)return{tool:'gh:repo',args:`${mm[1]}/${mm[2]}`};
+
+  // PRs
+  if(/(?:prs?|pull\s*requests?|пул\s*реквест|моите\s+prs|moi\s+prs)/i.test(text))return{tool:'gh:prs',args:'klikmarkettt-dotcom'};
+
+  // GitHub search
+  mm=text.match(/(?:пребарај|search|најди|find)\s+(?:github|gh)?\s*[:\-]?\s*(.+)/i);
+  if(mm)return{tool:'gh:search',args:mm[1].trim()};
+
+  // GitHub user
+  mm=text.match(/github\s+([a-z0-9_\-]{2,30})/i);
+  if(mm&&!mm[1].includes('.'))return{tool:'gh:user',args:mm[1]};
+
+  // Trending
+  if(/(?:трендинг|trending).*(?:github|gh|repos)/i.test(text))return{tool:'gh:trending',args:''};
+
+  // Utilities
+  if(/(?:qr)\s+(.+)/i.test(text))return{tool:'util:qr',args:text.replace(/^.*?qr\s+/i,'')};
+  if(/(?:колку е часот|what time|тековно време|current time)/i.test(text))return{tool:'util:time',args:''};
+  if(/(?:мој\s+ip|my\s+ip)/i.test(text))return{tool:'util:ip',args:''};
+  if(/(?:uuid)/i.test(text))return{tool:'util:uuid',args:''};
+  if(/(?:лозинка|password|geslo)/i.test(text))return{tool:'util:password',args:''};
+
+  // Text
+  mm=text.match(/(?:резимирај|summarize)\s+(.+)/i);
+  if(mm)return{tool:'text:summarize',args:mm[1].trim()};
+  mm=text.match(/(?:препиши|rewrite)\s+(.+)/i);
+  if(mm)return{tool:'text:rewrite',args:mm[1].trim()};
+  mm=text.match(/(?:email|мејл)\s+(?:за\s+|about\s+)?(.+)/i);
+  if(mm)return{tool:'text:email',args:mm[1].trim()};
+  mm=text.match(/(?:твит|tweet)\s+(?:за\s+|about\s+)?(.+)/i);
+  if(mm)return{tool:'text:tweet',args:mm[1].trim()};
+
+  // Stats/list
+  if(/(?:колку|статистика|stats|status)/i.test(text))return{tool:'__stats__',args:''};
+  if(/(?:tools|инструменти|recipes)/i.test(text))return{tool:'__tools__',args:''};
+
+  return null;
+}
+
+// ═══ SEND ═══
 async function sendMsg(){
   if(STATE.busy)return;
   const text=msgBox.value.trim();
@@ -686,153 +644,128 @@ async function sendMsg(){
   try{
     const intent=detectIntent(text);
 
-    if(intent&&intent.tool==='__manual_learn__'){
-      const result=await manualLearn();
-      th.remove();addMsg('hugo',result);setStatus('Ready');
+    if(intent&&intent.tool==='__stats__'){
+      th.remove();
+      addMsg('hugo',`📊 **Статистика**\n\n• 📚 Recipes: **${Object.keys(KB).length}**\n• 🎓 Научени од GitHub: **${STATE.learned.length}**\n• 💬 Пораки: **${STATE.history.length}**`);
     }
-    else if(intent&&TOOLS[intent.tool]){
-      setStatus(intent.tool==='generate_image'?'🎨 Генерирам слика…':`🛠 ${intent.tool}`);
+    else if(intent&&intent.tool==='__tools__'){
+      th.remove();
+      const byCat={};
+      for(const[k,v]of Object.entries(KB)){byCat[v.cat]=byCat[v.cat]||[];byCat[v.cat].push(v.title)}
+      addMsg('hugo','🛠 **Tools:**\n\n'+Object.entries(byCat).map(([c,l])=>`**${c}** (${l.length}): ${l.join(', ')}`).join('\n\n'));
+    }
+    else if(intent&&KB[intent.tool]){
+      setStatus(`🛠 ${intent.tool}`);
       let result;
-      try{result=await TOOLS[intent.tool](intent.args)}
+      try{result=await KB[intent.tool].fn(intent.args)}
       catch(e){result='❌ '+e.message}
       th.remove();addMsg('hugo',result);setStatus('Ready');
     }
     else{
-      setStatus('💭 Thinking…');
-      const mem=STATE.memory.slice(-5).map(m=>'• '+(m.fact||'')).join('\n');
-      const sys=`Ти си Hugo Ultra. Одговори КРАТКО (макс 3 реченици) на македонски или англиски. НИКОГАШ не измислувај бројки за апликацијата — само кажи им да напишат "статистика". Ако прашаат за слика, кажи: „Напиши: направи слика на [опис]"${mem?'\n\nЗнаеш: '+mem:''}`;
-      const reply=await callLLM(text,sys);
+      // General chat with LLM + context
+      setStatus('💭…');
+      const learnedCtx=STATE.learned.slice(-10).map(l=>'• '+l.name).join('\n');
+      const reply=await callLLM(text,`Ти си Hugo, автономен агент. Одговори КРАТКО (макс 3 реченици) на македонски. Можеш: слики, крипто цени, вести, GitHub, Wikipedia, време, превод, QR, лозинки.${learnedCtx?'\n\nНаучено: '+learnedCtx:''}`);
       th.remove();
-      if(reply)addMsg('hugo',reply);
-      else addMsg('hugo','⚠️ LLM недостапен. Пробај: „направи слика на..." или „статистика" — тие работат без LLM.');
-      setStatus('Ready');
+      addMsg('hugo',reply||'Пробај: „Направи слика на куче", „Цена на BTC", „Хакер њуз", „Моите PRs".');
     }
   }catch(e){
-    th.remove();addErr('❌ '+e.message);setStatus('Error');
+    th.remove();addErr('❌ '+e.message);
   }
+  setStatus('Ready');
   STATE.busy=false;sendBtn.disabled=false;msgBox.focus();
 }
 
-function renderAgentCategories(){
-  const html=Object.entries(AGENT_DATA).map(([cat,d])=>{
-    const count=d.p.length*d.a.length;
-    return`<div class="agent-cat" onclick="openAgentCat('${cat}')">
-      <div class="ico">${d.e}</div>
-      <div class="info"><b>${cat}</b><span>${d.d} · ${count}</span></div>
-    </div>`;
-  }).join('');
-  $('agent-content').innerHTML=html;
-}
-window.openAgentCat=function(cat){
-  const d=AGENT_DATA[cat];
-  let html=`<button class="sg" onclick="renderAgentCategories()" style="margin-bottom:10px">← Назад</button>`;
-  let count=0;
-  for(const p of d.p){
-    for(const a of d.a){
-      const key=`${cat}_${p}_${a}`.toLowerCase().replace(/[^a-z0-9_]/g,'_');
-      html+=`<div class="agent-item" onclick="selectAgent('${key}')">
-        <span style="width:5px;height:5px;background:var(--cyan);border-radius:50%"></span>
-        <span>${esc(p)} <span style="color:var(--txt3)">${esc(a)}</span></span></div>`;
-      count++;if(count>150)break;
-    }
-    if(count>150)break;
-  }
-  $('agent-content').innerHTML=html;
-};
-window.selectAgent=function(key){
-  const a=AGENTS[key];if(!a)return;
-  closeModal('modal-agents');
-  showToast(`✅ ${a.role}`,2000);
-  msgBox.placeholder=`${a.role}: кажи задача…`;
-  msgBox.focus();
-};
-function searchAgents(q){
-  q=q.toLowerCase();
-  if(!q){renderAgentCategories();return}
-  const r=[];
-  for(const[k,a]of Object.entries(AGENTS)){
-    if(k.includes(q)||a.role.toLowerCase().includes(q)){r.push({k,a});if(r.length>80)break}
-  }
-  if(!r.length){$('agent-content').innerHTML='<div style="text-align:center;color:var(--txt3);padding:20px">Нема резултати</div>';return}
-  $('agent-content').innerHTML=r.map(({k,a})=>`
-    <div class="agent-item" onclick="selectAgent('${k}')">
-      <span style="width:5px;height:5px;background:var(--cyan);border-radius:50%"></span>
-      <span>${esc(a.role)}</span></div>`).join('');
+// ═══ KB BROWSER ═══
+function renderKB(filter=''){
+  filter=filter.toLowerCase();
+  const items=Object.entries(KB).filter(([k,v])=>!filter||k.toLowerCase().includes(filter)||v.title.toLowerCase().includes(filter)||v.usage.toLowerCase().includes(filter));
+  if(!items.length){$('kb-content').innerHTML='<div style="text-align:center;color:var(--txt3);padding:20px">Нема резултати</div>';return}
+  $('kb-content').innerHTML=items.map(([k,v])=>
+    `<div class="kb-item" onclick="qs('${esc(v.usage.replace(/\[.*?\]/g,'').trim())}')">
+      <b>${esc(k)}</b> — ${esc(v.title)}<br>
+      <span style="color:var(--txt3);font-size:11px">💡 ${esc(v.usage)}</span>
+    </div>`).join('');
 }
 function openModal(id){$(id).classList.add('on')}
 function closeModal(id){$(id).classList.remove('on')}
 
+// ═══ EVENTS ═══
 sendBtn.onclick=sendMsg;
 msgBox.addEventListener('input',()=>{msgBox.style.height='auto';msgBox.style.height=Math.min(msgBox.scrollHeight,120)+'px'});
 msgBox.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg()}});
 $('btn-menu').onclick=()=>{sidebar.classList.add('open');backdrop.classList.add('on')};
 $('sb-close').onclick=()=>{sidebar.classList.remove('open');backdrop.classList.remove('on')};
 backdrop.onclick=()=>{sidebar.classList.remove('open');backdrop.classList.remove('on')};
+$('btn-kb').onclick=()=>{renderKB();openModal('modal-kb')};
+$('modal-kb-close').onclick=()=>closeModal('modal-kb');
+$('kb-search').addEventListener('input',e=>renderKB(e.target.value));
+
 document.querySelectorAll('.sb-item').forEach(el=>{
   el.onclick=()=>{
     const a=el.dataset.a;
     sidebar.classList.remove('open');backdrop.classList.remove('on');
     if(a==='new'){chat.innerHTML='';STATE.history=[];saveHistory();showWelcome()}
-    else if(a==='agents'){renderAgentCategories();openModal('modal-agents')}
-    else if(a==='tools'){TOOLS.list_tools('').then(r=>addMsg('hugo',r))}
-    else if(a==='memory'){TOOLS.recall('*').then(r=>addMsg('hugo',r))}
-    else if(a==='learned'){TOOLS.list_learned('').then(r=>addMsg('hugo',r))}
-    else if(a==='learn'){TOOLS.auto_learn('status').then(r=>addMsg('hugo',r))}
-    else if(a==='export'){exportChat()}
+    else if(a==='kb'){renderKB();openModal('modal-kb')}
+    else if(a==='learned'){
+      if(!STATE.learned.length)addMsg('hugo','🎓 Сè уште ништо. Пиши: „Клонирај e2b-dev/awesome-ai-agents"');
+      else addMsg('hugo',`🎓 **Научени (${STATE.learned.length})** — последни 30:\n\n`+STATE.learned.slice(-30).reverse().map(l=>`• **${esc(l.name)}** — ${esc(l.desc)} _(${esc(l.source)})_`).join('\n'));
+    }
+    else if(a==='tools'){
+      const byCat={};
+      for(const[k,v]of Object.entries(KB)){byCat[v.cat]=byCat[v.cat]||[];byCat[v.cat].push(v.title)}
+      addMsg('hugo','🛠 **Tools:**\n\n'+Object.entries(byCat).map(([c,l])=>`**${c}** (${l.length}): ${l.join(', ')}`).join('\n\n'));
+    }
+    else if(a==='export'){
+      const data=JSON.stringify({learned:STATE.learned,history:STATE.history},null,2);
+      const blob=new Blob([data],{type:'application/json'});
+      const url=URL.createObjectURL(blob);
+      const a2=document.createElement('a');
+      a2.href=url;a2.download=`hugo-memory-${Date.now()}.json`;a2.click();
+      URL.revokeObjectURL(url);showToast('💾 Извезено');
+    }
+    else if(a==='import'){
+      const inp=document.createElement('input');
+      inp.type='file';inp.accept='.json';
+      inp.onchange=e=>{
+        const file=e.target.files[0];
+        const reader=new FileReader();
+        reader.onload=ev=>{
+          try{
+            const data=JSON.parse(ev.target.result);
+            if(data.learned)STATE.learned=data.learned;
+            if(data.history)STATE.history=data.history;
+            saveLearned();saveHistory();
+            chat.innerHTML='';
+            STATE.history.forEach(h=>addMsg(h.role,h.text,false));
+            showToast('📥 Импортирано');
+          }catch(err){showToast('❌ Грешка')}
+        };
+        reader.readAsText(file);
+      };
+      inp.click();
+    }
     else if(a==='clear'){if(confirm('Избриши сè?')){localStorage.clear();location.reload()}}
   };
 });
-$('btn-agents').onclick=()=>{renderAgentCategories();openModal('modal-agents')};
-$('modal-agents-close').onclick=()=>closeModal('modal-agents');
-$('agent-search').addEventListener('input',e=>searchAgents(e.target.value));
 
-function exportChat(){
-  const txt=STATE.history.map(h=>`[${h.role}]\n${h.text}`).join('\n\n---\n\n');
-  const blob=new Blob([txt],{type:'text/plain'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url;a.download=`hugo-chat-${Date.now()}.txt`;a.click();
-  URL.revokeObjectURL(url);showToast('💾 Извезено');
-}
-
-async function installSkills(){
-  if(STATE.installed){
-    STATE.agentCount=localStorage.getItem('hugo9_count')|0;
-    $('agent-count').textContent=STATE.agentCount.toLocaleString();
-    install.classList.add('off');setTimeout(()=>install.remove(),600);return;
-  }
+// ═══ INSTALL ═══
+async function init(){
   const steps=[
-    {txt:'Initializing…',pct:15},
-    {txt:'Generating agents…',pct:50},
-    {txt:'Loading tools…',pct:85},
+    {txt:'Loading knowledge base…',pct:20},
+    {txt:'Registering '+Object.keys(KB).length+' recipes…',pct:60},
     {txt:'Ready!',pct:100},
   ];
-  for(const step of steps){
-    loaderText.textContent=step.txt;
-    progressFill.style.width=step.pct+'%';
-    await new Promise(r=>setTimeout(r,180));
+  for(const s of steps){
+    loaderText.textContent=s.txt;
+    progressFill.style.width=s.pct+'%';
+    await new Promise(r=>setTimeout(r,200));
   }
-  const list=generateAgents();
-  STATE.agentCount=list.length;
-  localStorage.setItem('hugo9_installed','1');
-  localStorage.setItem('hugo9_count',String(STATE.agentCount));
-  $('agent-count').textContent=STATE.agentCount.toLocaleString();
-  await new Promise(r=>setTimeout(r,700));
-  install.classList.add('off');setTimeout(()=>install.remove(),600);
-}
-
-async function init(){
-  await installSkills();
-  if(!Object.keys(AGENTS).length){const list=generateAgents();STATE.agentCount=list.length}
-  $('mem-count').textContent=STATE.memory.length;
+  $('kb-count').textContent=Object.keys(KB).length;
+  $('mem-count').textContent=STATE.learned.length;
   if(STATE.history.length){STATE.history.forEach(h=>addMsg(h.role,h.text,false))}
   else{showWelcome()}
-  setTimeout(()=>{
-    msgBox.focus();startAutoLearn();
-    const el=document.createElement('div');el.className='sys';
-    el.innerHTML='🎨 Пробај: <b>„Napravi slika na..."</b> · 📊 <b>„Kolku agenti imam?"</b>';
-    chat.appendChild(el);scrollDown();
-  },2500);
+  setTimeout(()=>{install.classList.add('off');setTimeout(()=>install.remove(),600);msgBox.focus()},400);
   setStatus('Ready');
 }
 
