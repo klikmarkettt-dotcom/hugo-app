@@ -17,18 +17,6 @@ body{display:flex;flex-direction:column;position:fixed;inset:0}
 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
 input,textarea{font-family:inherit;outline:none}
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-#install{position:fixed;inset:0;background:var(--bg);z-index:2000;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;padding:24px;text-align:center;transition:opacity .5s}
-#install.off{opacity:0;pointer-events:none}
-#install .hero{width:90px;height:90px;border-radius:26px;background:var(--grad1);display:flex;
-  align-items:center;justify-content:center;font-size:50px;box-shadow:0 0 60px rgba(0,229,255,.5);animation:fl 3s infinite;margin-bottom:20px}
-@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-#install h1{font-size:26px;font-weight:800;color:#fff;margin:0 0 6px}
-#install h1 span{background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-#install .tagline{color:var(--txt2);font-size:13px;margin-bottom:28px}
-#install .progress{width:240px;height:4px;background:var(--card);border-radius:2px;overflow:hidden;margin-bottom:14px}
-#install .progress-fill{height:100%;background:var(--grad1);transition:width .2s;border-radius:2px}
-#install .status-text{color:var(--txt3);font-size:11px;font-family:monospace;height:16px;margin-bottom:20px}
 header{display:flex;align-items:center;gap:12px;padding:12px 16px;
   padding-top:calc(12px + env(safe-area-inset-top));background:rgba(13,13,24,.9);
   backdrop-filter:blur(30px);border-bottom:1px solid var(--border);flex-shrink:0;z-index:10}
@@ -54,16 +42,18 @@ header{display:flex;align-items:center;gap:12px;padding:12px 16px;
 .img-wrap{position:relative;display:inline-block;overflow:hidden;border-radius:12px;margin:8px 0}
 .img-wrap img{max-width:100%;border-radius:12px;display:block}
 .img-wrap::after{content:'';position:absolute;bottom:0;right:0;width:140px;height:35px;background:var(--card);z-index:2}
-.err{background:rgba(255,71,87,.15);color:#ff9999;border-left:3px solid var(--red);font-size:13px;padding:8px 12px;border-radius:10px;max-width:88%}
+.tool-log{background:rgba(0,229,255,.08);border-left:3px solid var(--cyan);padding:6px 10px;
+  border-radius:8px;font-size:11px;color:var(--txt2);margin:3px 0;font-family:monospace;max-width:92%;line-height:1.3}
+.tool-log b{color:var(--cyan)}
 .think{color:var(--txt2);font-style:italic;display:flex;align-items:center;gap:6px}
 .dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--purple);animation:b 1.3s infinite}
 .dot:nth-child(2){animation-delay:.15s}.dot:nth-child(3){animation-delay:.3s}
 @keyframes b{0%,80%,100%{transform:scale(.5);opacity:.4}40%{transform:scale(1);opacity:1}}
 .sys{color:var(--txt3);font-size:11px;text-align:center;margin:6px 0;font-style:italic}
-.sys b{color:var(--cyan)}
 .welcome{text-align:center;padding:30px 16px;color:var(--txt2)}
 .welcome .hero{width:70px;height:70px;margin:0 auto 16px;border-radius:22px;background:var(--grad1);
   display:flex;align-items:center;justify-content:center;font-size:38px;box-shadow:0 0 40px rgba(0,229,255,.4);animation:fl 3s infinite}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 .welcome h2{font-size:22px;font-weight:700;margin:0 0 4px;background:var(--grad1);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .welcome p{margin:4px 0;font-size:13px}
@@ -82,9 +72,6 @@ header{display:flex;align-items:center;gap:12px;padding:12px 16px;
 #mic{width:38px;height:38px;border-radius:50%;flex-shrink:0;background:var(--card2);color:var(--cyan);
   display:flex;align-items:center;justify-content:center;font-size:18px;border:1px solid var(--border)}
 #mic:active{transform:scale(.9)}#mic.on{background:var(--red);color:#fff;border-color:var(--red);animation:p 1s infinite}
-#cam{width:38px;height:38px;border-radius:50%;flex-shrink:0;background:var(--card2);color:var(--cyan);
-  display:flex;align-items:center;justify-content:center;font-size:18px;border:1px solid var(--border)}
-#cam:active{transform:scale(.9)}
 #sidebar{position:fixed;top:0;left:0;bottom:0;width:280px;max-width:85vw;background:var(--bg2);
   border-right:1px solid var(--border);transform:translateX(-100%);transition:transform .3s;z-index:100;
   display:flex;flex-direction:column;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
@@ -102,20 +89,6 @@ header{display:flex;align-items:center;gap:12px;padding:12px 16px;
 .close-btn{width:34px;height:34px;border-radius:50%;background:var(--card);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--txt2);cursor:pointer}
 #backdrop{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:99;opacity:0;pointer-events:none;transition:opacity .25s}
 #backdrop.on{opacity:1;pointer-events:auto}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(8px)}
-.modal.on{display:flex}
-.modal-content{background:var(--bg2);border-radius:18px 18px 0 0;padding:18px;max-width:600px;width:100%;
-  border:1px solid var(--border);border-bottom:none;max-height:82vh;overflow-y:auto;padding-bottom:calc(18px + env(safe-area-inset-bottom))}
-.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.modal-header h2{font-size:18px;font-weight:700;color:#fff}
-.modal input{width:100%;padding:12px 14px;border-radius:10px;background:var(--card);
-  color:#fff;border:1px solid var(--border);font-size:14px;margin-bottom:10px}
-#camera-modal{position:fixed;inset:0;background:#000;z-index:300;display:none;flex-direction:column;align-items:center;justify-content:center}
-#camera-modal.on{display:flex}
-#camera-video{max-width:100%;max-height:80vh;border-radius:12px}
-.cam-actions{position:absolute;bottom:30px;left:0;right:0;display:flex;justify-content:center;gap:20px}
-.cam-btn{width:70px;height:70px;border-radius:50%;background:var(--grad1);color:#000;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;border:none;cursor:pointer;box-shadow:0 0 40px rgba(0,229,255,.5)}
-.cam-close{width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;border:none;cursor:pointer}
 #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(100px);
   background:var(--card);color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;
   box-shadow:0 8px 24px rgba(0,0,0,.6);border:1px solid var(--border);z-index:500;opacity:0;transition:.3s;pointer-events:none}
@@ -124,14 +97,6 @@ header{display:flex;align-items:center;gap:12px;padding:12px 16px;
 </head>
 <body>
 
-<div id="install">
-  <div class="hero">🤖</div>
-  <h1>Hugo <span>AI</span></h1>
-  <div class="tagline" id="install-tag">Connecting to hugo-core…</div>
-  <div class="progress"><div class="progress-fill" id="pf" style="width:0%"></div></div>
-  <div class="status-text" id="st">Initializing…</div>
-</div>
-
 <div id="backdrop"></div>
 <aside id="sidebar">
   <div class="sb-header"><h2>🤖 Hugo</h2>
@@ -139,14 +104,12 @@ header{display:flex;align-items:center;gap:12px;padding:12px 16px;
   <div class="sb-body">
     <div class="sb-item" data-a="new"><div class="ico">💬</div><div class="text">Нов разговор</div></div>
     <div class="sb-item" data-a="help"><div class="ico">❓</div><div class="text">Што можам</div></div>
-    <div class="sb-section">Core</div>
-    <div class="sb-item" data-a="token"><div class="ico">🔑</div><div class="text">GitHub token</div><div class="badge" id="token-badge">-</div></div>
-    <div class="sb-item" data-a="reload"><div class="ico">🔄</div><div class="text">Пречитај од core</div></div>
-    <div class="sb-item" data-a="files"><div class="ico">📁</div><div class="text">Файлови во core</div><div class="badge" id="files-badge">0</div></div>
+    <div class="sb-item" data-a="memory"><div class="ico">🧠</div><div class="text">Меморија</div><div class="badge" id="mem-count">0</div></div>
     <div class="sb-section">Глас</div>
     <div class="sb-item" data-a="tts"><div class="ico">🔊</div><div class="text">Auto-speak</div><div class="badge" id="tts-badge">OFF</div></div>
+    <div class="sb-item" data-a="lang"><div class="ico">🌐</div><div class="text">Јазик</div><div class="badge" id="lang-badge">MK</div></div>
     <div class="sb-section">Опасно</div>
-    <div class="sb-item danger" data-a="clear"><div class="ico">🗑</div><div class="text">Избриши локално</div></div>
+    <div class="sb-item danger" data-a="clear"><div class="ico">🗑</div><div class="text">Избриши сè</div></div>
   </div>
 </aside>
 
@@ -162,39 +125,9 @@ header{display:flex;align-items:center;gap:12px;padding:12px 16px;
 
 <div id="input-area">
   <div id="input-row">
-    <textarea id="msg" placeholder="Кажи или пиши…" rows="1"></textarea>
+    <textarea id="msg" placeholder="Кажи што да направам…" rows="1"></textarea>
     <button id="mic">🎤</button>
-    <button id="cam">📷</button>
     <button id="send">➤</button>
-  </div>
-</div>
-
-<div id="camera-modal">
-  <video id="camera-video" autoplay playsinline></video>
-  <div class="cam-actions">
-    <button class="cam-close" id="cam-close">✕</button>
-    <button class="cam-btn" id="cam-snap">📸</button>
-  </div>
-</div>
-
-<div class="modal" id="modal-token">
-  <div class="modal-content">
-    <div class="modal-header"><h2>🔑 GitHub Token</h2>
-      <button class="close-btn" id="modal-token-close">✕</button></div>
-    <p style="color:var(--txt2);font-size:12px;margin-bottom:12px">
-      Потребен е scope <b>repo</b> за да чита од приватен <code>hugo-core</code>.<br>
-      <a href="https://github.com/settings/tokens/new?scopes=repo&description=Hugo-Core" target="_blank" style="color:var(--cyan)">Креирај тука</a>
-    </p>
-    <input type="password" id="token-input" placeholder="ghp_...">
-    <button class="sg" id="token-save" style="width:100%;padding:14px;text-align:center">Зачувај и поврзи</button>
-  </div>
-</div>
-
-<div class="modal" id="modal-files">
-  <div class="modal-content">
-    <div class="modal-header"><h2>📁 Файлови во core</h2>
-      <button class="close-btn" id="modal-files-close">✕</button></div>
-    <div id="files-list" style="font-family:monospace;font-size:13px;line-height:1.8;color:var(--txt)"></div>
   </div>
 </div>
 
@@ -204,114 +137,32 @@ header{display:flex;align-items:center;gap:12px;padding:12px 16px;
 'use strict';
 
 const $ = id => document.getElementById(id);
-const chat = $('chat'), msgBox = $('msg'), sendBtn = $('send'), micBtn = $('mic'), camBtn = $('cam');
+const chat = $('chat'), msgBox = $('msg'), sendBtn = $('send'), micBtn = $('mic');
 const sidebar = $('sidebar'), backdrop = $('backdrop');
 const statusEl = $('status'), toast = $('toast');
-const install = $('install'), loaderText = $('st'), progressFill = $('pf'), installTag = $('install-tag');
-const cameraModal = $('camera-modal'), cameraVideo = $('camera-video');
-const tokenModal = $('modal-token'), filesModal = $('modal-files');
 
 function setStatus(t){ statusEl.textContent = t }
 function scrollDown(){ chat.scrollTop = chat.scrollHeight }
 function esc(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]) }
-function showToast(m, ms=2500){ toast.textContent = m; toast.classList.add('on'); clearTimeout(showToast.t); showToast.t = setTimeout(() => toast.classList.remove('on'), ms); }
+function showToast(m, ms=2000){ toast.textContent = m; toast.classList.add('on'); clearTimeout(showToast.t); showToast.t = setTimeout(() => toast.classList.remove('on'), ms); }
 
 // ═══ STATE ═══
 const STATE = {
-  history: JSON.parse(localStorage.getItem('hugo14_hist') || '[]'),
-  token: localStorage.getItem('hugo14_token') || '',
-  speak: localStorage.getItem('hugo14_speak') === '1',
-  lang: localStorage.getItem('hugo14_lang') || 'mk-MK',
+  history: JSON.parse(localStorage.getItem('hugoR_hist') || '[]'),
+  memory: JSON.parse(localStorage.getItem('hugoR_memory') || '[]'),
+  speak: localStorage.getItem('hugoR_speak') === '1',
+  lang: localStorage.getItem('hugoR_lang') || 'mk-MK',
   busy: false,
   listening: false,
-  // Loaded from core repo:
-  skills: null,
-  translate: {},
-  tools: {},
-  agents: null,
-  cant: {},
-  systemPrompt: '',
-  toolsPrompt: '',
-  memory: {facts: [], learned: [], history: []},
-  recipes: {},
-  loadedFiles: [],
 };
-
-const CORE_REPO = 'klikmarkettt-dotcom/hugo-core';
-const API = 'https://api.github.com';
-
-function saveLocal(){
+function save(){
   try {
-    localStorage.setItem('hugo14_hist', JSON.stringify(STATE.history.slice(-50)));
-    localStorage.setItem('hugo14_token', STATE.token);
-    localStorage.setItem('hugo14_speak', STATE.speak ? '1' : '0');
-    localStorage.setItem('hugo14_lang', STATE.lang);
+    localStorage.setItem('hugoR_hist', JSON.stringify(STATE.history.slice(-50)));
+    localStorage.setItem('hugoR_memory', JSON.stringify(STATE.memory.slice(-500)));
+    localStorage.setItem('hugoR_speak', STATE.speak ? '1' : '0');
+    localStorage.setItem('hugoR_lang', STATE.lang);
   } catch(e){}
-}
-
-// ═══ GITHUB CORE READER ═══
-async function ghFetch(path){
-  const r = await fetch(`${API}/repos/${CORE_REPO}/contents/${path}`, {
-    headers: { 'Authorization': 'token ' + STATE.token, 'Accept': 'application/vnd.github+json' }
-  });
-  if (!r.ok) throw new Error(`${path}: ${r.status}`);
-  const d = await r.json();
-  // Decode base64
-  const content = decodeURIComponent(escape(atob(d.content.replace(/\n/g, ''))));
-  return { content, sha: d.sha };
-}
-
-async function loadAllFiles(){
-  setStatus('📥 Читам core…');
-  const files = [
-    { path: 'data/skills.json', key: 'skills', json: true },
-    { path: 'data/translate.json', key: 'translate', json: true },
-    { path: 'data/tools.json', key: 'tools', json: true },
-    { path: 'data/agents.json', key: 'agents', json: true },
-    { path: 'data/cant.json', key: 'cant', json: true },
-    { path: 'prompts/system.txt', key: 'systemPrompt', json: false },
-    { path: 'prompts/tools.txt', key: 'toolsPrompt', json: false },
-    { path: 'memory/memory.json', key: 'memory', json: true },
-    { path: 'memory/learned.json', key: 'learned', json: true },
-    { path: 'tools/recipes.json', key: 'recipes', json: true },
-  ];
-  STATE.loadedFiles = [];
-  for (const f of files){
-    try {
-      const { content } = await ghFetch(f.path);
-      STATE[f.key] = f.json ? JSON.parse(content) : content;
-      STATE.loadedFiles.push(f.path);
-    } catch(e){
-      console.warn('Skip', f.path, e.message);
-    }
-  }
-  $('files-badge').textContent = STATE.loadedFiles.length;
-  return STATE.loadedFiles.length;
-}
-
-async function saveMemoryToGitHub(){
-  if (!STATE.token) return;
-  try {
-    // Get current sha
-    const r = await fetch(`${API}/repos/${CORE_REPO}/contents/memory/memory.json`, {
-      headers: { 'Authorization': 'token ' + STATE.token }
-    });
-    let sha = null;
-    if (r.ok){ const d = await r.json(); sha = d.sha; }
-
-    const body = {
-      message: 'Update memory ' + new Date().toISOString(),
-      content: btoa(unescape(encodeURIComponent(JSON.stringify(STATE.memory, null, 2)))),
-      branch: 'main'
-    };
-    if (sha) body.sha = sha;
-
-    await fetch(`${API}/repos/${CORE_REPO}/contents/memory/memory.json`, {
-      method: 'PUT',
-      headers: { 'Authorization': 'token ' + STATE.token, 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-  } catch(e){ console.warn('saveMemory', e); }
+  if ($('mem-count')) $('mem-count').textContent = STATE.memory.length;
 }
 
 // ═══ TTS ═══
@@ -319,7 +170,7 @@ function speak(text){
   if (!STATE.speak || !('speechSynthesis' in window)) return;
   try {
     speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text.replace(/[#*`_\[\]()]/g,'').slice(0, 400));
+    const u = new SpeechSynthesisUtterance(text.replace(/[#*`_\[\]()]/g,'').slice(0, 300));
     u.lang = STATE.lang;
     u.rate = 1.05;
     const voices = speechSynthesis.getVoices();
@@ -345,7 +196,7 @@ function initSTT(){
     else { msgBox.value = e.results[e.results.length-1][0].transcript; }
   };
   r.onend = () => { STATE.listening = false; micBtn.classList.remove('on'); setStatus('Ready'); };
-  r.onerror = (e) => { STATE.listening = false; micBtn.classList.remove('on'); setStatus('Ready'); };
+  r.onerror = () => { STATE.listening = false; micBtn.classList.remove('on'); setStatus('Ready'); };
   return r;
 }
 micBtn.onclick = () => {
@@ -359,108 +210,131 @@ micBtn.onclick = () => {
   }
 };
 
-// ═══ CAMERA ═══
-let cameraStream = null;
-camBtn.onclick = async () => {
-  try {
-    cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
-    cameraVideo.srcObject = cameraStream;
-    cameraModal.classList.add('on');
-  } catch(e){ showToast('❌ ' + e.message); }
-};
-$('cam-close').onclick = () => {
-  if (cameraStream) cameraStream.getTracks().forEach(t => t.stop());
-  cameraModal.classList.remove('on');
-};
-$('cam-snap').onclick = async () => {
-  const canvas = document.createElement('canvas');
-  canvas.width = cameraVideo.videoWidth;
-  canvas.height = cameraVideo.videoHeight;
-  canvas.getContext('2d').drawImage(cameraVideo, 0, 0);
-  const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
-  if (cameraStream) cameraStream.getTracks().forEach(t => t.stop());
-  cameraModal.classList.remove('on');
-  addMsg('user', '📷 [Слика]');
-  const th = addThinking('👁 Гледам…');
-  try {
-    const r = await fetch('https://text.pollinations.ai/openai', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({model:'openai', messages:[{role:'user', content:[
-        {type:'text', text:'Опиши детално што гледаш. Одговори на македонски, 3-4 реченици.'},
-        {type:'image_url', image_url:{url:dataUrl}}
-      ]}], private:true})
-    });
-    let reply = r.ok ? (await r.json()).choices[0].message.content : 'Vision недостапен';
-    th.remove();
-    addMsg('hugo', '👁 **Што гледам:**\n\n' + reply);
-    speak(reply.slice(0, 200));
-  } catch(e){ th.remove(); addMsg('hugo', '❌ ' + e.message); }
+// ═══════════════════════════════════════════════════════════
+//  🛠 10 УНИВЕРЗАЛНИ TOOLS
+// ═══════════════════════════════════════════════════════════
+const TOOLS = {
+  // 1. Отвори URL
+  open_url: {
+    desc: "Отвори URL во нов таб",
+    args: "https://example.com",
+    run: async (url) => {
+      url = url.trim();
+      if (!url.startsWith('http')) url = 'https://' + url;
+      window.open(url, '_blank');
+      return `🌐 Отворено: ${url}`;
+    }
+  },
+  // 2. Земи содржина од URL
+  fetch_url: {
+    desc: "Земи текст од веб-страница",
+    args: "url",
+    run: async (url) => {
+      url = url.trim();
+      if (!url.startsWith('http')) url = 'https://' + url;
+      try {
+        const r = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`);
+        const t = await r.text();
+        const clean = t.replace(/<script[\s\S]*?<\/script>/gi,'').replace(/<style[\s\S]*?<\/style>/gi,'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+        return clean.slice(0, 2500);
+      } catch(e) { return `❌ Не можам да преземам: ${e.message}`; }
+    }
+  },
+  // 3. Пребарај веб
+  search_web: {
+    desc: "Пребарај на DuckDuckGo",
+    args: "query",
+    run: async (q) => {
+      q = q.trim();
+      const url = `https://duckduckgo.com/?q=${encodeURIComponent(q)}`;
+      window.open(url, '_blank');
+      return `🔍 Пребарувам: **${q}**\n\nОтворено во нов таб. Ако не се отвори, кликни: [DuckDuckGo](${url})`;
+    }
+  },
+  // 4. Пребарај YouTube
+  search_youtube: {
+    desc: "Пребарај видеа на YouTube",
+    args: "query",
+    run: async (q) => {
+      q = q.trim();
+      const url = `https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`;
+      window.open(url, '_blank');
+      return `▶️ Барам на YouTube: **${q}**\n\n[Отвори рачно](${url})`;
+    }
+  },
+  // 5. Изврши JavaScript
+  execute_js: {
+    desc: "Пресметај или изврши JS код",
+    args: "код или математички израз",
+    run: async (code) => {
+      try {
+        const result = Function('"use strict"; return (' + code + ')')();
+        return `💻 \`${code}\` = **${result}**`;
+      } catch(e) {
+        return `❌ Грешка во кодот: ${e.message}`;
+      }
+    }
+  },
+  // 6. Запамети
+  remember: {
+    desc: "Запамети факт",
+    args: "факт",
+    run: async (fact) => {
+      STATE.memory.push({ts: Date.now(), fact: fact.trim()});
+      if (STATE.memory.length > 500) STATE.memory = STATE.memory.slice(-500);
+      save();
+      return `✓ Запаметено: "${fact}"`;
+    }
+  },
+  // 7. Сети се
+  recall: {
+    desc: "Пребарај во меморија",
+    args: "клуч",
+    run: async (q) => {
+      q = q.toLowerCase().trim();
+      const m = STATE.memory.filter(x => !q || x.fact.toLowerCase().includes(q));
+      if (!m.length) return `🧠 Нема спомени${q?' за "'+q+'"':''}.`;
+      return `🧠 **${m.length} спомени:**\n\n` + m.slice(-15).map(x => '• ' + x.fact).join('\n');
+    }
+  },
+  // 8. Време
+  current_time: {
+    desc: "Тековно време и датум",
+    args: "",
+    run: async () => `🕐 ${new Date().toLocaleString('mk-MK', {dateStyle:'full', timeStyle:'short'})}`
+  },
+  // 9. Кажи
+  speak: {
+    desc: "Кажи текст гласно",
+    args: "текст",
+    run: async (t) => {
+      const wasSpeak = STATE.speak;
+      STATE.speak = true;
+      speak(t);
+      STATE.speak = wasSpeak;
+      return `🔊 Кажано: "${t}"`;
+    }
+  },
+  // 10. Изрази мисла преку LLM
+  llm_think: {
+    desc: "Размисли со LLM за комплексни работи",
+    args: "прашање или задача",
+    run: async (q) => {
+      const reply = await callLLM(q);
+      return reply || '❌ LLM недостапен';
+    }
+  }
 };
 
-// ═══ UI HELPERS ═══
-function renderMD(t){
-  if (!t) return '';
-  const im = t.match(/__IMAGE__(.+)__PROMPT__(.+)$/);
-  if (im) return `🎨 **${esc(im[2])}**\n\n<div class="img-wrap"><img src="${esc(im[1])}" loading="lazy"></div>`;
-  let h = esc(t);
-  h = h.replace(/```(\w*)\n?([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
-  h = h.replace(/`([^`\n]+)`/g, '<code>$1</code>');
-  h = h.replace(/^### (.+)$/gm, '<h3>$1</h3>');
-  h = h.replace(/^## (.+)$/gm, '<h2>$1</h2>');
-  h = h.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
-  h = h.replace(/^\s*[-*] (.+)$/gm, '• $1');
-  h = h.replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
-  h = h.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank">$1</a>');
-  return h;
-}
-function addMsg(role, text, save=true){
-  const el = document.createElement('div');
-  el.className = 'msg ' + role;
-  el.innerHTML = renderMD(text);
-  chat.appendChild(el);
-  scrollDown();
-  if (save){ STATE.history.push({role, text}); saveLocal(); }
-}
-function addThinking(t='…'){
-  const el = document.createElement('div');
-  el.className = 'msg hugo think';
-  el.id = 'thinking';
-  el.innerHTML = `<span class="dot"></span><span class="dot"></span><span class="dot"></span> ${t}`;
-  chat.appendChild(el);
-  scrollDown();
-  return el;
-}
-function showWelcome(){
-  if ($('welcome')) return;
-  const el = document.createElement('div');
-  el.className = 'welcome'; el.id = 'welcome';
-  el.innerHTML = `
-    <div class="hero">🤖</div>
-    <h2>Hugo AI</h2>
-    <p>Connected to <b>hugo-core</b> · ${STATE.loadedFiles.length} files loaded</p>
-    <div style="margin-top:20px">
-      <span class="sg" onclick="qs('Направи слика на куче')">🎨 Слика</span>
-      <span class="sg" onclick="qs('Цена на BTC')">💰 BTC</span>
-      <span class="sg" onclick="qs('Хакер њуз')">📰 HN</span>
-      <span class="sg" onclick="qs('Вести Македонија')">🇲🇰 Вести</span>
-      <span class="sg" onclick="qs('Време Скопје')">🌤 Време</span>
-      <span class="sg" onclick="qs('Моите PRs')">📋 PRs</span>
-      <span class="sg" onclick="qs('Што можеш?')">❓ Помош</span>
-    </div>`;
-  chat.appendChild(el);
-  scrollDown();
-}
-function rmWelcome(){ $('welcome')?.remove() }
-window.qs = t => { msgBox.value = t; sendMsg() };
-
-// ═══ LLM ═══
-async function callLLM(prompt, system=''){
-  const full = (system ? system + '\n\n' : '') + prompt;
-  const enc = encodeURIComponent(full);
+// ═══════════════════════════════════════════════════════════
+//  🧠 LLM за размислување
+// ═══════════════════════════════════════════════════════════
+async function callLLM(prompt){
+  const enc = encodeURIComponent(prompt);
   for (const url of [
     `https://text.pollinations.ai/${enc}?model=openai&private=true`,
     `https://text.pollinations.ai/${enc}?model=mistral&private=true`,
-    `https://text.pollinations.ai/${enc}`,
+    `https://text.pollinations.ai/${enc}`
   ]){
     try {
       const r = await fetch(url);
@@ -472,157 +346,144 @@ async function callLLM(prompt, system=''){
   return null;
 }
 
-// ═══ TOOLS — read from STATE.tools ═══
-async function toolImage(p){
-  const words = p.toLowerCase().split(/\s+/);
-  const translated = words.map(w => STATE.translate[w] || STATE.translate[w.replace(/[.,!?;:]/g,'')] || w).join(' ');
-  const suffix = STATE.recipes.image_prompt_suffix || ', photorealistic, 8k';
-  const full = translated + suffix;
-  const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(full)}?width=768&height=768&seed=${Math.floor(Math.random()*1e6)}&nologo=true&model=flux`;
-  return `__IMAGE__${url}__PROMPT__${full}`;
-}
-async function toolCrypto(sym){
-  const ids = {BTC:'bitcoin',ETH:'ethereum',SOL:'solana',BNB:'binancecoin',XRP:'ripple',ADA:'cardano',DOGE:'dogecoin',AVAX:'avalanche-2',DOT:'polkadot',LINK:'chainlink',TON:'the-open-network'};
-  const id = ids[sym.toUpperCase()] || sym.toLowerCase();
-  try {
-    const r = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${id}&vs_currencies=usd,eur&include_24hr_change=true`);
-    const d = await r.json();
-    const k = Object.keys(d)[0];
-    if (!k) return `❌ ${sym} не е најден`;
-    const i = d[k];
-    const ch = i.usd_24h_change >= 0 ? '🟢 +' : '🔴 ';
-    return `💰 **${sym.toUpperCase()}** = **$${i.usd.toLocaleString()}** (${ch}${i.usd_24h_change?.toFixed(2)}%)\n€${i.eur.toLocaleString()}`;
-  } catch(e){ return '❌ Error'; }
-}
-async function toolHN(){
-  try {
-    const r = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json');
-    const ids = (await r.json()).slice(0,10);
-    const items = await Promise.all(ids.map(id => fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(x => x.json())));
-    return `📰 **Hacker News Top 10:**\n\n` + items.map((x,i) => `${i+1}. [${x.title}](${x.url||`https://news.ycombinator.com/item?id=${x.id}`}) ⭐${x.score}`).join('\n\n');
-  } catch(e){ return '❌ Error'; }
-}
-async function toolMKDNews(){
-  const feeds = [
-    {name:'MIA', url:'https://mia.mk/feed/'},
-    {name:'Meta.mk', url:'https://meta.mk/feed/'},
-  ];
-  for (const f of feeds){
-    try {
-      const r = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(f.url)}&count=10`);
-      const d = await r.json();
-      if (d.status === 'ok' && d.items?.length)
-        return `📰 **${f.name}:**\n\n` + d.items.slice(0,8).map((x,i) => `${i+1}. [${x.title}](${x.link})`).join('\n');
-    } catch(e){}
-  }
-  return `📰 Feed недостапен`;
-}
-async function toolWiki(q){
-  try {
-    const r = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(q.trim())}`);
-    if (!r.ok) return '❌ Не е најдено';
-    const d = await r.json();
-    return `📖 **${d.title}**\n\n${d.extract}`;
-  } catch(e){ return '❌ Error'; }
-}
-async function toolWeather(city){
-  try {
-    const r = await fetch(`https://wttr.in/${encodeURIComponent(city.trim())}?format=j1`);
-    if (!r.ok) return '❌ Град не е најден';
-    const d = await r.json();
-    const c = d.current_condition[0];
-    return `🌤 **${city}**\n🌡 ${c.temp_C}°C\n💧 ${c.humidity}%\n💨 ${c.windspeedKmph} km/h\n☁ ${c.weatherDesc[0].value}`;
-  } catch(e){ return '❌ Error'; }
-}
-async function toolPRs(){
-  try {
-    const r = await fetch(`https://api.github.com/search/issues?q=author:klikmarkettt-dotcom+is:pr+is:open&per_page=20`);
-    const d = await r.json();
-    if (!d.items?.length) return `📋 Нема отворени PRs`;
-    return `📋 **Open PRs: ${d.total_count}**\n\n` + d.items.map(x => `• #${x.number} **${x.title}**\n  ${x.repository_url.split('/').slice(-2).join('/')}`).join('\n');
-  } catch(e){ return '❌ Error'; }
-}
-async function toolPassword(){
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*-_=+';
-  const arr = new Uint32Array(24); crypto.getRandomValues(arr);
-  let pwd = ''; for (let i = 0; i < 24; i++) pwd += chars[arr[i] % chars.length];
-  return `🔐 \`${pwd}\``;
+// ═══════════════════════════════════════════════════════════
+//  🤖 LLM ОДЛУЧУВА КОЈ TOOL ДА ГО КОРИСТИ
+// ═══════════════════════════════════════════════════════════
+function buildToolPrompt(userText){
+  const toolsList = Object.entries(TOOLS).map(([k,v]) => `- ${k}: ${v.desc} (args: ${v.args||'none'})`).join('\n');
+  const mem = STATE.memory.slice(-10).map(m => '• ' + m.fact).join('\n') || '(none)';
+  return `Ти си Hugo agent. Одлучи кој tool да го користиш за задачата.
+
+ДОСТАПНИ TOOLS:
+${toolsList}
+
+ФОРМАТ НА ОДГОВОР (само ова, ништо друго):
+TOOL: tool_name|argument
+
+Примери:
+- "Отвори YouTube" → TOOL: open_url|https://youtube.com
+- "Пребарај Python tutorial" → TOOL: search_web|Python tutorial
+- "Најди видео за AI" → TOOL: search_youtube|AI video
+- "Колку е 25*4" → TOOL: execute_js|25*4
+- "Запамети дека сум Марко" → TOOL: remember|User is Marko
+- "Што знаеш за мене" → TOOL: recall|
+- "Колку е часот" → TOOL: current_time|
+- "Кој си ти" → TOOL: llm_think|Кој си ти
+- "Напиши песна" → TOOL: llm_think|Напиши песна за пролет
+- "Здраво" → TOOL: llm_think|Здраво
+
+АКО НЕ Е ЈАСНО КОЈ TOOL — користи llm_think со оригиналниот текст.
+
+ЗАДАЧА: "${userText}"
+
+КОРИСНИКОВА МЕМОРИЈА:
+${mem}
+
+Одговори САМО со: TOOL: tool_name|argument`;
 }
 
-// ═══ INTENT ═══
-function detectIntent(text){
-  const t = text.toLowerCase().trim();
-  if (!t) return null;
-
-  let m = text.match(/(?:направи|napravi|нацртај|nacrtaj|генерирај|generiraj|create|make|generate|draw)\s+(?:slika|слика|image)?\s*(?:на|na|so|со|of|with|за)?\s*(.+)/i);
-  if (m && /(?:slika|слика|image|нацртај|nacrtaj|генерирај)/i.test(text)) return {tool:'image', args:m[1].trim()};
-
-  m = text.match(/(?:цена|price|cena)\s+(?:на\s+|na\s+|of\s+)?([A-Z]{2,6})/i);
-  if (m) return {tool:'crypto', args:m[1]};
-  if (/^(?:btc|eth|sol|bnb|xrp|ada|doge|avax|dot|link|ton)$/i.test(t.trim())) return {tool:'crypto', args:t.trim()};
-
-  if (/(?:хакер|hacker|hn)/i.test(text)) return {tool:'hn', args:''};
-  if (/(?:вести|news|vesti)/i.test(text)) return {tool:'mkdnews', args:''};
-
-  m = text.match(/(?:википедија|wikipedia|wiki)\s+(?:за\s+|za\s+|about\s+)?(.+)/i);
-  if (m) return {tool:'wiki', args:m[1].trim()};
-
-  m = text.match(/(?:време|vreme|weather)\s+(?:во\s+|in\s+)?(.+)/i);
-  if (m) return {tool:'weather', args:m[1].trim()};
-
-  if (/(?:prs?|pull\s*requests?|моите\s+prs)/i.test(text)) return {tool:'prs', args:''};
-  if (/(?:лозинка|password)/i.test(text) && !/private/i.test(text)) return {tool:'password', args:''};
-  if (/(?:колку|статистика|stats|status)/i.test(text)) return {tool:'stats', args:''};
-  if (/^(?:pomosh|помош|help|sto\s+mozes|што\s+можеш)/i.test(t)) return {tool:'help', args:''};
-
+function parseTool(text){
+  if (!text) return null;
+  const m = text.match(/TOOL:\s*([a-z_]+)\s*\|\s*([^\n]*)/i);
+  if (m) return { tool: m[1].toLowerCase().trim(), args: m[2].trim() };
   return null;
 }
 
-function checkCant(text){
-  for (const k in STATE.cant){
-    try {
-      const pat = STATE.cant[k].pattern;
-      if (new RegExp(pat, 'i').test(text)) return STATE.cant[k].msg;
-    } catch(e){}
-  }
-  return null;
-}
+async function runAgent(userText){
+  setStatus('🧠 Размислувам…');
+  const decisionPrompt = buildToolPrompt(userText);
+  const decision = await callLLM(decisionPrompt);
 
-async function handle(text){
-  const cant = checkCant(text);
-  if (cant) return cant;
-
-  const intent = detectIntent(text);
-  if (!intent){
-    const sys = STATE.systemPrompt || 'Ти си Hugo. Одговори КРАТКО. Ако не знаеш — кажи не знам.';
-    const r = await callLLM(text, sys);
-    return r || 'Пробај: „Направи слика на куче", „Цена на BTC", „Вести Македонија".';
+  if (!decision){
+    return '❌ Не можам да размислам. Пробај пак.';
   }
 
-  switch(intent.tool){
-    case 'image': return await toolImage(intent.args);
-    case 'crypto': return await toolCrypto(intent.args);
-    case 'hn': return await toolHN();
-    case 'mkdnews': return await toolMKDNews();
-    case 'wiki': return await toolWiki(intent.args);
-    case 'weather': return await toolWeather(intent.args);
-    case 'prs': return await toolPRs();
-    case 'password': return await toolPassword();
-    case 'stats': return `📊 **Hugo:**\n• 💬 Пораки: ${STATE.history.length}\n• 📁 Core files: ${STATE.loadedFiles.length}\n• 🧠 Facts: ${STATE.memory.facts?.length || 0}\n• 🔒 Repo: ${CORE_REPO}`;
-    case 'help': return helpText();
+  const tc = parseTool(decision);
+  if (!tc){
+    // LLM didn't return TOOL: format — use direct reply
+    return decision;
+  }
+
+  if (!TOOLS[tc.tool]){
+    return `⚠️ Непознат tool: ${tc.tool}. Пробај: ${Object.keys(TOOLS).join(', ')}`;
+  }
+
+  setStatus(`🛠 ${tc.tool}…`);
+  addToolLog(tc.tool, tc.args);
+
+  try {
+    const result = await TOOLS[tc.tool].run(tc.args);
+    return result;
+  } catch(e){
+    return `❌ Грешка: ${e.message}`;
   }
 }
 
-function helpText(){
-  return `🛠 **Што можам:**
-🎨 Слика · 💰 Крипто · 📰 Вести · 📖 Wiki · 🌤 Време · 📋 PRs · 🔐 Лозинка
-🎤 Глас · 📷 Камера · 🔊 Auto-speak
-
-**Достапни tools од core:** ${Object.keys(STATE.tools).length}
-**Файлови вчитани:** ${STATE.loadedFiles.length}`;
+// ═══ UI ═══
+function renderMD(t){
+  if (!t) return '';
+  const im = t.match(/__IMAGE__(.+)__PROMPT__(.+)$/);
+  if (im) return `🎨 **${esc(im[2])}**\n\n<div class="img-wrap"><img src="${esc(im[1])}" loading="lazy"></div>`;
+  let h = esc(t);
+  h = h.replace(/```(\w*)\n?([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+  h = h.replace(/`([^`\n]+)`/g, '<code>$1</code>');
+  h = h.replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>');
+  h = h.replace(/^\s*[-*] (.+)$/gm, '• $1');
+  h = h.replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+  h = h.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank">$1</a>');
+  return h;
 }
 
-// ═══ SEND ═══
+function addMsg(role, text, saveIt=true){
+  const el = document.createElement('div');
+  el.className = 'msg ' + role;
+  el.innerHTML = renderMD(text);
+  chat.appendChild(el);
+  scrollDown();
+  if (saveIt){ STATE.history.push({role, text}); save(); }
+}
+
+function addToolLog(tool, args){
+  const el = document.createElement('div');
+  el.className = 'tool-log';
+  el.innerHTML = `<b>🛠 ${esc(tool)}</b>(${esc(String(args).slice(0,80))})`;
+  chat.appendChild(el);
+  scrollDown();
+}
+
+function addThinking(){
+  const el = document.createElement('div');
+  el.className = 'msg hugo think';
+  el.id = 'thinking';
+  el.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span> размислувам…';
+  chat.appendChild(el);
+  scrollDown();
+  return el;
+}
+
+function showWelcome(){
+  if ($('welcome')) return;
+  const el = document.createElement('div');
+  el.className = 'welcome';
+  el.id = 'welcome';
+  el.innerHTML = `
+    <div class="hero">🤖</div>
+    <h2>Hugo</h2>
+    <p>10 универзални tools · размислува сам</p>
+    <div style="margin-top:20px">
+      <span class="sg" onclick="qs('Отвори YouTube')">▶️ YouTube</span>
+      <span class="sg" onclick="qs('Пребарај Python tutorial')">🔍 Python</span>
+      <span class="sg" onclick="qs('Колку е 25*4+15')">💻 Пресметај</span>
+      <span class="sg" onclick="qs('Запамети дека сум Марко')">📌 Запамети</span>
+      <span class="sg" onclick="qs('Напиши песна за пролет')">✍️ Песна</span>
+      <span class="sg" onclick="qs('Кој си ти?')">❓ Кој си</span>
+    </div>`;
+  chat.appendChild(el);
+  scrollDown();
+}
+function rmWelcome(){ $('welcome')?.remove(); }
+window.qs = t => { msgBox.value = t; sendMsg(); };
+
 async function sendMsg(){
   if (STATE.busy) return;
   const text = msgBox.value.trim();
@@ -634,11 +495,12 @@ async function sendMsg(){
   rmWelcome();
   addMsg('user', text);
   const th = addThinking();
+
   try {
-    const reply = await handle(text);
+    const result = await runAgent(text);
     th.remove();
-    addMsg('hugo', reply);
-    speak(reply);
+    addMsg('hugo', result);
+    speak(result);
     setStatus('Ready');
   } catch(e){
     th.remove();
@@ -648,103 +510,70 @@ async function sendMsg(){
   sendBtn.disabled = false;
   msgBox.focus();
 }
+
 sendBtn.onclick = sendMsg;
 msgBox.addEventListener('input', () => { msgBox.style.height = 'auto'; msgBox.style.height = Math.min(msgBox.scrollHeight, 120) + 'px'; });
 msgBox.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendMsg(); } });
 
-// ═══ SIDEBAR ═══
-$('btn-menu').onclick = () => { sidebar.classList.add('open'); backdrop.classList.add('on') };
-$('sb-close').onclick = () => { sidebar.classList.remove('open'); backdrop.classList.remove('on') };
-backdrop.onclick = () => { sidebar.classList.remove('open'); backdrop.classList.remove('on') };
+// Sidebar
+$('btn-menu').onclick = () => { sidebar.classList.add('open'); backdrop.classList.add('on'); };
+$('sb-close').onclick = () => { sidebar.classList.remove('open'); backdrop.classList.remove('on'); };
+backdrop.onclick = () => { sidebar.classList.remove('open'); backdrop.classList.remove('on'); };
 $('btn-help').onclick = () => addMsg('hugo', helpText());
 
+function helpText(){
+  const toolsList = Object.entries(TOOLS).map(([k,v]) => `• **${k}** — ${v.desc}`).join('\n');
+  return `🛠 **10 универзални tools:**\n\n${toolsList}\n\n💡 **Како работам:** LLM размислува кој tool да го користи за задачата. Не е потребно да учам нов tool за секоја задача.`;
+}
+
 document.querySelectorAll('.sb-item').forEach(el => {
-  el.onclick = async () => {
+  el.onclick = () => {
     const a = el.dataset.a;
     sidebar.classList.remove('open'); backdrop.classList.remove('on');
-    if (a === 'new'){ chat.innerHTML = ''; STATE.history = []; saveLocal(); showWelcome(); }
+    if (a === 'new'){ chat.innerHTML=''; STATE.history=[]; save(); showWelcome(); }
     else if (a === 'help'){ addMsg('hugo', helpText()); }
-    else if (a === 'token'){
-      $('token-input').value = STATE.token;
-      tokenModal.classList.add('on');
-    }
-    else if (a === 'reload'){
-      if (!STATE.token){ showToast('❌ Внеси token прво'); return; }
-      await loadAllFiles();
-      showToast('✅ Пречитани ' + STATE.loadedFiles.length + ' файлови');
-    }
-    else if (a === 'files'){
-      $('files-list').innerHTML = STATE.loadedFiles.map(f => `✓ ${f}`).join('<br>') || 'Ништо вчитано';
-      filesModal.classList.add('on');
+    else if (a === 'memory'){
+      if (!STATE.memory.length) addMsg('hugo', '🧠 Меморија е празна.');
+      else addMsg('hugo', `🧠 **${STATE.memory.length} спомени:**\n\n` + STATE.memory.slice(-30).reverse().map(m => '• ' + m.fact).join('\n'));
     }
     else if (a === 'tts'){
       STATE.speak = !STATE.speak;
-      saveLocal();
+      save();
       $('tts-badge').textContent = STATE.speak ? 'ON' : 'OFF';
       $('tts-badge').style.background = STATE.speak ? 'rgba(0,255,136,.2)' : 'rgba(0,229,255,.15)';
       $('tts-badge').style.color = STATE.speak ? 'var(--green)' : 'var(--cyan)';
-      if (STATE.speak) speak('Auto speak on');
     }
-    else if (a === 'clear'){ if (confirm('Избриши локално?')){ localStorage.clear(); location.reload(); } }
+    else if (a === 'lang'){
+      const langs = ['mk-MK','en-US','sr-RS','de-DE'];
+      const names = ['MK','EN','SR','DE'];
+      const idx = langs.indexOf(STATE.lang);
+      const next = (idx + 1) % langs.length;
+      STATE.lang = langs[next];
+      save();
+      $('lang-badge').textContent = names[next];
+    }
+    else if (a === 'clear'){ if (confirm('Избриши сè?')){ localStorage.clear(); location.reload(); } }
   };
 });
 
-// ═══ MODALS ═══
-$('modal-token-close').onclick = () => tokenModal.classList.remove('on');
-$('token-save').onclick = async () => {
-  STATE.token = $('token-input').value.trim();
-  saveLocal();
-  tokenModal.classList.remove('on');
-  if (STATE.token){
-    $('token-badge').textContent = '✓';
-    const n = await loadAllFiles();
-    showToast(`✅ Вчитани ${n} файлови од core`);
-  }
-};
-$('modal-files-close').onclick = () => filesModal.classList.remove('on');
-
-// ═══ INIT ═══
-async function init(){
-  const steps = [
-    {txt:'Checking token…', pct:20},
-    {txt:'Loading from hugo-core…', pct:60},
-    {txt:'Ready!', pct:100},
-  ];
-  for (const s of steps){
-    loaderText.textContent = s.txt;
-    progressFill.style.width = s.pct + '%';
-    await new Promise(r => setTimeout(r, 200));
-  }
+// Init
+function init(){
   if (STATE.speak){
     $('tts-badge').textContent = 'ON';
     $('tts-badge').style.background = 'rgba(0,255,136,.2)';
     $('tts-badge').style.color = 'var(--green)';
   }
+  $('lang-badge').textContent = {'mk-MK':'MK','en-US':'EN','sr-RS':'SR','de-DE':'DE'}[STATE.lang] || 'MK';
+  $('mem-count').textContent = STATE.memory.length;
 
-  if (!STATE.token){
-    install.classList.add('off');
-    setTimeout(() => install.remove(), 600);
-    tokenModal.classList.add('on');
-    return;
+  if (STATE.history.length){ STATE.history.forEach(h => addMsg(h.role, h.text, false)); }
+  else { showWelcome(); }
+
+  // Preload voices
+  if ('speechSynthesis' in window){
+    speechSynthesis.getVoices();
+    speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
   }
-
-  $('token-badge').textContent = '✓';
-  try {
-    const n = await loadAllFiles();
-    installTag.textContent = `Loaded ${n} files from hugo-core`;
-  } catch(e){
-    installTag.textContent = 'Error: ' + e.message;
-  }
-
-  if (STATE.history.length) STATE.history.forEach(h => addMsg(h.role, h.text, false));
-  else showWelcome();
-
-  setTimeout(() => {
-    install.classList.add('off');
-    setTimeout(() => install.remove(), 600);
-    msgBox.focus();
-  }, 500);
-  setStatus('Ready');
 }
 
 init();
