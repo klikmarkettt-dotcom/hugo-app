@@ -577,6 +577,130 @@ function init(){
 }
 
 init();
+
+// ═══════════════════════════════════════════════════
+//  🎬 HIGGSFIELD TOOLS
+// ═══════════════════════════════════════════════════
+const HIGGSFIELD_API = "https://api.higgsfield.ai/v1";
+
+async function higgsfieldCall(endpoint, payload){
+  const key = localStorage.getItem('higgsfield_key');
+  if (!key){
+    return "❌ Higgsfield API key не е внесен. Отвори Settings → Higgsfield API Key, или оди на https://cloud.higgsfield.ai";
+  }
+  try {
+    const r = await fetch(HIGGSFIELD_API + endpoint, {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + key,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+    if (!r.ok) {
+      const err = await r.text();
+      return `❌ Higgsfield error ${r.status}: ${err.slice(0,200)}`;
+    }
+    return await r.json();
+  } catch(e) {
+    return "❌ " + e.message;
+  }
+}
+
+const HIGGSFIELD_TOOLS = {
+  higgsfield_image: {
+    desc: "Генерирај слика со Higgsfield AI (50+ модели: Flux, SDXL, Ideogram)",
+    args: "промпт за слика",
+    run: async (prompt) => {
+      if (!prompt) return "❌ Напиши промпт за сликата.";
+      const result = await higgsfieldCall('/images/generate', {
+        prompt: prompt,
+        model: 'flux-pro',
+        width: 1024,
+        height: 1024
+      });
+      if (typeof result === 'string') return result;
+      const url = result.image_url || result.url || result.output;
+      if (url) return `🎨 **${prompt}**\n\n<div class="img-wrap"><img src="${url}" loading="lazy"></div>\n\n[Отвори](${url})`;
+      return "✓ Генерирано: " + JSON.stringify(result).slice(0, 300);
+    }
+  },
+  higgsfield_video: {
+    desc: "Генерирај видео со Higgsfield AI (Sora 2, Veo 3, Kling, Seedance)",
+    args: "промпт за видео",
+    run: async (prompt) => {
+      if (!prompt) return "❌ Напиши промпт за видеото.";
+      const result = await higgsfieldCall('/videos/generate', {
+        prompt: prompt,
+        model: 'veo-3',
+        duration: 5,
+        aspect_ratio: '16:9'
+      });
+      if (typeof result === 'string') return result;
+      const url = result.video_url || result.url || result.output;
+      if (url) return `🎬 **${prompt}**\n\n<a href="${url}" target="_blank">▶ Гледај видео</a>`;
+      return "🎬 Видео генерирано! " + JSON.stringify(result).slice(0, 300);
+    }
+  },
+  higgsfield_brand: {
+    desc: "Создај целосен бренд пакет (лого, бои, фонтови)",
+    args: "опис на бренд",
+    run: async (prompt) => {
+      if (!prompt) return "❌ Опиши го брендот.";
+      const result = await higgsfieldCall('/brands/create', { prompt: prompt });
+      if (typeof result === 'string') return result;
+      return `🎨 **Бренд: ${prompt}**\n\n${JSON.stringify(result, null, 2).slice(0, 500)}`;
+    }
+  },
+  higgsfield_soul: {
+    desc: "Тренирај Soul ID за character consistency",
+    args: "опис на лик",
+    run: async (prompt) => {
+      if (!prompt) return "❌ Опиши го ликот.";
+      const result = await higgsfieldCall('/souls/create', { prompt: prompt });
+      if (typeof result === 'string') return result;
+      return `👤 **Soul ID: ${prompt}**\n\n${JSON.stringify(result, null, 2).slice(0, 300)}`;
+    }
+  },
+  higgsfield_website: {
+    desc: "Создај веб-страница со React 19 + TanStack Start",
+    args: "опис на страница",
+    run: async (prompt) => {
+      if (!prompt) return "❌ Опиши ја страницата.";
+      const result = await higgsfieldCall('/websites/build', { prompt: prompt });
+      if (typeof result === 'string') return result;
+      const url = result.url || result.deploy_url;
+      if (url) return `🌐 **${prompt}**\n\n[Отвори веб-страница](${url})`;
+      return "🌐 " + JSON.stringify(result).slice(0, 300);
+    }
+  },
+  higgsfield_campaign: {
+    desc: "Креирај целосна маркетинг кампања (research → plan → assets → launch)",
+    args: "опис на кампања",
+    run: async (prompt) => {
+      if (!prompt) return "❌ Опиши ја кампањата.";
+      const result = await higgsfieldCall('/campaigns/generate', { prompt: prompt });
+      if (typeof result === 'string') return result;
+      return `📢 **Кампања: ${prompt}**\n\n${JSON.stringify(result, null, 2).slice(0, 500)}`;
+    }
+  }
+};
+
+// Merge Higgsfield tools into main TOOLS object
+Object.assign(TOOLS, HIGGSFIELD_TOOLS);
+
+// Setup API key via localStorage
+function setupHiggsfieldKey(){
+  const key = prompt('Внеси Higgsfield API Key (од cloud.higgsfield.ai):');
+  if (key) {
+    localStorage.setItem('higgsfield_key', key.trim());
+    alert('✅ Зачуван! Hugo сега има пристап до Higgsfield.');
+  }
+}
+
+// Bind to settings button
+window.setupHiggsfieldKey = setupHiggsfieldKey;
+
 </script>
 </body>
 </html>
