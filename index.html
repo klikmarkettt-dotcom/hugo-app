@@ -460,7 +460,32 @@ _Копирај и објави рачно на Facebook/Instagram/Twitter._`;
 };
 
 // ═══ LLM ═══
-async function callLLM(prompt){
+const OLLAMA_TUNNEL = "https://avatar-evaluation-lucas-shelter.trycloudflare.com";
+const OLLAMA_MODEL = "qwen2.5:3b";
+
+async function callOllama(prompt){
+  try {
+    const r = await fetch(`${OLLAMA_TUNNEL}/v1/chat/completions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: OLLAMA_MODEL,
+        messages: [
+          { role: 'system', content: 'Ти си JARVIS, асистент. Одговарај кратко и на македонски.' },
+          { role: 'user', content: prompt }
+        ],
+        stream: false
+      })
+    });
+    if (!r.ok) return null;
+    const data = await r.json();
+    const t = data?.choices?.[0]?.message?.content;
+    if (t && t.length > 0) return t;
+  } catch(e){ console.warn('Ollama failed:', e); }
+  return null;
+}
+
+async function callPollinations(prompt){
   const enc = encodeURIComponent(prompt);
   for (const url of [
     `https://text.pollinations.ai/${enc}?model=openai&private=true`,
@@ -475,6 +500,12 @@ async function callLLM(prompt){
     } catch(e){}
   }
   return null;
+}
+
+async function callLLM(prompt){
+  const local = await callOllama(prompt);
+  if (local) return local;
+  return await callPollinations(prompt);
 }
 
 // ═══ PARSE JARVIS DECISION ═══
