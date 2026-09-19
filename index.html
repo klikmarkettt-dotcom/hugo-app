@@ -460,14 +460,17 @@ _Копирај и објави рачно на Facebook/Instagram/Twitter._`;
 };
 
 // ═══ LLM ═══
-const OLLAMA_TUNNEL = "https://cap-silk-opportunities-interim.trycloudflare.com";
+const OLLAMA_TUNNEL = "https://твојот-ngrok-url.ngrok-free.app";
 const OLLAMA_MODEL = "qwen2.5:3b";
 
 async function callOllama(prompt){
   try {
     const r = await fetch(`${OLLAMA_TUNNEL}/v1/chat/completions`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': 'true'
+      },
       body: JSON.stringify({
         model: OLLAMA_MODEL,
         messages: [
